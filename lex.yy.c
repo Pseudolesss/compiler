@@ -622,80 +622,10 @@ char *yytext;
 		cout << fileName << ":" << line << ":" <<column << ": lexical error: " << error << endl;
 	}
 
-	void bin2Decimal(char* bin_digit,char* buffer){
-		char** p;
-		unsigned long number = 0;
-		number = strtoul(&bin_digit[2],p,2);
-		sprintf(buffer, "%lu", number);
-		return;
-	}
-	void hex2Decimal(char* hex_digit,char* buffer){
-		char** p;
-		unsigned long number = 0;
-		number = strtoul(&hex_digit[2],p,16);
-		sprintf(buffer, "%lu", number);
-		return;
-	}
-	void update_clm_line(char* str,unsigned* column,unsigned* line){
-		unsigned i = 0;
-		while(str[i] != '\0'){
-			*column++;
-			if(str[i] == '\n')
-				*line++;
-			if(str[i] == '\r')
-				*column = 1;
-		}
-	}
-	char* strValue(char* str){
-		unsigned length = strlen(str);
-		char* value = NULL;
-		unsigned i =0;
-		value = (char*) malloc(2*sizeof(char)*length);
-		int j = 0;
-		while(str[i] != '\0'){
-			if(str[i] == '\\'){
-				i++;
-				if(str[i] == 'n'){
-					value[j] = '\\';
-					value[j+1] = 'x';
-					value[j+2] = '0';
-					value[j+3] = 'a';
-					j += 3;
-				}
-				if(str[i] == 'r'){
-					value[j] = '\\';
-					value[j+1] = 'x';
-					value[j+2] = '0';
-					value[j+3] = 'd';
-					j += 3;
-				}
-				if(str[i] == 't'){
-					value[j] = '\\';
-					value[j+1] = 'x';
-					value[j+2] = '0';
-					value[j+3] = '8';
-					j += 3;
-				}
-				if(str[i] == '\\'){
-					value[j] = '\\';
-				}
-				else{
-					value[j] = str[i];
-				}		
-			}
-			else{
-				value[j] = str[i];
-			}
-			i++;
-			j++;
-		}
-		value[j] = '\0';
-		return value;
-	}
-#line 696 "lex.yy.c"
+#line 626 "lex.yy.c"
 /* regular definitions */
 
-#line 699 "lex.yy.c"
+#line 629 "lex.yy.c"
 
 #define INITIAL 0
 #define l_comment 1
@@ -925,10 +855,10 @@ YY_DECL
 		}
 
 	{
-#line 160 "cpp.lex"
+#line 90 "cpp.lex"
 
 
-#line 932 "lex.yy.c"
+#line 862 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -988,351 +918,351 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 162 "cpp.lex"
+#line 92 "cpp.lex"
 {line += 1;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 163 "cpp.lex"
+#line 93 "cpp.lex"
 {column = 1;}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 164 "cpp.lex"
+#line 94 "cpp.lex"
 {column += yyleng;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 166 "cpp.lex"
+#line 96 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 167 "cpp.lex"
+#line 97 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 168 "cpp.lex"
+#line 98 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 169 "cpp.lex"
+#line 99 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 170 "cpp.lex"
+#line 100 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 171 "cpp.lex"
+#line 101 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 172 "cpp.lex"
+#line 102 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 173 "cpp.lex"
+#line 103 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 174 "cpp.lex"
+#line 104 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 175 "cpp.lex"
+#line 105 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 176 "cpp.lex"
+#line 106 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 177 "cpp.lex"
+#line 107 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 178 "cpp.lex"
+#line 108 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 179 "cpp.lex"
+#line 109 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 180 "cpp.lex"
+#line 110 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 181 "cpp.lex"
+#line 111 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 182 "cpp.lex"
+#line 112 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 183 "cpp.lex"
+#line 113 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 184 "cpp.lex"
+#line 114 "cpp.lex"
 printToken(yytext);
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 186 "cpp.lex"
+#line 116 "cpp.lex"
 printToken("lbrace");
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 187 "cpp.lex"
+#line 117 "cpp.lex"
 printToken("rbrace");
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 188 "cpp.lex"
+#line 118 "cpp.lex"
 printToken("lpar");
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 189 "cpp.lex"
+#line 119 "cpp.lex"
 printToken("rpar");
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 190 "cpp.lex"
+#line 120 "cpp.lex"
 printToken("colon");
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 191 "cpp.lex"
+#line 121 "cpp.lex"
 printToken("semicolon");
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 192 "cpp.lex"
+#line 122 "cpp.lex"
 printToken("coma");
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 193 "cpp.lex"
+#line 123 "cpp.lex"
 printToken("plus");
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 194 "cpp.lex"
+#line 124 "cpp.lex"
 printToken("minus");
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 195 "cpp.lex"
+#line 125 "cpp.lex"
 printToken("times");
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 196 "cpp.lex"
+#line 126 "cpp.lex"
 printToken("div");
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 197 "cpp.lex"
+#line 127 "cpp.lex"
 printToken("pow");
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 198 "cpp.lex"
+#line 128 "cpp.lex"
 printToken("dot");
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 199 "cpp.lex"
+#line 129 "cpp.lex"
 printToken("equal");
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 200 "cpp.lex"
+#line 130 "cpp.lex"
 printToken("lower");
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 201 "cpp.lex"
+#line 131 "cpp.lex"
 printToken("lower-equal");
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 202 "cpp.lex"
+#line 132 "cpp.lex"
 printToken("assign");
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 204 "cpp.lex"
+#line 134 "cpp.lex"
 printToken("integer-literal", yytext);
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 205 "cpp.lex"
+#line 135 "cpp.lex"
 {string buff = yytext; printToken("integer-literal", to_string(stoi(buff.erase(0, 2), nullptr, 2)));}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 206 "cpp.lex"
+#line 136 "cpp.lex"
 printToken("integer-literal", to_string(stoi(yytext, nullptr, 0)));
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 208 "cpp.lex"
+#line 138 "cpp.lex"
 printToken("type-identifier", yytext);
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 209 "cpp.lex"
+#line 139 "cpp.lex"
 printToken("object-identifier", yytext);
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 211 "cpp.lex"
+#line 141 "cpp.lex"
 {column += yyleng; yy_push_state(l_comment);}
 	YY_BREAK
 case 46:
 /* rule 46 can match eol */
 YY_RULE_SETUP
-#line 212 "cpp.lex"
+#line 142 "cpp.lex"
 {column += yyleng; line++; yy_pop_state();}
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 213 "cpp.lex"
+#line 143 "cpp.lex"
 {column = 1; yy_push_state(l_comment); yy_pop_state();}
 	YY_BREAK
 case YY_STATE_EOF(l_comment):
-#line 214 "cpp.lex"
+#line 144 "cpp.lex"
 {yy_pop_state();}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 216 "cpp.lex"
+#line 146 "cpp.lex"
 {str.clear(); str.append(yytext); temp_line = 0; temp_column = 1; yy_push_state(str_lit);}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 217 "cpp.lex"
+#line 147 "cpp.lex"
 {str.append(yytext); temp_column += yyleng;}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 218 "cpp.lex"
+#line 148 "cpp.lex"
 {str.append(yytext); printToken("string-literal", str); column += --temp_column; line += temp_line; yy_pop_state();}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 219 "cpp.lex"
+#line 149 "cpp.lex"
 {column = 1; temp_column++;}
 	YY_BREAK
 case 52:
 /* rule 52 can match eol */
 YY_RULE_SETUP
-#line 220 "cpp.lex"
+#line 150 "cpp.lex"
 {temp_column += yyleng-1; temp_line++;}
 	YY_BREAK
 case 53:
 /* rule 53 can match eol */
 YY_RULE_SETUP
-#line 221 "cpp.lex"
+#line 151 "cpp.lex"
 {column = 1; temp_column = yyleng-2; temp_line++;}
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 222 "cpp.lex"
+#line 152 "cpp.lex"
 {str.append(yytext); temp_column += yyleng;}
 	YY_BREAK
 case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
-#line 223 "cpp.lex"
+#line 153 "cpp.lex"
 {faultHandler(string(" \\n or \\0 in string")); yy_pop_state();}
 	YY_BREAK
 case YY_STATE_EOF(str_lit):
-#line 224 "cpp.lex"
+#line 154 "cpp.lex"
 {faultHandler(string("non terminated string")); yy_pop_state();}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 227 "cpp.lex"
+#line 157 "cpp.lex"
 {cout << yytext; yy_push_state(b_comment);}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 229 "cpp.lex"
+#line 159 "cpp.lex"
 {cout << yytext; yy_push_state(b_comment);}
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 230 "cpp.lex"
+#line 160 "cpp.lex"
 {column += yyleng; cout << yytext;}  /* eat anything that's not a '*' a '(' or a ')' */
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 231 "cpp.lex"
+#line 161 "cpp.lex"
 {column += yyleng; cout << yytext;}/* eat up '*'s not followed by ')'s */
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 232 "cpp.lex"
+#line 162 "cpp.lex"
 {column += yyleng; cout << yytext;}
 	YY_BREAK
 case 61:
 /* rule 61 can match eol */
 YY_RULE_SETUP
-#line 233 "cpp.lex"
+#line 163 "cpp.lex"
 {line++; cout << endl;}
 	YY_BREAK
 case YY_STATE_EOF(b_comment):
-#line 234 "cpp.lex"
+#line 164 "cpp.lex"
 {faultHandler(string("non terminated block comment")); yy_pop_state();}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 235 "cpp.lex"
+#line 165 "cpp.lex"
 {cout << yytext; yy_pop_state();}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 237 "cpp.lex"
+#line 167 "cpp.lex"
 {cout << "End of file dear" << endl; return 0;}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 238 "cpp.lex"
+#line 168 "cpp.lex"
 {faultHandler(string("Invalid character: ").append(yytext));}
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 239 "cpp.lex"
+#line 169 "cpp.lex"
 {faultHandler(string("Unrecognized token: ").append(yytext));}
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 241 "cpp.lex"
+#line 171 "cpp.lex"
 ECHO;
 	YY_BREAK
-#line 1336 "lex.yy.c"
+#line 1266 "lex.yy.c"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2381,7 +2311,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 241 "cpp.lex"
+#line 171 "cpp.lex"
 
 int main(int argc, char** argv) {
 
