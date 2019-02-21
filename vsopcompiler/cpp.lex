@@ -175,26 +175,23 @@ int main(int argc, char** argv) {
    		cerr << "No file path specified" << endl;
    		//return -1;
 	}
-
-	if(argc < 1){
-		cerr << "No file path specified" << endl;
-		//return -1;
- 	}
-	setFile(argv[1]);
-	FILE *f = fopen(argv[1], "r");
- 	if(!f) {
-    	cerr << "Unable to open file specify in " << argv[1] << endl;
-    return -1;
-  }
+	FILE* f = NULL;
+	if(argc == 1){
+		setFile(argv[1]);	
+		f = fopen(argv[1], "r");
+ 		if(!f) {
+    			cerr << "Unable to open file specify in " << argv[1] << endl;
+    			return -1; 	
+		}
+  		// set lex to read from it instead of defaulting to STDIN:
+  		yyin = f;
+  	}
   
-  // set lex to read from it instead of defaulting to STDIN:
-  yyin = f;
-
-  // lex through the input:
-  while(yylex());
-  
-  fclose(f);
-
-  return 0;
+  	// lex through the input:
+  	while(yylex());
+  	if(f){
+ 		fclose(f);
+	}
+  	return 0;
 
 }
