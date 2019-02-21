@@ -184,7 +184,7 @@ whitespace 	{;}
 {comment-line} 		{column += yyleng;}
 {block-comment}		{update_clm_line(yytext,&column,&line);}
 ("\""(.)*"\"")	{char* val = strValue(yytext) ;printf("%d,%d,string-literal,%s\n", line, column,val);free(val);column += yyleng;}
-
+{integer-literal}{custom}* {cerr << "Unrecognized token: " << line << coma << column << coma <<"'"<< yytext <<"'"<< endl; column += yyleng;}
 
 %%
 int main (void) {

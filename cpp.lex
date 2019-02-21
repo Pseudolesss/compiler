@@ -10,19 +10,16 @@
 	#include <iostream>
   	using namespace std;
   	extern int yylex();
-	extern void setFile(string);
-	
 	const char coma = ',';
 	unsigned line = 1;
 	unsigned column = 1;
 	unsigned temp_line;
 	unsigned temp_column;
-	bool str_error;
 	string str;
-	string filename;
+	string fileName;
 
-	void setFile(string file){
-		filename = file;
+	void setFile(char* file){
+		fileName = string(file);
 	}
 
 	void printToken(string token){
@@ -35,10 +32,24 @@
 		column += yyleng;
 	}
 
-	void faultHandler(){
-		cout << "ERROR string literal" << endl;
+	void faultHandler(string error){
+		cout << fileName << ":" << line << ":" <<column << ": lexical error: " << error << endl;
 	}
 
+	void bin2Decimal(char* bin_digit,char* buffer){
+		char** p;
+		unsigned long number = 0;
+		number = strtoul(&bin_digit[2],p,2);
+		sprintf(buffer, "%lu", number);
+		return;
+	}
+	void hex2Decimal(char* hex_digit,char* buffer){
+		char** p;
+		unsigned long number = 0;
+		number = strtoul(&hex_digit[2],p,16);
+		sprintf(buffer, "%lu", number);
+		return;
+	}
 	void update_clm_line(char* str,unsigned* column,unsigned* line){
 		unsigned i = 0;
 		while(str[i] != '\0'){
@@ -108,7 +119,8 @@ bin-digit 		[0-1]
 digit 			{bin-digit}|[2-9]
 hex-digit 		{digit}|[a-fA-F]
 
-whitespaces 	\n|\f|\r|\t|" "	
+whitespaces 	\n|\f|\r|\t|" "
+whitespaces-custom \f|\r|\t|" "
 
 comment-line 		"//"[^\n\r]*
 
@@ -120,9 +132,6 @@ object-identifier 	{lowercase-letter}({letter}|{digit}|"_")*
 
 escape-sequence 	b|t|r|\"|\\|x{hex-digit}{2}
 escaped-char 		\\{escape-sequence}
-regular-char 		[^(\"|\n|\0|<<EOF>>)]
-string-line 		(\\\n{whitespaces}*)
-string-literal		("\""({regular-char}|{escaped-char}|{string-line})*"\"") 
 
 lbrace				"{"
 rbrace				"}"
@@ -134,9 +143,9 @@ comma				","
 plus				"+"
 minus				"-"
 times				"*"
-div				"/"
-pow				"^"
-dot				"."
+div					"/"
+pow					"^"
+dot					"."
 equal				"="
 lower				"<"
 lower-equal			"<="
@@ -144,7 +153,7 @@ assign				"<-"
 
 operators 			({lbrace}|{rbrace}|{lpar}|{rpar}|{colon}|{semicolon}|{comma}|{plus}|{minus}|{times}|{div}|{pow}|{dot}|{equal}|{lower}|{lower-equal}|{assign})
 
-custom 				[^\n|\f|\r|\t|" "[a-fA-F][0-9]]
+custom 				[^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 
 %x l_comment b_comment str_lit
 
@@ -192,9 +201,9 @@ custom 				[^\n|\f|\r|\t|" "[a-fA-F][0-9]]
 "<="  			printToken("lower-equal");
 "<-"  			printToken("assign");
 
-{digit}+{whitespaces}		printToken("integer-literal", yytext);
-"0b"{bin-digit}+{whitespaces}	{string buff = yytext; printToken("integer-literal", to_string(stoi(buff.erase(0, 2), nullptr, 2)));}
-"0x"{hex-digit}+{whitespaces}	printToken("integer-literal", to_string(stoi(yytext, nullptr, 0)));
+{digit}+		printToken("integer-literal", yytext);
+"0b"{bin-digit}+	{string buff = yytext; printToken("integer-literal", to_string(stoi(buff.erase(0, 2), nullptr, 2)));}
+"0x"{hex-digit}+	printToken("integer-literal", to_string(stoi(yytext, nullptr, 0)));
 
 {type-identifier}	printToken("type-identifier", yytext);
 {object-identifier}	printToken("object-identifier", yytext);
@@ -204,7 +213,16 @@ custom 				[^\n|\f|\r|\t|" "[a-fA-F][0-9]]
 <l_comment>[^\n\r]*\r 	{column = 1; yy_push_state(l_comment); yy_pop_state();}
 <l_comment><<EOF>> 	{yy_pop_state();}
 
-{string-literal}	{printToken("string-literal",strValue(yytext));}
+\"							{str.clear(); str.append(yytext); temp_line = 0; temp_column = 1; yy_push_state(str_lit);}
+<str_lit>{escaped-char} 	{str.append(yytext); temp_column += yyleng;}
+<str_lit>\" 				{str.append(yytext); printToken("string-literal", str); column += --temp_column; line += temp_line; yy_pop_state();}
+<str_lit>\r 				{column = 1; temp_column++;}
+<str_lit>"\\"\n{whitespaces-custom}* {temp_column += yyleng-1; temp_line++;}
+<str_lit>"\\"\r\n{whitespaces-custom}* {column = 1; temp_column = yyleng-2; temp_line++;}
+<str_lit>[^\n\0\\]			{str.append(yytext); temp_column += yyleng;}
+<str_lit>(\n|\0)  			{faultHandler(string(" \\n or \\0 in string")); yy_pop_state();}
+<str_lit><<EOF>>			{faultHandler(string("non terminated string")); yy_pop_state();}
+
 
 "(*"         {cout << yytext; yy_push_state(b_comment);}
 
@@ -213,14 +231,12 @@ custom 				[^\n|\f|\r|\t|" "[a-fA-F][0-9]]
 <b_comment>"*"+[^(*)\n]*   	{column += yyleng; cout << yytext;}/* eat up '*'s not followed by ')'s */
 <b_comment>"("+[^(*\n]*		{column += yyleng; cout << yytext;}
 <b_comment>\n           	{line++; cout << endl;}
-<b_comment><<EOF>>		{cerr << "Unrecognized token: " << line << coma << column << coma <<"'"<< yytext <<"'"<< endl; column += yyleng; return 0;}
+<b_comment><<EOF>>		{faultHandler(string("non terminated block comment")); yy_pop_state();}
 <b_comment>"*)"        		{cout << yytext; yy_pop_state();}
 
 <<EOF>>				{cout << "End of file dear" << endl; return 0;}
-.				{cerr << filename << ":" << line << ":" << column << ":" << "lexical error, unknow char" << yytext << endl; column += yyleng;}
-0x([^\n|\f|\r|\t|" "[0-9][a-fA-F]])* 	{cerr << filename << ":" << line << ":" << column << ":" <<"lexical error, invalid hex integer" << yytext << endl; column += yyleng;}
-0b([^\n|\f|\r|\t|" "[0-1]])* {cerr << filename << ":" << line << ":" << column << ":" <<"lexical error, invalid bin integer" << yytext << endl; column += yyleng;}
-{digit}*[^\n|\f|\r|\t|" "[0-9]] {cerr << filename << ":" << line << ":" << column << ":" <<"lexical error, invalid decimal integer" << yytext << endl; column += yyleng;}
+.				{faultHandler(string("Invalid character: ").append(yytext));}
+{integer-literal}{custom}* 	{faultHandler(string("Unrecognized token: ").append(yytext));}
 
 %%
 int main(int argc, char** argv) {
@@ -234,7 +250,7 @@ int main(int argc, char** argv) {
 		cerr << "No file path specified" << endl;
 		//return -1;
  	}
-
+	setFile(argv[1]);
 	FILE *f = fopen(argv[1], "r");
  	if(!f) {
     	cerr << "Unable to open file specify in " << argv[1] << endl;
@@ -244,7 +260,6 @@ int main(int argc, char** argv) {
   // set lex to read from it instead of defaulting to STDIN:
   yyin = f;
 
-  setFile(argv[1]);
   // lex through the input:
   while(yylex());
   
