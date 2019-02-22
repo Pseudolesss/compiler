@@ -154,33 +154,29 @@ custom 				[^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 <str_lit><<EOF>>			{faultHandler(string("non terminated string")); yy_pop_state();}
 
 
-"(*"         {cout << yytext; yy_push_state(b_comment);}
+"(*"         {yy_push_state(b_comment);}
 
-<b_comment>"(*"			{cout << yytext; yy_push_state(b_comment);}
-<b_comment>[^(*)\n]*      	{column += yyleng; cout << yytext;}  /* eat anything that's not a '*' a '(' or a ')' */
-<b_comment>"*"+[^(*)\n]*   	{column += yyleng; cout << yytext;}/* eat up '*'s not followed by ')'s */
-<b_comment>"("+[^(*\n]*		{column += yyleng; cout << yytext;}
-<b_comment>\n           	{line++; cout << endl;}
+<b_comment>"(*"			{yy_push_state(b_comment);}
+<b_comment>[^(*)\n]*      	{column += yyleng;}  /* eat anything that's not a '*' a '(' or a ')' */
+<b_comment>"*"+[^(*)\n]*   	{column += yyleng;}/* eat up '*'s not followed by ')'s */
+<b_comment>"("+[^(*\n]*		{column += yyleng;}
+<b_comment>\n           	{line++;}
 <b_comment><<EOF>>		{faultHandler(string("non terminated block comment")); yy_pop_state();}
-<b_comment>"*)"        		{cout << yytext; yy_pop_state();}
+<b_comment>"*)"        		{yy_pop_state();}
 
-<<EOF>>				{cout << "End of file dear" << endl; return 0;}
+<<EOF>>				{return 0;}
 .				{faultHandler(string("Invalid character: ").append(yytext));}
 {integer-literal}{custom}* 	{faultHandler(string("Unrecognized token: ").append(yytext));}
 
 %%
 int main(int argc, char** argv) {
 
-	if(argv != NULL) {
-   		cerr << "No file path specified" << endl;
-   		//return -1;
-	}
 	FILE* f = NULL;
-	if(argc == 1){
-		setFile(argv[1]);	
-		f = fopen(argv[1], "r");
+	if(argc == 3){
+		setFile(argv[2]);	
+		f = fopen(argv[2], "r");
  		if(!f) {
-    			cerr << "Unable to open file specify in " << argv[1] << endl;
+    			cerr << "Unable to open file specify in " << argv[2] << endl;
     			return -1; 	
 		}
   		// set lex to read from it instead of defaulting to STDIN:
@@ -188,6 +184,8 @@ int main(int argc, char** argv) {
   	}
   
   	// lex through the input:
+	line = 1;
+	column = 1;
   	while(yylex());
   	if(f){
  		fclose(f);
