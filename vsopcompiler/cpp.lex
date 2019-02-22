@@ -8,15 +8,18 @@
 	#include <string>
 	#include <stdlib.h>
 	#include <iostream>
+	#include <stack>
   	using namespace std;
   	extern int yylex();
+  	stack<pair<int,int>> s;
+	
 	const char coma = ',';
 	unsigned line = 1;
 	unsigned column = 1;
 	unsigned temp_line;
 	unsigned temp_column;
-	string str;
 	string fileName;
+	string str;
 
 	void setFile(char* file){
 		fileName = string(file);
@@ -33,9 +36,27 @@
 	}
 
 	void faultHandler(string error){
-		cout << fileName << ":" << line << ":" <<column << ": lexical error: " << error << endl;
+		cerr << fileName << ":" << line << ":" <<column << ": lexical error: " << error << endl;
 	}
 
+	string escapedAscii(char c){
+	switch (c) {
+	  case '\\':
+	    return "\\\\";
+	  case 'b':
+	    return "\\x08";
+      case 't':
+	    return "\\x09";
+      case 'n':
+	    return "\\x0a";
+      case 'r':
+	    return "\\x0d";
+      case '\"':
+	    return "\\\"";
+	  default:
+	    return "\\x20";
+	  }
+	}
 %}
 
 %option noyywrap
@@ -60,7 +81,7 @@ type-identifier 	{uppercase-letter}({letter}|{digit}|"_")*
 
 object-identifier 	{lowercase-letter}({letter}|{digit}|"_")*
 
-escape-sequence 	b|t|r|\"|\\|x{hex-digit}{2}
+escape-sequence 	b|t|n|r|\"|\\|x{hex-digit}{2}
 escaped-char 		\\{escape-sequence}
 
 lbrace				"{"
@@ -89,9 +110,10 @@ custom 				[^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 
 %%
 
-\n			{line += 1;}
-\r 			{column = 1;}
-[ \t\f] 		{column += yyleng;}
+\n			{column = 1; line += 1;}
+\r 			column = 1;
+\r\n 		{column = 1; line += 1;}
+[ \t\f] 	column ++;
 
 "and"			printToken(yytext);
 "bool"			printToken(yytext);
@@ -119,7 +141,7 @@ custom 				[^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 ")"  			printToken("rpar");
 ":"  			printToken("colon");
 ";"  			printToken("semicolon");
-","  			printToken("coma");
+","  			printToken("comma");
 "+"  			printToken("plus");
 "-"  			printToken("minus");
 "*"  			printToken("times");
@@ -131,42 +153,54 @@ custom 				[^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 "<="  			printToken("lower-equal");
 "<-"  			printToken("assign");
 
-{digit}+		printToken("integer-literal", yytext);
+{digit}+			printToken("integer-literal", to_string(stoi(yytext)));
 "0b"{bin-digit}+	{string buff = yytext; printToken("integer-literal", to_string(stoi(buff.erase(0, 2), nullptr, 2)));}
 "0x"{hex-digit}+	printToken("integer-literal", to_string(stoi(yytext, nullptr, 0)));
 
 {type-identifier}	printToken("type-identifier", yytext);
 {object-identifier}	printToken("object-identifier", yytext);
 
-{comment-line} 		{column += yyleng; yy_push_state(l_comment);}
-<l_comment>[^\n\r]*\n 	{column += yyleng; line++; yy_pop_state();}
-<l_comment>[^\n\r]*\r 	{column = 1; yy_push_state(l_comment); yy_pop_state();}
-<l_comment><<EOF>> 	{yy_pop_state();}
+{comment-line} 		{column += yyleng; BEGIN(l_comment);}
+<l_comment>[^\n\r]*\n 	{column += yyleng; line++; column = 1; BEGIN(INITIAL);}
+<l_comment>[^\n\r]*\r 	column = 1; 
+<l_comment><<EOF>> 	BEGIN(INITIAL);
 
-\"							{str.clear(); str.append(yytext); temp_line = 0; temp_column = 1; yy_push_state(str_lit);}
-<str_lit>{escaped-char} 	{str.append(yytext); temp_column += yyleng;}
-<str_lit>\" 				{str.append(yytext); printToken("string-literal", str); column += --temp_column; line += temp_line; yy_pop_state();}
-<str_lit>\r 				{column = 1; temp_column++;}
-<str_lit>"\\"\n{whitespaces-custom}* {temp_column += yyleng-1; temp_line++;}
-<str_lit>"\\"\r\n{whitespaces-custom}* {column = 1; temp_column = yyleng-2; temp_line++;}
+\"							{str.clear(); str.append(yytext); temp_line = line; temp_column = column + 1; BEGIN(str_lit);}
+<str_lit>\\x{hex-digit}{2}  {string tmp = string(yytext).substr(yyleng-2, 2);
+							if( 33 < stoi(tmp, nullptr, 16) && stoi(tmp, nullptr, 16) < 127 )
+								str.push_back((char)(int)strtol(tmp.c_str(), NULL, 16));
+							else
+								str.append(yytext);
+							temp_column += 4;}
+<str_lit>{escaped-char} 	{str.append(escapedAscii(string(yytext).back())); temp_column += yyleng;}
+<str_lit>\" 				{str.append(yytext); printToken("string-literal", str); column = ++temp_column; line = temp_line; BEGIN(INITIAL);}
+<str_lit>\r 				{temp_column = 1;}
+<str_lit>"\\"\n{whitespaces-custom}* {temp_column = 1; temp_column += yyleng; temp_line++;}
+<str_lit>"\\"\r\n{whitespaces-custom}* {temp_column = 1; temp_column += yyleng; temp_line++;}
 <str_lit>[^\n\0\\]			{str.append(yytext); temp_column += yyleng;}
-<str_lit>(\n|\0)  			{faultHandler(string(" \\n or \\0 in string")); yy_pop_state();}
-<str_lit><<EOF>>			{faultHandler(string("non terminated string")); yy_pop_state();}
+<str_lit>\0		  			{column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\000' is illegal in this context."); return -1;}
+<str_lit>\n  				{column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\n' is illegal in this context."); return -1;}
+<str_lit>\\					{column = --temp_column; line = temp_line; faultHandler(" Forbidden use of \\ in string literal"); return -1;}
+<str_lit>\\[^\"]			{faultHandler(string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); return -1;}
+<str_lit>\\x[^\"]{2}		{faultHandler(string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); return -1;}
+<str_lit><<EOF>>			{faultHandler("non terminated string"); return -1;}
 
 
-"(*"         {yy_push_state(b_comment);}
+"(*"        				{s.push(pair<int,int> (line, column)); column += 2; yy_push_state(b_comment);}
 
-<b_comment>"(*"			{yy_push_state(b_comment);}
-<b_comment>[^(*)\n]*      	{column += yyleng;}  /* eat anything that's not a '*' a '(' or a ')' */
-<b_comment>"*"+[^(*)\n]*   	{column += yyleng;}/* eat up '*'s not followed by ')'s */
-<b_comment>"("+[^(*\n]*		{column += yyleng;}
-<b_comment>\n           	{line++;}
-<b_comment><<EOF>>		{faultHandler(string("non terminated block comment")); yy_pop_state();}
-<b_comment>"*)"        		{yy_pop_state();}
+<b_comment>"(*"				{s.push(pair<int,int> (line, column)); column += 2; yy_push_state(b_comment);}
+<b_comment>[^(*\n]*      	column += yyleng;  /* eat anything that's not a '*' a '(' or a ')' */
+<b_comment>"*"+[^*)\n]*   	column += yyleng; /* eat up '*'s not followed by ')'s */
+<b_comment>"("+[^(*\n]*		column += yyleng;
+<b_comment>\n           	column = 1; line++;
+<b_comment><<EOF>>			{cerr << fileName << ":" << s.top().first << ":" << s.top().second << ": lexical error " << endl;
+							 column += yyleng; return -1;}
+<b_comment>"*)"        		{s.pop(); column += 2; yy_pop_state();}
 
-<<EOF>>				{return 0;}
-.				{faultHandler(string("Invalid character: ").append(yytext));}
-{integer-literal}{custom}* 	{faultHandler(string("Unrecognized token: ").append(yytext));}
+<<EOF>>						return 0;
+[^ \n\t\r\f]				{faultHandler(string("Invalid character: ")); return -1;}
+{integer-literal}{custom}* 	{faultHandler((string(yytext) + string(" is not a valid integer literal."))); return -1;}
+
 
 %%
 int main(int argc, char** argv) {
@@ -186,10 +220,10 @@ int main(int argc, char** argv) {
   	// lex through the input:
 	line = 1;
 	column = 1;
-  	while(yylex());
+	int tmp = yylex();
   	if(f){
  		fclose(f);
 	}
-  	return 0;
+  	return tmp;
 
 }
