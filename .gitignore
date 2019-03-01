@@ -2,6 +2,11 @@
 # Created by https://www.gitignore.io/api/c,c++,flex
 # Edit at https://www.gitignore.io/?templates=c,c++,flex
 
+###Perso###
+*.output
+*.tab.c
+*.tab.h
+
 ### C ###
 # Prerequisites
 *.d
