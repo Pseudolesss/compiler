@@ -100,17 +100,6 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 
 %%
 
-{white} 	{}
-{real} 		{ yylval = atof(yytext); return NUMBER; }
-"+" 		{ return PLUS; }
-"-"  		{ return MINUS; }
-"*" 		{ return TIMES; }
-"/" 		{ return DIVIDE; }
-"(" 		{ return LEFT; }
-")" 		{ return RIGHT; }
-"\n" 		{ return END; }
-. 			{ yyerror("Invalid token"); }
-
 \n          {column = 1; line += 1;}
 \r          column = 1;
 \r\n        {column = 1; line += 1;}
@@ -180,12 +169,12 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 <str_lit>"\\"\n[ \t]*       {temp_column = 1; temp_column += yyleng - 2; temp_line++;}
 <str_lit>"\\"\r\n[ \t]*     {temp_column = 1; temp_column += yyleng - 3; temp_line++;}
 <str_lit>[^\n\0\\]          {str.append(yytext); temp_column += yyleng;}
-<str_lit>\0                 {column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\000' is illegal in this context."); return -1;}
-<str_lit>\n                 {column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\n' is illegal in this context."); return -1;}
-<str_lit>\\                 {column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\' is illegal in this context."); return -1;}
-<str_lit>\\[^\"]            {faultHandler(string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); return -1;}
-<str_lit>\\x[^\"]{2}        {faultHandler(string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); return -1;}
-<str_lit><<EOF>>            {faultHandler("non terminated string"); return -1;}
+<str_lit>\0                 {column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\000' is illegal in this context."); /*return -1;*/}
+<str_lit>\n                 {column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\n' is illegal in this context."); /*return -1;*/}
+<str_lit>\\                 {column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\' is illegal in this context."); /*return -1;*/}
+<str_lit>\\[^\"]            {faultHandler(string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); /*return -1;*/}
+<str_lit>\\x[^\"]{2}        {faultHandler(string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); /*return -1;*/}
+<str_lit><<EOF>>            {faultHandler("non terminated string"); /*return -1;*/}
 
 
 "(*"                        {s.push(pair<int,int> (line, column)); column += 2; yy_push_state(b_comment);}
@@ -196,9 +185,9 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 <b_comment>"("+[^(*\n]      column += yyleng;  /* eat up '('s not followed by '(' or '*'  */
 <b_comment>\n               column = 1; line++;
 <b_comment><<EOF>>          {cerr << fileName << ":" << s.top().first << ":" << s.top().second << ": lexical error " << endl;
-                             column += yyleng; return -1;}
+                             column += yyleng; /*return -1;*/}
 <b_comment>"*)"             {s.pop(); column += 2; yy_pop_state();}
 
 <<EOF>>                                     return 0;
-.                                           {faultHandler(" lexical error\r\n  character '" + string(yytext) + "' is illegal in this context."); return -1;}
-{integer-literal}{whitespaces-operator}*    {faultHandler((string(yytext) + string(" is not a valid integer literal."))); return -1;}
+.                                           {faultHandler(" lexical error\r\n  character '" + string(yytext) + "' is illegal in this context."); /*return -1;*/}
+{integer-literal}{whitespaces-operator}*    {faultHandler((string(yytext) + string(" is not a valid integer literal."))); /*return -1;*/}

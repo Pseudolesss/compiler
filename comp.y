@@ -55,60 +55,20 @@ extern FILE *yyin;
 %token STRING-LITERAL
 
 %start program
-/*
-Ce ne sont pas des tokens
-mais des non terminaux
-%token class
-%token class-body
-%token field
-%token method
-%token type
-%token formal
-%token block
-%token expr
-%token args
-%token literal
-%token boolean-literal
 
-%token NUMBER
-%token PLUS MINUS TIMES DIVIDE
-%token LEFT RIGHT
-%token END
-
-%start Input
-
-%left PLUS MINUS
-%left TIMES DIVIDE
-%left NEG */
-
+%nonassoc THEN DO
+%nonassoc ELSE
 %right ASSIGN
 %left AND
 %right NOT
 %nonassoc EQUAL LOWER-EQUAL LOWER
 %left PLUS MINUS
 %left TIMES DIVIDE
-%right ISNULL ?????
+%right ISNULL TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
 %right POW
 %left DOT
 
 %%
-Input: 	/* epsilon */
-		| Input Line
-;
-Line: 	END
-		| Expression END { printf("Result: %f\n", $1); }
-;
-
-Expression:
-	NUMBER { $$ = $1; }
-	| Expression PLUS Expression { $$ = $1 + $3;}
-	| Expression MINUS Expression { $$ = $1 - $3;}
-	| Expression TIMES Expression { $$ = $1 * $3;}
-	| Expression DIVIDE Expression { $$ = $1 / $3;}
-	| MINUS Expression %prec NEG { $$ = -$2; }
-	| LEFT Expression RIGHT { $$ = $2; }
-;
-
 program:
 	classes
 ;
@@ -160,10 +120,13 @@ exprx:
 	/*epsilon*/
 	| SEMICOLON exprx
 ;
+stmt:
+	IF expr THEN stmt
+	| IF expr stmt ELSE stmt
+	| WHILE expr DO stmt
+;
 expr:
-	IF expr THEN expr
-	| IF expr THEN expr ELSE expr
-	| WHILE expr DO expr
+	stmt
 	| LET OBJECT-IDENTIFIER COLON type IN expr
 	| LET OBJECT-IDENTIFIER COLON type ASSIGN expr IN expr
 	| OBJECT-IDENTIFIER ASSIGN expr
@@ -188,7 +151,7 @@ expr:
 	| LPAR expr RPAR
 	| block
 ;
-arg:
+args:
 	/*epsilon*/
 	| expr exprxx
 ;
