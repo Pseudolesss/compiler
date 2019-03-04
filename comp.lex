@@ -2,7 +2,7 @@
 	#include <stdlib.h>
 	#include <string>
 	#define YYSTYPE double /* Define the main semantic type */
-	#include "calc.tab.h" /* Define the token constants */
+	#include "comp.tab.h" /* Define the token constants */
 
 	#include <stdio.h>
     #include <stdlib.h>
@@ -19,6 +19,7 @@
     unsigned temp_line;
     unsigned temp_column;
     string str;
+    string fileName = string("petit con");
 
 	void printToken(string token){
         cout << line << coma << column << coma << token << endl;
@@ -67,11 +68,11 @@ hex-digit       {digit}|[a-fA-F]
 
 comment-line        "//"[^\n\r]*
 
-integer-literal     {digit}+|"0x"{hex-digit}+|"0b"{bin-digit}+
+INTEGER_LITERAL     {digit}+|"0x"{hex-digit}+|"0b"{bin-digit}+
 
-type-identifier     {uppercase-letter}({letter}|{digit}|"_")*
+TYPE_IDENTIFIER     {uppercase-letter}({letter}|{digit}|"_")*
 
-object-identifier   {lowercase-letter}({letter}|{digit}|"_")*
+OBJECT_IDENTIFIER   {lowercase-letter}({letter}|{digit}|"_")*
 
 escape-sequence     b|t|n|r|\"|\\|x{hex-digit}{2}
 escaped-char        \\{escape-sequence}
@@ -143,12 +144,12 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 "<="            { printToken("lower-equal"); return LOWER-EQUAL; }
 "<-"            { printToken("assign"); return ASSIGN; }
 
-{digit}+            { printToken("integer-literal", to_string(stoi(yytext))); return INTEGER-LITERAL; }
-"0b"{bin-digit}+    { string buff = yytext; printToken("integer-literal", to_string(stoi(buff.erase(0, 2), nullptr, 2))); return INTEGER-LITERAL; }
-"0x"{hex-digit}+    { printToken("integer-literal", to_string(stoi(yytext, nullptr, 0))); return INTEGER-LITERAL; }
+{digit}+            { printToken("INTEGER_LITERAL", to_string(stoi(yytext))); return INTEGER_LITERAL; }
+"0b"{bin-digit}+    { string buff = yytext; printToken("INTEGER_LITERAL", to_string(stoi(buff.erase(0, 2), nullptr, 2))); return INTEGER_LITERAL; }
+"0x"{hex-digit}+    { printToken("INTEGER_LITERAL", to_string(stoi(yytext, nullptr, 0))); return INTEGER_LITERAL; }
 
-{type-identifier}   { printToken("type-identifier", yytext); return TYPE-IDENTIFIER; }
-{object-identifier} { printToken("object-identifier", yytext); return OBJECT-IDENTIFIER; }
+{TYPE_IDENTIFIER}   { printToken("TYPE_IDENTIFIER", yytext); return TYPE_IDENTIFIER; }
+{OBJECT_IDENTIFIER} { printToken("OBJECT_IDENTIFIER", yytext); return OBJECT_IDENTIFIER; }
 
 {comment-line}          {column += yyleng; BEGIN(l_comment);}
 <l_comment>[^\n\r]*\n   {column += yyleng; line++; column = 1; BEGIN(INITIAL);}
@@ -190,4 +191,16 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 
 <<EOF>>                                     return 0;
 .                                           {faultHandler(" lexical error\r\n  character '" + string(yytext) + "' is illegal in this context."); /*return -1;*/}
-{integer-literal}{whitespaces-operator}*    {faultHandler((string(yytext) + string(" is not a valid integer literal."))); /*return -1;*/}
+{INTEGER_LITERAL}{whitespaces-operator}*    {faultHandler((string(yytext) + string(" is not a valid integer literal."))); /*return -1;*/}
+
+
+
+
+
+
+
+
+
+
+
+

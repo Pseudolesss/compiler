@@ -49,10 +49,10 @@ extern FILE *yyin;
 %token UNIT
 %token WHILE
 
-%token TYPE-IDENTIFIER
-%token OBJECT-IDENTIFIER
-%token INTEGER-LITERAL
-%token STRING-LITERAL
+%token TYPE_IDENTIFIER
+%token OBJECT_IDENTIFIER
+%token INTEGER_LITERAL
+%token STRING_LITERAL
 
 %start program
 
@@ -77,26 +77,26 @@ classes:
 	| class
 ;
 class:
-	CLASS TYPE-IDENTIFIER class-body
-	| CLASS TYPE-IDENTIFIER EXTENDS TYPE-IDENTIFIER class-body
+	CLASS TYPE_IDENTIFIER class-body
+	| CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER class-body
 ;
 class-body:
 	LBRACE field-method RBRACE
 ;
 field-method:
 	/*espilon*/
-	| field
-	| method
+	| field-method field
+	| field-method method
 ;
 field:
-	OBJECT-IDENTIFIER COLON type SEMICOLON
-	| OBJECT-IDENTIFIER COLON type ASSIGN expr SEMICOLON;
+	OBJECT_IDENTIFIER COLON type SEMICOLON
+	| OBJECT_IDENTIFIER COLON type ASSIGN expr SEMICOLON;
 ;
 method:
-	OBJECT-IDENTIFIER LPAR formals RPAR COLON type block
+	OBJECT_IDENTIFIER LPAR formals RPAR COLON type block
 ;
 type:
-	TYPE-IDENTIFIER
+	TYPE_IDENTIFIER
 	| INT32
 	| BOOL
 	| STRING
@@ -108,17 +108,17 @@ formals:
 ;
 formalx:
 	/*epsilon*/
-	| COMMA formal formalx
+	| COMMA formal formalx 
 ;
 formal:
-	OBJECT-IDENTIFIER COLON type
+	OBJECT_IDENTIFIER COLON type
 ;
 block:
 	LBRACE expr exprx RBRACE
 ;
 exprx:
 	/*epsilon*/
-	| SEMICOLON exprx
+	| SEMICOLON expr exprx
 ;
 stmt:
 	IF expr THEN stmt
@@ -127,9 +127,9 @@ stmt:
 ;
 expr:
 	stmt
-	| LET OBJECT-IDENTIFIER COLON type IN expr
-	| LET OBJECT-IDENTIFIER COLON type ASSIGN expr IN expr
-	| OBJECT-IDENTIFIER ASSIGN expr
+	| LET OBJECT_IDENTIFIER COLON type IN expr
+	| LET OBJECT_IDENTIFIER COLON type ASSIGN expr IN expr
+	| OBJECT_IDENTIFIER ASSIGN expr
 	| NOT expr
 	| expr AND expr
 	| expr EQUAL expr
@@ -142,10 +142,10 @@ expr:
 	| expr POW expr
 	| MINUS expr
 	| ISNULL expr
-	| OBJECT-IDENTIFIER LPAR args RPAR
-	| expr DOT OBJECT-IDENTIFIER LPAR args RPAR
-	| NEW TYPE-IDENTIFIER
-	| OBJECT-IDENTIFIER
+	| OBJECT_IDENTIFIER LPAR args RPAR
+	| expr DOT OBJECT_IDENTIFIER LPAR args RPAR
+	| NEW TYPE_IDENTIFIER
+	| OBJECT_IDENTIFIER
 	| literal
 	| LPAR RPAR
 	| LPAR expr RPAR
@@ -160,8 +160,8 @@ exprxx:
 	| COLON expr exprxx
 ;
 literal:
-	INTEGER-LITERAL
-	| STRING-LITERAL
+	INTEGER_LITERAL
+	| STRING_LITERAL
 	| boolean-literal
 ;
 boolean-literal:
@@ -191,3 +191,7 @@ int main(int argc, char **argv) {
 	fprintf(stdout, "End of processing\n");
 	return EXIT_SUCCESS;
 }
+
+
+
+
