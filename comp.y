@@ -18,37 +18,21 @@ extern FILE *yyin;
 %token COLON
 %token SEMICOLON
 %token COMMA
-%token PLUS
-%token MINUS
-%token TIMES
-%token DIV
-%token POW
-%token DOT
-%token EQUAL
-%token LOWER
-%token LOWER-EQUAL
 %token ASSIGN
-
-%token AND
 %token BOOL
 %token CLASS
-%token DO
-%token ELSE
 %token EXTENDS
 %token FALSE
 %token IF
-%token IN
+
 %token INT32
 %token ISNULL
 %token LET
 %token NEW
-%token NOT
 %token STRING
-%token THEN
 %token TRUE
 %token UNIT
 %token WHILE
-
 %token TYPE_IDENTIFIER
 %token OBJECT_IDENTIFIER
 %token INTEGER_LITERAL
@@ -56,6 +40,7 @@ extern FILE *yyin;
 
 %start program
 
+%nonassoc IN
 %nonassoc THEN DO
 %nonassoc ELSE
 %right ASSIGN
@@ -63,8 +48,8 @@ extern FILE *yyin;
 %right NOT
 %nonassoc EQUAL LOWER-EQUAL LOWER
 %left PLUS MINUS
-%left TIMES DIVIDE
-%right ISNULL TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
+%left TIMES DIV
+%right ISNULL 
 %right POW
 %left DOT
 
