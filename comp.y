@@ -105,13 +105,10 @@ exprx:
 	/*epsilon*/
 	| SEMICOLON expr exprx
 ;
-stmt:
-	IF expr THEN stmt
-	| IF expr stmt ELSE stmt
-	| WHILE expr DO stmt
-;
 expr:
-	stmt
+	IF expr THEN expr ELSE expr
+	| IF expr THEN expr
+	| WHILE expr DO expr
 	| LET OBJECT_IDENTIFIER COLON type IN expr
 	| LET OBJECT_IDENTIFIER COLON type ASSIGN expr IN expr
 	| OBJECT_IDENTIFIER ASSIGN expr
