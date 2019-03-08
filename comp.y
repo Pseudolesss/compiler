@@ -11,6 +11,9 @@ extern int yylineno;
 extern FILE *yyin;
 %}
 
+%define api.namespace {std}
+%define api.value.type variant /* for using c++ classes */
+
 %token LBRACE
 %token RBRACE
 %token LPAR
