@@ -11,22 +11,28 @@ class Visitor;
 
 struct ASTnode
 {
+  public:
+    ASTnode();
+    ASTnode(bool);
+    template <class T> T
+    accept(struct Visitor<T>);
+    bool isEmpty();
+
+  private:
+    bool isempty;
 };
 
 struct Expr : ASTnode
 {
   public:
     Expr();
-
-  private:
-     bool isempty;
 };
 
 struct Type : ASTnode
 {
   public:
-
-    Type(string);    
+    Type();
+    Type(string);
     template <typename T>
     T accept(struct Visitor<T>);
     string getID();
@@ -38,6 +44,7 @@ struct Type : ASTnode
 struct Field : ASTnode
 {
   public:
+    Field();
     Field(string, Type);
     Field(string, Type, Expr);
     template <typename T>
@@ -55,6 +62,7 @@ struct Field : ASTnode
 struct Formal : ASTnode
 {
   public:
+    Formal();
     Formal(string, Type);
     string getID();
     Type getType();
@@ -90,13 +98,13 @@ struct Formals : ASTnode
     Formalx formalx;
 };
 struct Exprx;
-struct Exprx
+struct Exprx : ASTnode
 {
   public:
     Exprx();
     Exprx(Expr, Exprx);
     Expr getExpr();
-    Exprx *getExprx();
+    Exprx getExprx();
 
   private:
     Expr expr;
@@ -106,6 +114,7 @@ struct Exprx
 struct Block : Expr
 {
   public:
+    Block();
     Block(Expr, Exprx);
     Expr getExpr();
     Exprx getExprx();
@@ -118,6 +127,7 @@ struct Block : Expr
 struct Method : ASTnode
 {
   public:
+    Method();
     Method(string, Formals, Type, Block);
     string getID();
     Formals getFormals();
@@ -139,27 +149,29 @@ struct FieldMethod : ASTnode
     FieldMethod();
     Field getField();
     Method getMethod();
-    FieldMethod *getFieldMethod();
+    FieldMethod getFieldMethod();
 
   private:
     Field field;
     Method method;
-    FieldMethod *filed_method;
+    FieldMethod *fieldMethod;
 };
 
 struct Body : ASTnode
 {
   public:
+    Body();
     Body(FieldMethod);
     FieldMethod getFieldMethod();
 
   private:
-    FieldMethod field_method;
+    FieldMethod fieldMethod;
 };
 
-struct Classe
+struct Classe : ASTnode
 {
   public:
+    Classe();
     Classe(string, Body);
     Classe(string, string, Body);
 
@@ -172,19 +184,14 @@ struct Classes;
 struct Classes : ASTnode
 {
   public:
+    Classes();
     Classes(Classes, Classe);
     Classes(Classe);
     Classe getClass();
     Classes *nextClass();
-    string getID();
-    Body getBody();
-    string getParentID();
 
   private:
     Classe a_class;
-    Body body;
-    string ID;
-    string parent_ID;
     Classes *next_class;
 };
 
@@ -193,12 +200,12 @@ struct Programm : ASTnode
   public:
     Programm(Classes);
     Programm(Classe);
-    Classes getChildren();
-    Classe getChild();
+    Classes getClasses();
+    Classe getClasse();
 
   private:
-    Classes children;
-    Classe child;
+    Classes classes;
+    Classe classe;
 };
 
 struct Dual : Expr
