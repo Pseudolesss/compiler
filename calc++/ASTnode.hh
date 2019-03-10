@@ -45,43 +45,42 @@ struct Field : ASTnode
 {
   public:
     Field();
-    Field(string, Type);
-    Field(string, Type, Expr);
+    Field(string, Type*);
+    Field(string, Type*, Expr*);
     template <typename T>
     T accept(struct Visitor<T>);
     string getID();
-    Type getType();
-    Expr getExpr();
+    Type* getType();
+    Expr* getExpr();
 
   private:
     string objID;
-    Type type;
-    Expr expr;
+    Type* type;
+    Expr* expr;
 };
 
 struct Formal : ASTnode
 {
   public:
-    Formal();
-    Formal(string, Type);
+    Formal(string, Type*);
     string getID();
-    Type getType();
+    Type* getType();
 
   private:
     string objID;
-    Type type;
+    Type* type;
 };
 struct Formalx;
 struct Formalx : ASTnode
 {
   public:
     Formalx();
-    Formalx(Formal, Formalx);
-    Formal getFormal();
-    Formalx getFormalx();
+    Formalx(Formal*, Formalx*);
+    Formal* getFormal();
+    Formalx* getFormalx();
 
   private:
-    Formal formal;
+    Formal* formal;
     Formalx *formalx;
 };
 
@@ -89,102 +88,97 @@ struct Formals : ASTnode
 {
   public:
     Formals();
-    Formals(Formal, Formalx);
-    Formal getFormal();
-    Formalx getFormalx();
+    Formals(Formal*, Formalx*);
+    Formal* getFormal();
+    Formalx* getFormalx();
 
   private:
-    Formal formal;
-    Formalx formalx;
+    Formal* formal;
+    Formalx* formalx;
 };
 struct Exprx;
 struct Exprx : ASTnode
 {
   public:
     Exprx();
-    Exprx(Expr, Exprx);
-    Expr getExpr();
-    Exprx getExprx();
+    Exprx(Expr*, Exprx*);
+    Expr* getExpr();
+    Exprx* getExprx();
 
   private:
-    Expr expr;
-    Exprx *exprx;
+    Expr* expr;
+    Exprx* exprx;
 };
 
 struct Block : Expr
 {
   public:
-    Block();
-    Block(Expr, Exprx);
-    Expr getExpr();
-    Exprx getExprx();
+    Block(Expr*, Exprx*);
+    Expr* getExpr();
+    Exprx* getExprx();
 
   private:
-    Expr expr;
-    Exprx exprx;
+    Expr* expr;
+    Exprx* exprx;
 };
 
 struct Method : ASTnode
 {
   public:
-    Method();
-    Method(string, Formals, Type, Block);
+    Method(string, Formals*, Type*, Block*);
     string getID();
-    Formals getFormals();
-    Type getType();
-    Block getBlock();
+    Formals* getFormals();
+    Type* getType();
+    Block* getBlock();
 
   private:
     string objID;
-    Formals formals;
-    Type type;
-    Block block;
+    Formals* formals;
+    Type* type;
+    Block* block;
 };
 struct FieldMethod;
 struct FieldMethod : ASTnode
 {
   public:
-    FieldMethod(FieldMethod, Field);
-    FieldMethod(FieldMethod, Method);
+    FieldMethod(FieldMethod*, Field*);
+    FieldMethod(FieldMethod*, Method*);
     FieldMethod();
-    Field getField();
-    Method getMethod();
-    FieldMethod getFieldMethod();
+    Field* getField();
+    Method* getMethod();
+    FieldMethod* getFieldMethod();
 
   private:
-    Field field;
-    Method method;
+    Field* field;
+    Method* method;
     FieldMethod *fieldMethod;
 };
 
 struct Body : ASTnode
 {
   public:
-    Body();
-    Body(FieldMethod);
-    FieldMethod getFieldMethod();
+    Body(FieldMethod*);
+    FieldMethod* getFieldMethod();
 
   private:
-    FieldMethod fieldMethod;
+    FieldMethod* fieldMethod;
 };
 
 struct Classe : ASTnode
 {
   public:
-    Classe();
-    Classe(string, Body);
-    Classe(string, string, Body);
+    Classe(string, Body*);
+    Classe(string, string, Body*);
 
   private:
     string typeID;
     string childID;
-    Body body;
+    Body* body;
 };
 struct Classes;
 struct Classes : ASTnode
 {
   public:
-    Classes();
     Classes(Classes, Classe);
     Classes(Classe);
     Classe getClass();
@@ -198,92 +192,92 @@ struct Classes : ASTnode
 struct Programm : ASTnode
 {
   public:
-    Programm(Classes);
-    Programm(Classe);
-    Classes getClasses();
-    Classe getClasse();
+    Programm(Classes*);
+    Programm(Classe*);
+    Classes* getClasses();
+    Classe* getClasse();
 
   private:
-    Classes classes;
-    Classe classe;
+    Classes* classes;
+    Classe* classe;
 };
 
 struct Dual : Expr
 {
   public:
-    Dual(Expr, Expr);
-    Expr getLeft();
-    Expr getRight();
+    Dual(Expr*, Expr*);
+    Expr* getLeft();
+    Expr* getRight();
 
   private:
-    Expr left;
-    Expr right;
+    Expr* left;
+    Expr* right;
 };
 
 struct Unary : Expr
 {
   public:
-    Unary(Expr);
-    Expr getExpr();
+    Unary(Expr*);
+    Expr* getExpr();
 
   private:
-    Expr expr;
+    Expr* expr;
 };
 
 struct If : Expr
 {
   public:
-    If(Expr, Expr, Expr);
-    If(Expr, Expr);
-    Expr getIf();
-    Expr getThen();
-    Expr getElse();
+    If(Expr*, Expr*, Expr*);
+    If(Expr*, Expr*);
+    Expr* getIf();
+    Expr* getThen();
+    Expr* getElse();
 
   private:
-    Expr _if;
-    Expr _then;
-    Expr _else;
+    Expr* _if;
+    Expr* _then;
+    Expr* _else;
 };
 
 struct While : Expr
 {
   public:
-    While(Expr, Expr);
-    Expr getWhile();
-    Expr getDo();
+    While(Expr*, Expr*);
+    Expr* getWhile();
+    Expr* getDo();
 
   private:
-    Expr _while;
-    Expr _do;
+    Expr* _while;
+    Expr* _do;
 };
 
 struct Let : Expr
 {
   public:
-    Let(string, Type, Expr);
-    Let(string, Type, Expr, Expr);
+    Let(string, Type*, Expr*);
+    Let(string, Type*, Expr*, Expr*);
     string getObjID();
-    Type getType();
-    Expr getAssign();
-    Expr getIn();
+    Type* getType();
+    Expr* getAssign();
+    Expr* getIn();
 
   private:
     string ObjID;
-    Type type;
-    Expr assign;
-    Expr in;
+    Type* type;
+    Expr* assign;
+    Expr* in;
 };
 
 struct Assign : Expr
 {
   public:
-    Assign(string, Expr);
+    Assign(string, Expr*);
     string getObjID();
-    Expr getExpr();
+    Expr* getExpr();
 
   private:
     string ObjID;
-    Expr expr;
+    Expr* expr;
 };
 
 struct Not : Unary
@@ -333,48 +327,55 @@ struct Minus1 : Unary
 struct IsNull : Unary
 {
 };
-
+struct Exprxx;
 struct Exprxx
 {
-    //TODO
+    public:
+    Exprxx();
+    Exprxx(Expr*,Exprxx*);
+    Expr* getExpr();
+    Exprxx* getExprxx();
+    private:
+    Expr* expr;
+    Exprxx* exprxx;
 };
 
 struct Args
 {
   public:
     Args();
-    Args(Expr, Exprx);
-    Expr getExpr();
-    Exprxx getExprxx();
+    Args(Expr*, Exprxx*);
+    Expr* getExpr();
+    Exprxx* getExprxx();
 
   private:
-    Expr expr;
-    Exprxx exprxx;
+    Expr* expr;
+    Exprxx* exprxx;
 };
 
 struct Function : Expr
 {
   public:
-    Function(string, Args);
+    Function(string, Args*);
     string getID();
-    Args getArgs();
+    Args* getArgs();
 
   private:
     string ID;
-    Args args;
+    Args* args;
 };
 
 struct Dot : Expr
 {
   public:
-    Dot(Expr, string, Args);
-    Expr getExpr();
-    Args getArgs();
+    Dot(Expr*, string, Args*);
+    Expr* getExpr();
+    Args* getArgs();
 
   private:
-    Expr expr;
+    Expr* expr;
     string ID;
-    Args args;
+    Args* args;
 };
 
 struct New : Expr

@@ -10,8 +10,5 @@ int main(){
     string a = test.getID();
     cout << a;
     a = "fafa";
-    cout << test.getID();
-    Block empty = Block();
-    cout<<boolalpha;
-    cout << empty.isEmpty();
+
 }
