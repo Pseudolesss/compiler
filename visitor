@@ -1,0 +1,14 @@
+struct printAST implement Visitor<String>{
+	String visitProgramme(Programme){
+		return "[" + Programme.accept(this) + "]";
+	}
+	String visitClasses{
+	}
+	String visitClasse{
+	}
+	...
+}
+
+struct MakeMACHINECODE implement Visitor <String> {
+	... projet suivant ^
+}

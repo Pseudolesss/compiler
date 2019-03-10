@@ -1,18 +1,34 @@
-%{
-#include <math.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string>
-#define YYSTYPE double /* Main semantic type */
-extern int yylex(void);
-void yyerror(char *s);
-extern char *yytext; /* Global variables of Flex */
-extern int yylineno;
-extern FILE *yyin;
-%}
 
-%define api.namespace {std}
-%define api.value.type variant /* for using c++ classes */
+%skeleton "lalr1.cc" /* -*- C++ -*- */
+
+%defines
+
+%define api.token.constructor
+%define api.value.type variant
+%define parse.assert
+
+%code requires {
+  # include <string>
+  class driver;
+}
+
+// The parsing context.
+%param { driver& drv }
+
+%locations
+
+%define parse.trace
+%define parse.error verbose
+
+%code {
+# include "driver.hh"
+}
+
+%define api.token.prefix {TOK_}
+
+
+
+
 
 %token LBRACE
 %token RBRACE

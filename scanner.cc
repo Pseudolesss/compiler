@@ -1,6 +1,6 @@
-#line 2 "comp.lex.c"
+#line 2 "scanner.cc"
 
-#line 4 "comp.lex.c"
+#line 4 "scanner.cc"
 
 #define  YY_INT_ALIGNED short int
 
@@ -615,8 +615,8 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "comp.lex"
-#line 2 "comp.lex"
+#line 1 "scanner.ll"
+#line 2 "scanner.ll"
 	#include <stdlib.h>
 	#include <string>
 	#define YYSTYPE double /* Define the main semantic type */
@@ -671,10 +671,10 @@ char *yytext;
         return "\\x20";
       }
     }
-#line 675 "comp.lex.c"
+#line 675 "scanner.cc"
 /* regular definitions */
 
-#line 678 "comp.lex.c"
+#line 678 "scanner.cc"
 
 #define INITIAL 0
 #define l_comment 1
@@ -904,10 +904,10 @@ YY_DECL
 		}
 
 	{
-#line 102 "comp.lex"
+#line 102 "scanner.ll"
 
 
-#line 911 "comp.lex.c"
+#line 911 "scanner.cc"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -977,258 +977,258 @@ do_action:	/* This label is used only to access EOF actions. */
 case 1:
 /* rule 1 can match eol */
 YY_RULE_SETUP
-#line 104 "comp.lex"
+#line 104 "scanner.ll"
 {column = 1; line += 1;}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 105 "comp.lex"
+#line 105 "scanner.ll"
 column = 1;
 	YY_BREAK
 case 3:
 /* rule 3 can match eol */
 YY_RULE_SETUP
-#line 106 "comp.lex"
+#line 106 "scanner.ll"
 {column = 1; line += 1;}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 107 "comp.lex"
+#line 107 "scanner.ll"
 column ++;
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 109 "comp.lex"
+#line 109 "scanner.ll"
 { printToken(yytext); return AND; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 110 "comp.lex"
+#line 110 "scanner.ll"
 { printToken(yytext); return BOOL; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 111 "comp.lex"
+#line 111 "scanner.ll"
 { printToken(yytext); return CLASS; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 112 "comp.lex"
+#line 112 "scanner.ll"
 { printToken(yytext); return DO; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 113 "comp.lex"
+#line 113 "scanner.ll"
 { printToken(yytext); return ELSE; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 114 "comp.lex"
+#line 114 "scanner.ll"
 { printToken(yytext); return EXTENDS; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 115 "comp.lex"
+#line 115 "scanner.ll"
 { printToken(yytext); return FALSE; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 116 "comp.lex"
+#line 116 "scanner.ll"
 { printToken(yytext); return IF; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 117 "comp.lex"
+#line 117 "scanner.ll"
 { printToken(yytext); return IN; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 118 "comp.lex"
+#line 118 "scanner.ll"
 { printToken(yytext); return INT32; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 119 "comp.lex"
+#line 119 "scanner.ll"
 { printToken(yytext); return ISNULL; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 120 "comp.lex"
+#line 120 "scanner.ll"
 { printToken(yytext); return LET; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 121 "comp.lex"
+#line 121 "scanner.ll"
 { printToken(yytext); return NEW; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 122 "comp.lex"
+#line 122 "scanner.ll"
 { printToken(yytext); return NOT; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 123 "comp.lex"
+#line 123 "scanner.ll"
 { printToken(yytext); return STRING; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 124 "comp.lex"
+#line 124 "scanner.ll"
 { printToken(yytext); return THEN; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 125 "comp.lex"
+#line 125 "scanner.ll"
 { printToken(yytext); return TRUE; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 126 "comp.lex"
+#line 126 "scanner.ll"
 { printToken(yytext); return UNIT; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 127 "comp.lex"
+#line 127 "scanner.ll"
 { printToken(yytext); return WHILE; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 129 "comp.lex"
+#line 129 "scanner.ll"
 { printToken("lbrace"); return LBRACE; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 130 "comp.lex"
+#line 130 "scanner.ll"
 { printToken("rbrace"); return RBRACE; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 131 "comp.lex"
+#line 131 "scanner.ll"
 { printToken("lpar"); return LPAR; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 132 "comp.lex"
+#line 132 "scanner.ll"
 { printToken("rpar"); return RPAR; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 133 "comp.lex"
+#line 133 "scanner.ll"
 { printToken("colon"); return COLON; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 134 "comp.lex"
+#line 134 "scanner.ll"
 { printToken("semicolon"); return SEMICOLON; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 135 "comp.lex"
+#line 135 "scanner.ll"
 { printToken("comma"); return COMMA; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 136 "comp.lex"
+#line 136 "scanner.ll"
 { printToken("plus"); return PLUS; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 137 "comp.lex"
+#line 137 "scanner.ll"
 { printToken("minus"); return MINUS; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 138 "comp.lex"
+#line 138 "scanner.ll"
 { printToken("times"); return TIMES; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 139 "comp.lex"
+#line 139 "scanner.ll"
 { printToken("div"); return DIV; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 140 "comp.lex"
+#line 140 "scanner.ll"
 { printToken("pow"); return POW; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 141 "comp.lex"
+#line 141 "scanner.ll"
 { printToken("dot"); return DOT; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 142 "comp.lex"
+#line 142 "scanner.ll"
 { printToken("equal"); return EQUAL; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 143 "comp.lex"
+#line 143 "scanner.ll"
 { printToken("lower"); return LOWER; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 144 "comp.lex"
+#line 144 "scanner.ll"
 { printToken("lower-equal"); return LOWER-EQUAL; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 145 "comp.lex"
+#line 145 "scanner.ll"
 { printToken("assign"); return ASSIGN; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 147 "comp.lex"
+#line 147 "scanner.ll"
 { printToken("INTEGER_LITERAL", to_string(stoi(yytext))); return INTEGER_LITERAL; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 148 "comp.lex"
+#line 148 "scanner.ll"
 { string buff = yytext; printToken("INTEGER_LITERAL", to_string(stoi(buff.erase(0, 2), nullptr, 2))); return INTEGER_LITERAL; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 149 "comp.lex"
+#line 149 "scanner.ll"
 { printToken("INTEGER_LITERAL", to_string(stoi(yytext, nullptr, 0))); return INTEGER_LITERAL; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 151 "comp.lex"
+#line 151 "scanner.ll"
 { printToken("TYPE_IDENTIFIER", yytext); return TYPE_IDENTIFIER; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 152 "comp.lex"
+#line 152 "scanner.ll"
 { printToken("OBJECT_IDENTIFIER", yytext); return OBJECT_IDENTIFIER; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 154 "comp.lex"
+#line 154 "scanner.ll"
 {column += yyleng; BEGIN(l_comment);}
 	YY_BREAK
 case 47:
 /* rule 47 can match eol */
 YY_RULE_SETUP
-#line 155 "comp.lex"
+#line 155 "scanner.ll"
 {column += yyleng; line++; column = 1; BEGIN(INITIAL);}
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 156 "comp.lex"
+#line 156 "scanner.ll"
 column = 1; 
 	YY_BREAK
 case YY_STATE_EOF(l_comment):
-#line 157 "comp.lex"
+#line 157 "scanner.ll"
 BEGIN(INITIAL);
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 159 "comp.lex"
+#line 159 "scanner.ll"
 {str.clear(); str.append(yytext); temp_line = line; temp_column = column + 1; BEGIN(str_lit);}
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 161 "comp.lex"
+#line 161 "scanner.ll"
 {string tmp = string(yytext).substr(yyleng-2, 2);
                             if( 33 < stoi(tmp, nullptr, 16) && stoi(tmp, nullptr, 16) < 127 )
                                 str.push_back((char)(int)strtol(tmp.c_str(), NULL, 16));
@@ -1238,129 +1238,129 @@ YY_RULE_SETUP
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 167 "comp.lex"
+#line 167 "scanner.ll"
 {str.append(escapedAscii(string(yytext).back())); temp_column += 2;}
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 168 "comp.lex"
+#line 168 "scanner.ll"
 {str.append(yytext); printToken("string-literal", str); column = ++temp_column; line = temp_line; BEGIN(INITIAL);}
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 169 "comp.lex"
+#line 169 "scanner.ll"
 temp_column = 1;
 	YY_BREAK
 case 54:
 /* rule 54 can match eol */
 YY_RULE_SETUP
-#line 170 "comp.lex"
+#line 170 "scanner.ll"
 {temp_column = 1; temp_column += yyleng - 2; temp_line++;}
 	YY_BREAK
 case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
-#line 171 "comp.lex"
+#line 171 "scanner.ll"
 {temp_column = 1; temp_column += yyleng - 3; temp_line++;}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 172 "comp.lex"
+#line 172 "scanner.ll"
 {str.append(yytext); temp_column += yyleng;}
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 173 "comp.lex"
+#line 173 "scanner.ll"
 {column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\000' is illegal in this context."); /*return -1;*/}
 	YY_BREAK
 case 58:
 /* rule 58 can match eol */
 YY_RULE_SETUP
-#line 174 "comp.lex"
+#line 174 "scanner.ll"
 {column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\n' is illegal in this context."); /*return -1;*/}
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 175 "comp.lex"
+#line 175 "scanner.ll"
 {column = --temp_column; line = temp_line; faultHandler(" lexical error\r\n  character '\\' is illegal in this context."); /*return -1;*/}
 	YY_BREAK
 case 60:
 /* rule 60 can match eol */
 YY_RULE_SETUP
-#line 176 "comp.lex"
+#line 176 "scanner.ll"
 {faultHandler(string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); /*return -1;*/}
 	YY_BREAK
 case 61:
 /* rule 61 can match eol */
 YY_RULE_SETUP
-#line 177 "comp.lex"
+#line 177 "scanner.ll"
 {faultHandler(string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); /*return -1;*/}
 	YY_BREAK
 case YY_STATE_EOF(str_lit):
-#line 178 "comp.lex"
+#line 178 "scanner.ll"
 {faultHandler("non terminated string"); /*return -1;*/}
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 181 "comp.lex"
+#line 181 "scanner.ll"
 {s.push(pair<int,int> (line, column)); column += 2; yy_push_state(b_comment);}
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 183 "comp.lex"
+#line 183 "scanner.ll"
 {s.push(pair<int,int> (line, column)); column += 2; yy_push_state(b_comment);}
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 184 "comp.lex"
+#line 184 "scanner.ll"
 column += yyleng;  /* eat anything that's not composed of '*', '(' or a '\n' */
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 185 "comp.lex"
+#line 185 "scanner.ll"
 column += yyleng;  /* eat up '*'s not followed by '(', ')' or '\n' */
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 186 "comp.lex"
+#line 186 "scanner.ll"
 column += yyleng;  /* eat up '('s not followed by '(' or '*'  */
 	YY_BREAK
 case 67:
 /* rule 67 can match eol */
 YY_RULE_SETUP
-#line 187 "comp.lex"
+#line 187 "scanner.ll"
 column = 1; line++;
 	YY_BREAK
 case YY_STATE_EOF(b_comment):
-#line 188 "comp.lex"
+#line 188 "scanner.ll"
 {cerr << fileName << ":" << s.top().first << ":" << s.top().second << ": lexical error " << endl;
                              column += yyleng; /*return -1;*/}
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 190 "comp.lex"
+#line 190 "scanner.ll"
 {s.pop(); column += 2; yy_pop_state();}
 	YY_BREAK
 case YY_STATE_EOF(INITIAL):
-#line 192 "comp.lex"
+#line 192 "scanner.ll"
 return 0;
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 193 "comp.lex"
+#line 193 "scanner.ll"
 {faultHandler(" lexical error\r\n  character '" + string(yytext) + "' is illegal in this context."); /*return -1;*/}
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 194 "comp.lex"
+#line 194 "scanner.ll"
 {faultHandler((string(yytext) + string(" is not a valid integer literal."))); /*return -1;*/}
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 207 "comp.lex"
+#line 207 "scanner.ll"
 ECHO;
 	YY_BREAK
-#line 1364 "comp.lex.c"
+#line 1364 "scanner.cc"
 
 	case YY_END_OF_BUFFER:
 		{
@@ -2421,4 +2421,4 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 207 "comp.lex"
+#line 207 "scanner.ll"

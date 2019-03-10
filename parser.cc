@@ -1,8 +1,8 @@
-// A Bison parser, made by GNU Bison 3.3.
+// A Bison parser, made by GNU Bison 3.0.4.
 
 // Skeleton implementation for Bison LALR(1) parsers in C++
 
-// Copyright (C) 2002-2015, 2018-2019 Free Software Foundation, Inc.
+// Copyright (C) 2002-2015 Free Software Foundation, Inc.
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -30,22 +30,30 @@
 // This special exception was added by the Free Software Foundation in
 // version 2.2 of Bison.
 
-// Undocumented macros, especially those whose name start with YY_,
-// are private implementation details.  Do not rely on them.
 
+// First part of user declarations.
 
+#line 37 "parser.cc" // lalr1.cc:404
 
+# ifndef YY_NULLPTR
+#  if defined __cplusplus && 201103L <= __cplusplus
+#   define YY_NULLPTR nullptr
+#  else
+#   define YY_NULLPTR 0
+#  endif
+# endif
 
+#include "parser.hh"
 
-#include "comp.tab.hh"
+// User implementation prologue.
 
-
+#line 51 "parser.cc" // lalr1.cc:412
 // Unqualified %code blocks.
-#line 23 "comp.yy" // lalr1.cc:435
+#line 23 "parser.yy" // lalr1.cc:413
 
 # include "driver.hh"
 
-#line 49 "comp.tab.cc" // lalr1.cc:435
+#line 57 "parser.cc" // lalr1.cc:413
 
 
 #ifndef YY_
@@ -57,15 +65,6 @@
 # endif
 # ifndef YY_
 #  define YY_(msgid) msgid
-# endif
-#endif
-
-// Whether we are compiled with exception support.
-#ifndef YY_EXCEPTIONS
-# if defined __GNUC__ && !defined __EXCEPTIONS
-#  define YY_EXCEPTIONS 0
-# else
-#  define YY_EXCEPTIONS 1
 # endif
 #endif
 
@@ -86,7 +85,7 @@
         {                                                               \
           (Current).begin = (Current).end = YYRHSLOC (Rhs, 0).end;      \
         }                                                               \
-    while (false)
+    while (/*CONSTCOND*/ false)
 # endif
 
 
@@ -105,7 +104,7 @@
     {                                           \
       *yycdebug_ << Title << ' ';               \
       yy_print_ (*yycdebug_, Symbol);           \
-      *yycdebug_ << '\n';                       \
+      *yycdebug_ << std::endl;                  \
     }                                           \
   } while (false)
 
@@ -124,9 +123,9 @@
 #else // !YYDEBUG
 
 # define YYCDEBUG if (false) std::cerr
-# define YY_SYMBOL_PRINT(Title, Symbol)  YYUSE (Symbol)
-# define YY_REDUCE_PRINT(Rule)           static_cast<void> (0)
-# define YY_STACK_PRINT()                static_cast<void> (0)
+# define YY_SYMBOL_PRINT(Title, Symbol)  YYUSE(Symbol)
+# define YY_REDUCE_PRINT(Rule)           static_cast<void>(0)
+# define YY_STACK_PRINT()                static_cast<void>(0)
 
 #endif // !YYDEBUG
 
@@ -140,7 +139,7 @@
 
 
 namespace yy {
-#line 144 "comp.tab.cc" // lalr1.cc:510
+#line 143 "parser.cc" // lalr1.cc:479
 
   /* Return YYSTR after stripping away unnecessary quotes and
      backslashes, so that it's suitable for yyerror.  The heuristic is
@@ -152,7 +151,7 @@ namespace yy {
   {
     if (*yystr == '"')
       {
-        std::string yyr;
+        std::string yyr = "";
         char const *yyp = yystr;
 
         for (;;)
@@ -165,10 +164,7 @@ namespace yy {
             case '\\':
               if (*++yyp != '\\')
                 goto do_not_strip_quotes;
-              else
-                goto append;
-
-            append:
+              // Fall through.
             default:
               yyr += *yyp;
               break;
@@ -196,8 +192,6 @@ namespace yy {
   parser::~parser ()
   {}
 
-  parser::syntax_error::~syntax_error () YY_NOEXCEPT YY_NOTHROW
-  {}
 
   /*---------------.
   | Symbol types.  |
@@ -206,20 +200,24 @@ namespace yy {
 
 
   // by_state.
-  parser::by_state::by_state () YY_NOEXCEPT
+  inline
+  parser::by_state::by_state ()
     : state (empty_state)
   {}
 
-  parser::by_state::by_state (const by_state& that) YY_NOEXCEPT
-    : state (that.state)
+  inline
+  parser::by_state::by_state (const by_state& other)
+    : state (other.state)
   {}
 
+  inline
   void
-  parser::by_state::clear () YY_NOEXCEPT
+  parser::by_state::clear ()
   {
     state = empty_state;
   }
 
+  inline
   void
   parser::by_state::move (by_state& that)
   {
@@ -227,12 +225,14 @@ namespace yy {
     that.clear ();
   }
 
-  parser::by_state::by_state (state_type s) YY_NOEXCEPT
+  inline
+  parser::by_state::by_state (state_type s)
     : state (s)
   {}
 
+  inline
   parser::symbol_number_type
-  parser::by_state::type_get () const YY_NOEXCEPT
+  parser::by_state::type_get () const
   {
     if (state == empty_state)
       return empty_symbol;
@@ -240,28 +240,16 @@ namespace yy {
       return yystos_[state];
   }
 
+  inline
   parser::stack_symbol_type::stack_symbol_type ()
   {}
 
-  parser::stack_symbol_type::stack_symbol_type (YY_RVREF (stack_symbol_type) that)
-    : super_type (YY_MOVE (that.state), YY_MOVE (that.location))
-  {
-    switch (that.type_get ())
-    {
-      default:
-        break;
-    }
 
-#if 201103L <= YY_CPLUSPLUS
-    // that is emptied.
-    that.state = empty_state;
-#endif
-  }
-
-  parser::stack_symbol_type::stack_symbol_type (state_type s, YY_MOVE_REF (symbol_type) that)
-    : super_type (s, YY_MOVE (that.location))
+  inline
+  parser::stack_symbol_type::stack_symbol_type (state_type s, symbol_type& that)
+    : super_type (s, that.location)
   {
-    switch (that.type_get ())
+      switch (that.type_get ())
     {
       default:
         break;
@@ -271,25 +259,24 @@ namespace yy {
     that.type = empty_symbol;
   }
 
-#if YY_CPLUSPLUS < 201103L
+  inline
   parser::stack_symbol_type&
-  parser::stack_symbol_type::operator= (stack_symbol_type& that)
+  parser::stack_symbol_type::operator= (const stack_symbol_type& that)
   {
     state = that.state;
-    switch (that.type_get ())
+      switch (that.type_get ())
     {
       default:
         break;
     }
 
     location = that.location;
-    // that is emptied.
-    that.state = empty_state;
     return *this;
   }
-#endif
+
 
   template <typename Base>
+  inline
   void
   parser::yy_destroy_ (const char* yymsg, basic_symbol<Base>& yysym) const
   {
@@ -306,12 +293,10 @@ namespace yy {
     std::ostream& yyoutput = yyo;
     YYUSE (yyoutput);
     symbol_number_type yytype = yysym.type_get ();
-#if defined __GNUC__ && ! defined __clang__ && ! defined __ICC && __GNUC__ * 100 + __GNUC_MINOR__ <= 408
     // Avoid a (spurious) G++ 4.8 warning about "array subscript is
     // below array bounds".
     if (yysym.empty ())
       std::abort ();
-#endif
     yyo << (yytype < yyntokens_ ? "token" : "nterm")
         << ' ' << yytname_[yytype] << " ("
         << yysym.location << ": ";
@@ -320,27 +305,26 @@ namespace yy {
   }
 #endif
 
+  inline
   void
-  parser::yypush_ (const char* m, YY_MOVE_REF (stack_symbol_type) sym)
+  parser::yypush_ (const char* m, state_type s, symbol_type& sym)
+  {
+    stack_symbol_type t (s, sym);
+    yypush_ (m, t);
+  }
+
+  inline
+  void
+  parser::yypush_ (const char* m, stack_symbol_type& s)
   {
     if (m)
-      YY_SYMBOL_PRINT (m, sym);
-    yystack_.push (YY_MOVE (sym));
+      YY_SYMBOL_PRINT (m, s);
+    yystack_.push (s);
   }
 
+  inline
   void
-  parser::yypush_ (const char* m, state_type s, YY_MOVE_REF (symbol_type) sym)
-  {
-#if 201103L <= YY_CPLUSPLUS
-    yypush_ (m, stack_symbol_type (s, std::move (sym)));
-#else
-    stack_symbol_type ss (s, sym);
-    yypush_ (m, ss);
-#endif
-  }
-
-  void
-  parser::yypop_ (int n)
+  parser::yypop_ (unsigned int n)
   {
     yystack_.pop (n);
   }
@@ -372,7 +356,7 @@ namespace yy {
   }
 #endif // YYDEBUG
 
-  parser::state_type
+  inline parser::state_type
   parser::yy_lr_goto_state_ (state_type yystate, int yysym)
   {
     int yyr = yypgoto_[yysym - yyntokens_] + yystate;
@@ -382,22 +366,16 @@ namespace yy {
       return yydefgoto_[yysym - yyntokens_];
   }
 
-  bool
+  inline bool
   parser::yy_pact_value_is_default_ (int yyvalue)
   {
     return yyvalue == yypact_ninf_;
   }
 
-  bool
+  inline bool
   parser::yy_table_value_is_error_ (int yyvalue)
   {
     return yyvalue == yytable_ninf_;
-  }
-
-  int
-  parser::operator() ()
-  {
-    return parse ();
   }
 
   int
@@ -421,11 +399,11 @@ namespace yy {
     /// The return value of parse ().
     int yyresult;
 
-#if YY_EXCEPTIONS
+    // FIXME: This shoud be completely indented.  It is not yet to
+    // avoid gratuitous conflicts when merging into the master branch.
     try
-#endif // YY_EXCEPTIONS
       {
-    YYCDEBUG << "Starting parse\n";
+    YYCDEBUG << "Starting parse" << std::endl;
 
 
     /* Initialize the stack.  The initial state will be set in
@@ -433,25 +411,21 @@ namespace yy {
        location values to have been already stored, initialize these
        stacks with a primary value.  */
     yystack_.clear ();
-    yypush_ (YY_NULLPTR, 0, YY_MOVE (yyla));
+    yypush_ (YY_NULLPTR, 0, yyla);
 
-  /*-----------------------------------------------.
-  | yynewstate -- push a new symbol on the stack.  |
-  `-----------------------------------------------*/
+    // A new symbol was pushed on the stack.
   yynewstate:
-    YYCDEBUG << "Entering state " << yystack_[0].state << '\n';
+    YYCDEBUG << "Entering state " << yystack_[0].state << std::endl;
 
     // Accept?
     if (yystack_[0].state == yyfinal_)
-      YYACCEPT;
+      goto yyacceptlab;
 
     goto yybackup;
 
-
-  /*-----------.
-  | yybackup.  |
-  `-----------*/
+    // Backup.
   yybackup:
+
     // Try to take a decision without lookahead.
     yyn = yypact_[yystack_[0].state];
     if (yy_pact_value_is_default_ (yyn))
@@ -461,21 +435,16 @@ namespace yy {
     if (yyla.empty ())
       {
         YYCDEBUG << "Reading a token: ";
-#if YY_EXCEPTIONS
         try
-#endif // YY_EXCEPTIONS
           {
             symbol_type yylookahead (yylex (drv));
             yyla.move (yylookahead);
           }
-#if YY_EXCEPTIONS
         catch (const syntax_error& yyexc)
           {
-            YYCDEBUG << "Caught exception: " << yyexc.what() << '\n';
             error (yyexc);
             goto yyerrlab1;
           }
-#endif // YY_EXCEPTIONS
       }
     YY_SYMBOL_PRINT ("Next token is", yyla);
 
@@ -500,9 +469,8 @@ namespace yy {
       --yyerrstatus_;
 
     // Shift the lookahead token.
-    yypush_ ("Shifting", yyn, YY_MOVE (yyla));
+    yypush_ ("Shifting", yyn, yyla);
     goto yynewstate;
-
 
   /*-----------------------------------------------------------.
   | yydefault -- do the default action for the current state.  |
@@ -513,64 +481,56 @@ namespace yy {
       goto yyerrlab;
     goto yyreduce;
 
-
   /*-----------------------------.
-  | yyreduce -- do a reduction.  |
+  | yyreduce -- Do a reduction.  |
   `-----------------------------*/
   yyreduce:
     yylen = yyr2_[yyn];
     {
       stack_symbol_type yylhs;
-      yylhs.state = yy_lr_goto_state_ (yystack_[yylen].state, yyr1_[yyn]);
+      yylhs.state = yy_lr_goto_state_(yystack_[yylen].state, yyr1_[yyn]);
       /* Variants are always initialized to an empty instance of the
          correct type. The default '$$ = $1' action is NOT applied
          when using variants.  */
-      switch (yyr1_[yyn])
+        switch (yyr1_[yyn])
     {
       default:
         break;
     }
 
 
-      // Default location.
+      // Compute the default @$.
       {
-        stack_type::slice range (yystack_, yylen);
-        YYLLOC_DEFAULT (yylhs.location, range, yylen);
-        yyerror_range[1].location = yylhs.location;
+        slice<stack_symbol_type, stack_type> slice (yystack_, yylen);
+        YYLLOC_DEFAULT (yylhs.location, slice, yylen);
       }
 
       // Perform the reduction.
       YY_REDUCE_PRINT (yyn);
-#if YY_EXCEPTIONS
       try
-#endif // YY_EXCEPTIONS
         {
           switch (yyn)
             {
 
-#line 552 "comp.tab.cc" // lalr1.cc:919
+#line 516 "parser.cc" // lalr1.cc:859
             default:
               break;
             }
         }
-#if YY_EXCEPTIONS
       catch (const syntax_error& yyexc)
         {
-          YYCDEBUG << "Caught exception: " << yyexc.what() << '\n';
           error (yyexc);
           YYERROR;
         }
-#endif // YY_EXCEPTIONS
       YY_SYMBOL_PRINT ("-> $$ =", yylhs);
       yypop_ (yylen);
       yylen = 0;
       YY_STACK_PRINT ();
 
       // Shift the result of the reduction.
-      yypush_ (YY_NULLPTR, YY_MOVE (yylhs));
+      yypush_ (YY_NULLPTR, yylhs);
     }
     goto yynewstate;
-
 
   /*--------------------------------------.
   | yyerrlab -- here on detecting error.  |
@@ -608,17 +568,18 @@ namespace yy {
   | yyerrorlab -- error raised explicitly by YYERROR.  |
   `---------------------------------------------------*/
   yyerrorlab:
-    /* Pacify compilers when the user code never invokes YYERROR and
-       the label yyerrorlab therefore never appears in user code.  */
-    if (false)
-      YYERROR;
 
+    /* Pacify compilers like GCC when the user code never invokes
+       YYERROR and the label yyerrorlab therefore never appears in user
+       code.  */
+    if (false)
+      goto yyerrorlab;
+    yyerror_range[1].location = yystack_[yylen - 1].location;
     /* Do not reclaim the symbols of the rule whose action triggered
        this YYERROR.  */
     yypop_ (yylen);
     yylen = 0;
     goto yyerrlab1;
-
 
   /*-------------------------------------------------------------.
   | yyerrlab1 -- common code for both syntax error and YYERROR.  |
@@ -656,30 +617,20 @@ namespace yy {
 
       // Shift the error token.
       error_token.state = yyn;
-      yypush_ ("Shifting", YY_MOVE (error_token));
+      yypush_ ("Shifting", error_token);
     }
     goto yynewstate;
 
-
-  /*-------------------------------------.
-  | yyacceptlab -- YYACCEPT comes here.  |
-  `-------------------------------------*/
+    // Accept.
   yyacceptlab:
     yyresult = 0;
     goto yyreturn;
 
-
-  /*-----------------------------------.
-  | yyabortlab -- YYABORT comes here.  |
-  `-----------------------------------*/
+    // Abort.
   yyabortlab:
     yyresult = 1;
     goto yyreturn;
 
-
-  /*-----------------------------------------------------.
-  | yyreturn -- parsing is finished, return the result.  |
-  `-----------------------------------------------------*/
   yyreturn:
     if (!yyla.empty ())
       yy_destroy_ ("Cleanup: discarding lookahead", yyla);
@@ -695,12 +646,12 @@ namespace yy {
 
     return yyresult;
   }
-#if YY_EXCEPTIONS
     catch (...)
       {
-        YYCDEBUG << "Exception caught: cleaning lookahead and stack\n";
+        YYCDEBUG << "Exception caught: cleaning lookahead and stack"
+                 << std::endl;
         // Do not try to display the values of the reclaimed symbols,
-        // as their printers might throw an exception.
+        // as their printer might throw an exception.
         if (!yyla.empty ())
           yy_destroy_ (YY_NULLPTR, yyla);
 
@@ -711,13 +662,12 @@ namespace yy {
           }
         throw;
       }
-#endif // YY_EXCEPTIONS
   }
 
   void
   parser::error (const syntax_error& yyexc)
   {
-    error (yyexc.location, yyexc.what ());
+    error (yyexc.location, yyexc.what());
   }
 
   // Generate an error message.
@@ -793,13 +743,12 @@ namespace yy {
         case N:                               \
           yyformat = S;                       \
         break
-      default: // Avoid compiler warnings.
-        YYCASE_ (0, YY_("syntax error"));
-        YYCASE_ (1, YY_("syntax error, unexpected %s"));
-        YYCASE_ (2, YY_("syntax error, unexpected %s, expecting %s"));
-        YYCASE_ (3, YY_("syntax error, unexpected %s, expecting %s or %s"));
-        YYCASE_ (4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
-        YYCASE_ (5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
+        YYCASE_(0, YY_("syntax error"));
+        YYCASE_(1, YY_("syntax error, unexpected %s"));
+        YYCASE_(2, YY_("syntax error, unexpected %s, expecting %s"));
+        YYCASE_(3, YY_("syntax error, unexpected %s, expecting %s or %s"));
+        YYCASE_(4, YY_("syntax error, unexpected %s, expecting %s or %s or %s"));
+        YYCASE_(5, YY_("syntax error, unexpected %s, expecting %s or %s or %s or %s"));
 #undef YYCASE_
       }
 
@@ -822,7 +771,7 @@ namespace yy {
 
   const signed char parser::yytable_ninf_ = -1;
 
-  const short
+  const short int
   parser::yypact_[] =
   {
        6,    10,    46,     6,   -35,     7,   -35,   -35,   -35,    23,
@@ -1017,18 +966,18 @@ namespace yy {
            i_end = yystack_.end ();
          i != i_end; ++i)
       *yycdebug_ << ' ' << i->state;
-    *yycdebug_ << '\n';
+    *yycdebug_ << std::endl;
   }
 
   // Report on the debug stream that the rule \a yyrule is going to be reduced.
   void
   parser::yy_reduce_print_ (int yyrule)
   {
-    unsigned yylno = yyrline_[yyrule];
+    unsigned int yylno = yyrline_[yyrule];
     int yynrhs = yyr2_[yyrule];
     // Print the symbols being reduced, and their result.
     *yycdebug_ << "Reducing stack by rule " << yyrule - 1
-               << " (line " << yylno << "):\n";
+               << " (line " << yylno << "):" << std::endl;
     // The symbols being reduced.
     for (int yyi = 0; yyi < yynrhs; yyi++)
       YY_SYMBOL_PRINT ("   $" << yyi + 1 << " =",
@@ -1039,8 +988,8 @@ namespace yy {
 
 
 } // yy
-#line 1043 "comp.tab.cc" // lalr1.cc:1242
-#line 174 "comp.yy" // lalr1.cc:1243
+#line 992 "parser.cc" // lalr1.cc:1167
+#line 174 "parser.yy" // lalr1.cc:1168
 
 void yyerror(char *s) {
 	printf("%s on line %d - %s\n", s, yylineno, yytext);

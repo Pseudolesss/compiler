@@ -534,7 +534,6 @@
       <nonterminal symbol-number="59" name="exprxx" usefulness="useful"/>
       <nonterminal symbol-number="60" name="literal" usefulness="useful"/>
       <nonterminal symbol-number="61" name="boolean-literal" usefulness="useful"/>
-      <nonterminal symbol-number="62" name="exp" usefulness="useless-in-grammar"/>
     </nonterminals>
   </grammar>
 

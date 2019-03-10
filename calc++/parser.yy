@@ -21,6 +21,7 @@
 
 %code {
 # include "driver.hh"
+# include "ASTnode.hh"
 }
 
 %define api.token.prefix {TOK_}
@@ -66,8 +67,6 @@
 %right ISNULL 
 %right POW
 %left DOT
-
-%type  <int> exp
 
 %printer { yyo << $$; } <*>;
 

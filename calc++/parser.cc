@@ -44,8 +44,9 @@
 #line 22 "parser.yy" // lalr1.cc:435
 
 # include "driver.hh"
+# include "ASTnode.hh"
 
-#line 49 "parser.cc" // lalr1.cc:435
+#line 50 "parser.cc" // lalr1.cc:435
 
 
 #ifndef YY_
@@ -140,7 +141,7 @@
 
 
 namespace yy {
-#line 144 "parser.cc" // lalr1.cc:510
+#line 145 "parser.cc" // lalr1.cc:510
 
   /* Return YYSTR after stripping away unnecessary quotes and
      backslashes, so that it's suitable for yyerror.  The heuristic is
@@ -548,7 +549,7 @@ namespace yy {
           switch (yyn)
             {
 
-#line 552 "parser.cc" // lalr1.cc:919
+#line 553 "parser.cc" // lalr1.cc:919
             default:
               break;
             }
@@ -999,13 +1000,13 @@ namespace yy {
   const unsigned char
   parser::yyrline_[] =
   {
-       0,    76,    76,    79,    80,    83,    84,    87,    89,    91,
-      92,    95,    96,    99,   102,   103,   104,   105,   106,   108,
-     110,   112,   114,   117,   120,   122,   124,   127,   128,   129,
-     130,   131,   132,   133,   134,   135,   136,   137,   138,   139,
-     140,   141,   142,   143,   144,   145,   146,   147,   148,   149,
-     150,   151,   152,   154,   156,   158,   160,   163,   164,   165,
-     168,   169
+       0,    75,    75,    78,    79,    82,    83,    86,    88,    90,
+      91,    94,    95,    98,   101,   102,   103,   104,   105,   107,
+     109,   111,   113,   116,   119,   121,   123,   126,   127,   128,
+     129,   130,   131,   132,   133,   134,   135,   136,   137,   138,
+     139,   140,   141,   142,   143,   144,   145,   146,   147,   148,
+     149,   150,   151,   153,   155,   157,   159,   162,   163,   164,
+     167,   168
   };
 
   // Print the state stack on the debug stream.
@@ -1040,8 +1041,8 @@ namespace yy {
 
 
 } // yy
-#line 1044 "parser.cc" // lalr1.cc:1242
-#line 171 "parser.yy" // lalr1.cc:1243
+#line 1045 "parser.cc" // lalr1.cc:1242
+#line 170 "parser.yy" // lalr1.cc:1243
 
 
 void
