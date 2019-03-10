@@ -48,10 +48,10 @@
 %token TRUE
 %token UNIT
 %token WHILE
-%token TYPE_IDENTIFIER
-%token OBJECT_IDENTIFIER
-%token INTEGER_LITERAL
-%token STRING_LITERAL
+%token <std::string> TYPE_IDENTIFIER
+%token <std::string> OBJECT_IDENTIFIER
+%token <int> INTEGER_LITERAL
+%token <std::string> STRING_LITERAL
 
 %start program
 %token END  0  "end of file"

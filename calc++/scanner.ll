@@ -219,9 +219,9 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 "<="            { printToken("lower-equal"); return yy::parser::make_LOWER_EQUAL(loc); }
 "<-"            { printToken("assign"); return yy::parser::make_ASSIGN(loc); }
 
-{digit}+            { printToken("INTEGER_LITERAL", to_string(stoi(yytext))); return yy::parser::make_INTEGER_LITERAL( to_string(stoi(yytext)), loc); }
-"0b"{bin-digit}+    { string buff = yytext; buff = to_string(stoi(buff.erase(0, 2), nullptr, 2)); printToken("INTEGER_LITERAL", buff); return yy::parser::make_INTEGER_LITERAL(buff, loc); }
-"0x"{hex-digit}+    { string buff = to_string(stoi(yytext, nullptr, 0)); printToken("INTEGER_LITERAL", buff); return yy::parser::make_INTEGER_LITERAL(buff, loc); }
+{digit}+            { printToken("INTEGER_LITERAL", to_string(stoi(yytext))); return yy::parser::make_INTEGER_LITERAL( stoi(yytext), loc); }
+"0b"{bin-digit}+    { string buff = yytext; buff = to_string(stoi(buff.erase(0, 2), nullptr, 2)); printToken("INTEGER_LITERAL", buff); return yy::parser::make_INTEGER_LITERAL(stoi(buff), loc); }
+"0x"{hex-digit}+    { string buff = to_string(stoi(yytext, nullptr, 0)); printToken("INTEGER_LITERAL", buff); return yy::parser::make_INTEGER_LITERAL(stoi(buff), loc); }
 
 {TYPE_IDENTIFIER}   { printToken("TYPE_IDENTIFIER", yytext); return yy::parser::make_TYPE_IDENTIFIER(yytext, loc); }
 {OBJECT_IDENTIFIER} { printToken("OBJECT_IDENTIFIER", yytext); return yy::parser::make_OBJECT_IDENTIFIER(yytext, loc); }
