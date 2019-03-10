@@ -18,7 +18,7 @@ all: $(BASE)
 %.o: %.cc
 	$(CXX) $(CXXFLAGS) -c -o$@ $<
 
-$(BASE): $(BASE).o driver.o parser.o scanner.o
+$(BASE): $(BASE).o driver.o parser.o scanner.o ASTnode.o
 	$(CXX) -o $@ $^
 
 $(BASE).o: parser.hh
@@ -36,6 +36,6 @@ html: parser.html
 CLEANFILES =										\
   $(BASE) *.o										\
   parser.hh parser.cc parser.output parser.xml parser.html parser.gv location.hh	\
-  scanner.cc
+  scanner.cc 
 clean:
 	rm -f $(CLEANFILES)
