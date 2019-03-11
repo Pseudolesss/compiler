@@ -32,22 +32,22 @@ void printToken(string token){
         cerr << "filename" << ":" << line << ":" <<column << ": lexical error: " << error << endl;
     }
 
-    char escapedAscii(char c){
+    string escapedAscii(char c){
     switch (c) {
       case '\\':
-        return '\\';
+        return "\\";
       case 'b':
-        return '\b';
+        return "\b";
       case 't':
-        return '\t';
+        return "\t";
       case 'n':
-        return '\n';
+        return "\n";
       case 'r':
-        return '\r';
+        return "\r";
       case '\"':
-        return '\"';
+        return "\"";
       default:
-        return '\\x20';
+        return "\\x20";
       }
     }
 
@@ -240,7 +240,7 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
                                 str.append(yytext);
                             temp_column += 4;}
 <str_lit>{escaped-char}     {str.append(escapedAscii(string(yytext).back())); temp_column += 2;}
-<str_lit>\"                 {str.append(yytext); printToken("string-literal", str); column = ++temp_column; line = temp_line; BEGIN(INITIAL); return yy::parser::make_STRING_LITERAL(str, loc)}
+<str_lit>\"                 {str.append(yytext); printToken("string-literal", str); column = ++temp_column; line = temp_line; BEGIN(INITIAL); return yy::parser::make_STRING_LITERAL(yytext,loc);}
 <str_lit>\r                 temp_column = 1;
 <str_lit>"\\"\n[ \t]*       {temp_column = 1; temp_column += yyleng - 2; temp_line++;}
 <str_lit>"\\"\r\n[ \t]*     {temp_column = 1; temp_column += yyleng - 3; temp_line++;}
