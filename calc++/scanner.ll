@@ -46,8 +46,6 @@ void printToken(string token){
         return '\r';
       case '\"':
         return '\"';
-      default:
-        return '\\x20';
       }
     }
 
@@ -239,8 +237,8 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
                             else
                                 str.append(yytext);
                             temp_column += 4;}
-<str_lit>{escaped-char}     {str.append(escapedAscii(string(yytext).back())); temp_column += 2;}
-<str_lit>\"                 {str.append(yytext); printToken("string-literal", str); column = ++temp_column; line = temp_line; BEGIN(INITIAL); return yy::parser::make_STRING_LITERAL(str, loc)}
+<str_lit>{escaped-char}     {str.push_back(escapedAscii(string(yytext).back())); temp_column += 2;}
+<str_lit>\"                 {str.append(yytext); printToken("string-literal", str); column = ++temp_column; line = temp_line; BEGIN(INITIAL); return yy::parser::make_STRING_LITERAL(str, loc);}
 <str_lit>\r                 temp_column = 1;
 <str_lit>"\\"\n[ \t]*       {temp_column = 1; temp_column += yyleng - 2; temp_line++;}
 <str_lit>"\\"\r\n[ \t]*     {temp_column = 1; temp_column += yyleng - 3; temp_line++;}
