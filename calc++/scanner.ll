@@ -46,6 +46,8 @@ void printToken(string token){
         return '\r';
       case '\"':
         return '\"';
+      default:
+        return 'E';
       }
     }
 
