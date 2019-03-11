@@ -9,7 +9,7 @@ template <class T>
 T ASTnode::accept(struct Visitor<T> v) { return v.visit(this); }
 
 
-Expr::Expr() : ASTnode(true){}
+string Expr::getDataType(){return dataType;}
 
 
 Type::Type(string s) : typeID(s){};
@@ -46,7 +46,7 @@ Exprx* Exprx::getExprx(){return exprx;}
 Expr* Exprx::getExpr(){return expr;}
 
 
-Block::Block(Expr* e, Exprx* ex) : expr(e), exprx(ex){};
+Block::Block(Expr* e, Exprx* ex) : expr(e), exprx(ex){dataType = string("Block");};
 Expr* Block::getExpr() {return expr;}
 Exprx* Block::getExprx() {return exprx;}
 
@@ -86,36 +86,36 @@ Classes* Programm::getClasses(){return classes;}
 Classe* Programm::getClasse(){return classe;}
 
 
-Dual::Dual(Expr* left, Expr* right) : left(left), right(right) {}
-Expr* Dual::getLeft(){return left;};
+Dual::Dual(Expr* left, Expr* right) : left(left), right(right) {dataType = string("Dual");}
+Expr* Dual::getLeft(){return left;}
 Expr* Dual::getRight(){return right;}
 
 
-Unary::Unary(Expr* e) : expr(e) {}
+Unary::Unary(Expr* e) : expr(e) {dataType = string("Unary");}
 Expr* Unary::getExpr(){return expr;}
 
 
-If::If(Expr* e1, Expr* e2, Expr* e3) : _if(e1), _then(e2),_else(e3){}
-If::If(Expr* e1, Expr* e2) : _if(e1), _then(e2){_else = nullptr;}
+If::If(Expr* e1, Expr* e2, Expr* e3) : _if(e1), _then(e2),_else(e3){dataType = string("If");}
+If::If(Expr* e1, Expr* e2) : _if(e1), _then(e2){_else = nullptr;dataType = string("If");}
 Expr* If::getElse(){return _else;}
 Expr* If::getIf(){return _if;}
 Expr* If::getThen(){return _then;}
 
 
-While::While(Expr* w,Expr*  d) : _while(w),_do(d){}
+While::While(Expr* w,Expr*  d) : _while(w),_do(d){dataType = string("While");}
 Expr* While::getWhile(){return _while;}
 Expr* While::getDo(){return _do;}
 
 
-Let::Let(string s, Type* t, Expr* e) : ObjID(s), type(t), in(e){assign = nullptr;}
-Let::Let(string s, Type* t, Expr* in, Expr* ass) : ObjID(s), type(t), assign(ass), in(in) {}
+Let::Let(string s, Type* t, Expr* e) : ObjID(s), type(t), in(e){assign = nullptr;dataType = string("Let");}
+Let::Let(string s, Type* t, Expr* in, Expr* ass) : ObjID(s), type(t), assign(ass), in(in) {dataType = string("Let");}
 Type* Let::getType(){return type;}
 string Let::getObjID(){return ObjID;}
 Expr* Let::getAssign(){return assign;}
 Expr* Let::getIn(){return in;}
 
 
-Assign::Assign(string s, Expr* e) : ObjID(s), expr(e) {}
+Assign::Assign(string s, Expr* e) : ObjID(s), expr(e) {dataType = string("Assign");}
 Expr* Assign::getExpr(){return expr;}
 string Assign::getObjID(){return ObjID;}
 
@@ -132,70 +132,30 @@ Expr* Args::getExpr(){return expr;}
 Exprxx* Args::getExprxx(){return exprxx;}
 
 
-Function::Function(string name,Args* a) : args(a), ID(name) {}
+Function::Function(string name,Args* a) : args(a), ID(name) {dataType = string("Function");}
 Args* Function::getArgs(){return args;}
 
 
-Dot::Dot(Expr* e, string s, Args* a) : expr(e),ID(s),args(a) {}
+Dot::Dot(Expr* e, string s, Args* a) : expr(e),ID(s),args(a) {dataType = string("Dot");}
 Expr* Dot::getExpr(){return expr;}
 Args* Dot::getArgs(){return args;}
 
 
-New::New(string s) : typeID(s) {}
+New::New(string s) : typeID(s) {dataType = string("New");}
 string New::getTypeID(){return typeID;}
 
 
-ObjID::ObjID(string s) : ObjId(s) {}
+ObjID::ObjID(string s) : ObjId(s) {dataType = string("ObjID");}
 string ObjID::getID() {return ObjId;}
 
-IntLit::IntLit(int i) : value(i){}
+IntLit::IntLit(int i) : value(i){litType = string("IntLit");}
 int IntLit::getValue() {return value;}
 
 
-StrLit::StrLit(string s) : value(s) {}
+StrLit::StrLit(string s) : value(s) {litType = string("StrLit");}
 string StrLit::getValue(){return value;}
 
 
-BoolLit::BoolLit(bool v) : value(v){}
+BoolLit::BoolLit(bool v) : value(v){litType = string("litType");}
 bool BoolLit::getValue(){return value;}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

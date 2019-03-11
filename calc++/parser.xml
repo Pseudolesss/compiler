@@ -1,0 +1,4802 @@
+<?xml version="1.0"?>
+
+<bison-xml-report version="3.3" bug-report="bug-bison@gnu.org" url="http://www.gnu.org/software/bison/">
+
+  <filename>parser.yy</filename>
+
+  <grammar>
+    <rules>
+      <rule number="0" usefulness="useful">
+        <lhs>$accept</lhs>
+        <rhs>
+          <symbol>program</symbol>
+          <symbol>&quot;end of file&quot;</symbol>
+        </rhs>
+      </rule>
+      <rule number="1" usefulness="useful">
+        <lhs>program</lhs>
+        <rhs>
+          <symbol>classes</symbol>
+        </rhs>
+      </rule>
+      <rule number="2" usefulness="useful">
+        <lhs>classes</lhs>
+        <rhs>
+          <symbol>classes</symbol>
+          <symbol>class</symbol>
+        </rhs>
+      </rule>
+      <rule number="3" usefulness="useful">
+        <lhs>classes</lhs>
+        <rhs>
+          <symbol>class</symbol>
+        </rhs>
+      </rule>
+      <rule number="4" usefulness="useful">
+        <lhs>class</lhs>
+        <rhs>
+          <symbol>CLASS</symbol>
+          <symbol>TYPE_IDENTIFIER</symbol>
+          <symbol>class-body</symbol>
+        </rhs>
+      </rule>
+      <rule number="5" usefulness="useful">
+        <lhs>class</lhs>
+        <rhs>
+          <symbol>CLASS</symbol>
+          <symbol>TYPE_IDENTIFIER</symbol>
+          <symbol>EXTENDS</symbol>
+          <symbol>TYPE_IDENTIFIER</symbol>
+          <symbol>class-body</symbol>
+        </rhs>
+      </rule>
+      <rule number="6" usefulness="useful">
+        <lhs>class-body</lhs>
+        <rhs>
+          <symbol>LBRACE</symbol>
+          <symbol>field-method</symbol>
+          <symbol>RBRACE</symbol>
+        </rhs>
+      </rule>
+      <rule number="7" usefulness="useful">
+        <lhs>field-method</lhs>
+        <rhs>
+          <empty/>
+        </rhs>
+      </rule>
+      <rule number="8" usefulness="useful">
+        <lhs>field-method</lhs>
+        <rhs>
+          <symbol>field-method</symbol>
+          <symbol>field</symbol>
+        </rhs>
+      </rule>
+      <rule number="9" usefulness="useful">
+        <lhs>field-method</lhs>
+        <rhs>
+          <symbol>field-method</symbol>
+          <symbol>method</symbol>
+        </rhs>
+      </rule>
+      <rule number="10" usefulness="useful">
+        <lhs>field</lhs>
+        <rhs>
+          <symbol>OBJECT_IDENTIFIER</symbol>
+          <symbol>COLON</symbol>
+          <symbol>type</symbol>
+          <symbol>SEMICOLON</symbol>
+        </rhs>
+      </rule>
+      <rule number="11" usefulness="useful">
+        <lhs>field</lhs>
+        <rhs>
+          <symbol>OBJECT_IDENTIFIER</symbol>
+          <symbol>COLON</symbol>
+          <symbol>type</symbol>
+          <symbol>ASSIGN</symbol>
+          <symbol>expr</symbol>
+          <symbol>SEMICOLON</symbol>
+        </rhs>
+      </rule>
+      <rule number="12" usefulness="useful">
+        <lhs>method</lhs>
+        <rhs>
+          <symbol>OBJECT_IDENTIFIER</symbol>
+          <symbol>LPAR</symbol>
+          <symbol>formals</symbol>
+          <symbol>RPAR</symbol>
+          <symbol>COLON</symbol>
+          <symbol>type</symbol>
+          <symbol>block</symbol>
+        </rhs>
+      </rule>
+      <rule number="13" usefulness="useful">
+        <lhs>type</lhs>
+        <rhs>
+          <symbol>TYPE_IDENTIFIER</symbol>
+        </rhs>
+      </rule>
+      <rule number="14" usefulness="useful">
+        <lhs>type</lhs>
+        <rhs>
+          <symbol>INT32</symbol>
+        </rhs>
+      </rule>
+      <rule number="15" usefulness="useful">
+        <lhs>type</lhs>
+        <rhs>
+          <symbol>BOOL</symbol>
+        </rhs>
+      </rule>
+      <rule number="16" usefulness="useful">
+        <lhs>type</lhs>
+        <rhs>
+          <symbol>STRING</symbol>
+        </rhs>
+      </rule>
+      <rule number="17" usefulness="useful">
+        <lhs>type</lhs>
+        <rhs>
+          <symbol>UNIT</symbol>
+        </rhs>
+      </rule>
+      <rule number="18" usefulness="useful">
+        <lhs>formals</lhs>
+        <rhs>
+          <empty/>
+        </rhs>
+      </rule>
+      <rule number="19" usefulness="useful">
+        <lhs>formals</lhs>
+        <rhs>
+          <symbol>formal</symbol>
+          <symbol>formalx</symbol>
+        </rhs>
+      </rule>
+      <rule number="20" usefulness="useful">
+        <lhs>formalx</lhs>
+        <rhs>
+          <empty/>
+        </rhs>
+      </rule>
+      <rule number="21" usefulness="useful">
+        <lhs>formalx</lhs>
+        <rhs>
+          <symbol>COMMA</symbol>
+          <symbol>formal</symbol>
+          <symbol>formalx</symbol>
+        </rhs>
+      </rule>
+      <rule number="22" usefulness="useful">
+        <lhs>formal</lhs>
+        <rhs>
+          <symbol>OBJECT_IDENTIFIER</symbol>
+          <symbol>COLON</symbol>
+          <symbol>type</symbol>
+        </rhs>
+      </rule>
+      <rule number="23" usefulness="useful">
+        <lhs>block</lhs>
+        <rhs>
+          <symbol>LBRACE</symbol>
+          <symbol>expr</symbol>
+          <symbol>exprx</symbol>
+          <symbol>RBRACE</symbol>
+        </rhs>
+      </rule>
+      <rule number="24" usefulness="useful">
+        <lhs>exprx</lhs>
+        <rhs>
+          <empty/>
+        </rhs>
+      </rule>
+      <rule number="25" usefulness="useful">
+        <lhs>exprx</lhs>
+        <rhs>
+          <symbol>SEMICOLON</symbol>
+          <symbol>expr</symbol>
+          <symbol>exprx</symbol>
+        </rhs>
+      </rule>
+      <rule number="26" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>IF</symbol>
+          <symbol>expr</symbol>
+          <symbol>THEN</symbol>
+          <symbol>expr</symbol>
+          <symbol>ELSE</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="27" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>IF</symbol>
+          <symbol>expr</symbol>
+          <symbol>THEN</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="28" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>WHILE</symbol>
+          <symbol>expr</symbol>
+          <symbol>DO</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="29" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>LET</symbol>
+          <symbol>OBJECT_IDENTIFIER</symbol>
+          <symbol>COLON</symbol>
+          <symbol>type</symbol>
+          <symbol>IN</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="30" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>LET</symbol>
+          <symbol>OBJECT_IDENTIFIER</symbol>
+          <symbol>COLON</symbol>
+          <symbol>type</symbol>
+          <symbol>ASSIGN</symbol>
+          <symbol>expr</symbol>
+          <symbol>IN</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="31" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>OBJECT_IDENTIFIER</symbol>
+          <symbol>ASSIGN</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="32" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>NOT</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="33" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>AND</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="34" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>EQUAL</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="35" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>LOWER</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="36" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>LOWER_EQUAL</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="37" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>PLUS</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="38" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>MINUS</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="39" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>TIMES</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="40" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>DIV</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="41" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>POW</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="42" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>MINUS</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="43" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>ISNULL</symbol>
+          <symbol>expr</symbol>
+        </rhs>
+      </rule>
+      <rule number="44" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>OBJECT_IDENTIFIER</symbol>
+          <symbol>LPAR</symbol>
+          <symbol>args</symbol>
+          <symbol>RPAR</symbol>
+        </rhs>
+      </rule>
+      <rule number="45" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>DOT</symbol>
+          <symbol>OBJECT_IDENTIFIER</symbol>
+          <symbol>LPAR</symbol>
+          <symbol>args</symbol>
+          <symbol>RPAR</symbol>
+        </rhs>
+      </rule>
+      <rule number="46" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>NEW</symbol>
+          <symbol>TYPE_IDENTIFIER</symbol>
+        </rhs>
+      </rule>
+      <rule number="47" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>OBJECT_IDENTIFIER</symbol>
+        </rhs>
+      </rule>
+      <rule number="48" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>literal</symbol>
+        </rhs>
+      </rule>
+      <rule number="49" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>LPAR</symbol>
+          <symbol>RPAR</symbol>
+        </rhs>
+      </rule>
+      <rule number="50" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>LPAR</symbol>
+          <symbol>expr</symbol>
+          <symbol>RPAR</symbol>
+        </rhs>
+      </rule>
+      <rule number="51" usefulness="useful">
+        <lhs>expr</lhs>
+        <rhs>
+          <symbol>block</symbol>
+        </rhs>
+      </rule>
+      <rule number="52" usefulness="useful">
+        <lhs>args</lhs>
+        <rhs>
+          <empty/>
+        </rhs>
+      </rule>
+      <rule number="53" usefulness="useful">
+        <lhs>args</lhs>
+        <rhs>
+          <symbol>expr</symbol>
+          <symbol>exprxx</symbol>
+        </rhs>
+      </rule>
+      <rule number="54" usefulness="useful">
+        <lhs>exprxx</lhs>
+        <rhs>
+          <empty/>
+        </rhs>
+      </rule>
+      <rule number="55" usefulness="useful">
+        <lhs>exprxx</lhs>
+        <rhs>
+          <symbol>COLON</symbol>
+          <symbol>expr</symbol>
+          <symbol>exprxx</symbol>
+        </rhs>
+      </rule>
+      <rule number="56" usefulness="useful">
+        <lhs>literal</lhs>
+        <rhs>
+          <symbol>INTEGER_LITERAL</symbol>
+        </rhs>
+      </rule>
+      <rule number="57" usefulness="useful">
+        <lhs>literal</lhs>
+        <rhs>
+          <symbol>STRING_LITERAL</symbol>
+        </rhs>
+      </rule>
+      <rule number="58" usefulness="useful">
+        <lhs>literal</lhs>
+        <rhs>
+          <symbol>boolean-literal</symbol>
+        </rhs>
+      </rule>
+      <rule number="59" usefulness="useful">
+        <lhs>boolean-literal</lhs>
+        <rhs>
+          <symbol>TRUE</symbol>
+        </rhs>
+      </rule>
+      <rule number="60" usefulness="useful">
+        <lhs>boolean-literal</lhs>
+        <rhs>
+          <symbol>FALSE</symbol>
+        </rhs>
+      </rule>
+    </rules>
+    <terminals>
+      <terminal symbol-number="0" token-number="0" name="&quot;end of file&quot;" usefulness="useful"/>
+      <terminal symbol-number="1" token-number="256" name="error" usefulness="useful"/>
+      <terminal symbol-number="3" token-number="258" name="LBRACE" usefulness="useful"/>
+      <terminal symbol-number="4" token-number="259" name="RBRACE" usefulness="useful"/>
+      <terminal symbol-number="5" token-number="260" name="LPAR" usefulness="useful"/>
+      <terminal symbol-number="6" token-number="261" name="RPAR" usefulness="useful"/>
+      <terminal symbol-number="7" token-number="262" name="COLON" usefulness="useful"/>
+      <terminal symbol-number="8" token-number="263" name="SEMICOLON" usefulness="useful"/>
+      <terminal symbol-number="9" token-number="264" name="COMMA" usefulness="useful"/>
+      <terminal symbol-number="10" token-number="265" name="ASSIGN" usefulness="useful" prec="4" assoc="right"/>
+      <terminal symbol-number="11" token-number="266" name="BOOL" usefulness="useful"/>
+      <terminal symbol-number="12" token-number="267" name="CLASS" usefulness="useful"/>
+      <terminal symbol-number="13" token-number="268" name="EXTENDS" usefulness="useful"/>
+      <terminal symbol-number="14" token-number="269" name="FALSE" usefulness="useful"/>
+      <terminal symbol-number="15" token-number="270" name="IF" usefulness="useful"/>
+      <terminal symbol-number="16" token-number="271" name="INT32" usefulness="useful"/>
+      <terminal symbol-number="17" token-number="272" name="ISNULL" usefulness="useful" prec="10" assoc="right"/>
+      <terminal symbol-number="18" token-number="273" name="LET" usefulness="useful"/>
+      <terminal symbol-number="19" token-number="274" name="NEW" usefulness="useful"/>
+      <terminal symbol-number="20" token-number="275" name="STRING" usefulness="useful"/>
+      <terminal symbol-number="21" token-number="276" name="TRUE" usefulness="useful"/>
+      <terminal symbol-number="22" token-number="277" name="UNIT" usefulness="useful"/>
+      <terminal symbol-number="23" token-number="278" name="WHILE" usefulness="useful"/>
+      <terminal symbol-number="24" token-number="279" name="TYPE_IDENTIFIER" usefulness="useful"/>
+      <terminal symbol-number="25" token-number="280" name="OBJECT_IDENTIFIER" usefulness="useful"/>
+      <terminal symbol-number="26" token-number="281" name="INTEGER_LITERAL" usefulness="useful"/>
+      <terminal symbol-number="27" token-number="282" name="STRING_LITERAL" usefulness="useful"/>
+      <terminal symbol-number="28" token-number="283" name="IN" usefulness="useful" prec="1" assoc="nonassoc"/>
+      <terminal symbol-number="29" token-number="284" name="THEN" usefulness="useful" prec="2" assoc="nonassoc"/>
+      <terminal symbol-number="30" token-number="285" name="DO" usefulness="useful" prec="2" assoc="nonassoc"/>
+      <terminal symbol-number="31" token-number="286" name="ELSE" usefulness="useful" prec="3" assoc="nonassoc"/>
+      <terminal symbol-number="32" token-number="287" name="AND" usefulness="useful" prec="5" assoc="left"/>
+      <terminal symbol-number="33" token-number="288" name="NOT" usefulness="useful" prec="6" assoc="right"/>
+      <terminal symbol-number="34" token-number="289" name="EQUAL" usefulness="useful" prec="7" assoc="nonassoc"/>
+      <terminal symbol-number="35" token-number="290" name="LOWER_EQUAL" usefulness="useful" prec="7" assoc="nonassoc"/>
+      <terminal symbol-number="36" token-number="291" name="LOWER" usefulness="useful" prec="7" assoc="nonassoc"/>
+      <terminal symbol-number="37" token-number="292" name="PLUS" usefulness="useful" prec="8" assoc="left"/>
+      <terminal symbol-number="38" token-number="293" name="MINUS" usefulness="useful" prec="8" assoc="left"/>
+      <terminal symbol-number="39" token-number="294" name="TIMES" usefulness="useful" prec="9" assoc="left"/>
+      <terminal symbol-number="40" token-number="295" name="DIV" usefulness="useful" prec="9" assoc="left"/>
+      <terminal symbol-number="41" token-number="296" name="POW" usefulness="useful" prec="11" assoc="right"/>
+      <terminal symbol-number="42" token-number="297" name="DOT" usefulness="useful" prec="12" assoc="left"/>
+    </terminals>
+    <nonterminals>
+      <nonterminal symbol-number="43" name="$accept" usefulness="useful"/>
+      <nonterminal symbol-number="44" name="program" usefulness="useful"/>
+      <nonterminal symbol-number="45" name="classes" usefulness="useful"/>
+      <nonterminal symbol-number="46" name="class" usefulness="useful"/>
+      <nonterminal symbol-number="47" name="class-body" usefulness="useful"/>
+      <nonterminal symbol-number="48" name="field-method" usefulness="useful"/>
+      <nonterminal symbol-number="49" name="field" usefulness="useful"/>
+      <nonterminal symbol-number="50" name="method" usefulness="useful"/>
+      <nonterminal symbol-number="51" name="type" usefulness="useful"/>
+      <nonterminal symbol-number="52" name="formals" usefulness="useful"/>
+      <nonterminal symbol-number="53" name="formalx" usefulness="useful"/>
+      <nonterminal symbol-number="54" name="formal" usefulness="useful"/>
+      <nonterminal symbol-number="55" name="block" usefulness="useful"/>
+      <nonterminal symbol-number="56" name="exprx" usefulness="useful"/>
+      <nonterminal symbol-number="57" name="expr" usefulness="useful"/>
+      <nonterminal symbol-number="58" name="args" usefulness="useful"/>
+      <nonterminal symbol-number="59" name="exprxx" usefulness="useful"/>
+      <nonterminal symbol-number="60" name="literal" usefulness="useful"/>
+      <nonterminal symbol-number="61" name="boolean-literal" usefulness="useful"/>
+    </nonterminals>
+  </grammar>
+
+  <automaton>
+
+    <state number="0">
+      <itemset>
+        <item rule-number="0" point="0"/>
+        <item rule-number="1" point="0"/>
+        <item rule-number="2" point="0"/>
+        <item rule-number="3" point="0"/>
+        <item rule-number="4" point="0"/>
+        <item rule-number="5" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="CLASS" state="1"/>
+          <transition type="goto" symbol="program" state="2"/>
+          <transition type="goto" symbol="classes" state="3"/>
+          <transition type="goto" symbol="class" state="4"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="1">
+      <itemset>
+        <item rule-number="4" point="1"/>
+        <item rule-number="5" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="TYPE_IDENTIFIER" state="5"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="2">
+      <itemset>
+        <item rule-number="0" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="&quot;end of file&quot;" state="6"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="3">
+      <itemset>
+        <item rule-number="1" point="1">
+          <lookaheads>
+            <symbol>&quot;end of file&quot;</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="2" point="1"/>
+        <item rule-number="4" point="0"/>
+        <item rule-number="5" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="CLASS" state="1"/>
+          <transition type="goto" symbol="class" state="7"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="1" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="4">
+      <itemset>
+        <item rule-number="3" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="3" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="5">
+      <itemset>
+        <item rule-number="4" point="2"/>
+        <item rule-number="5" point="2"/>
+        <item rule-number="6" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="8"/>
+          <transition type="shift" symbol="EXTENDS" state="9"/>
+          <transition type="goto" symbol="class-body" state="10"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="6">
+      <itemset>
+        <item rule-number="0" point="2"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="accept" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="7">
+      <itemset>
+        <item rule-number="2" point="2"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="2" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="8">
+      <itemset>
+        <item rule-number="6" point="1"/>
+        <item rule-number="7" point="0"/>
+        <item rule-number="8" point="0"/>
+        <item rule-number="9" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="goto" symbol="field-method" state="11"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="7" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="9">
+      <itemset>
+        <item rule-number="5" point="3"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="TYPE_IDENTIFIER" state="12"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="10">
+      <itemset>
+        <item rule-number="4" point="3"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="4" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="11">
+      <itemset>
+        <item rule-number="6" point="2"/>
+        <item rule-number="8" point="1"/>
+        <item rule-number="9" point="1"/>
+        <item rule-number="10" point="0"/>
+        <item rule-number="11" point="0"/>
+        <item rule-number="12" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="RBRACE" state="13"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="14"/>
+          <transition type="goto" symbol="field" state="15"/>
+          <transition type="goto" symbol="method" state="16"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="12">
+      <itemset>
+        <item rule-number="5" point="4"/>
+        <item rule-number="6" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="8"/>
+          <transition type="goto" symbol="class-body" state="17"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="13">
+      <itemset>
+        <item rule-number="6" point="3"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="6" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="14">
+      <itemset>
+        <item rule-number="10" point="1"/>
+        <item rule-number="11" point="1"/>
+        <item rule-number="12" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LPAR" state="18"/>
+          <transition type="shift" symbol="COLON" state="19"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="15">
+      <itemset>
+        <item rule-number="8" point="2"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="8" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="16">
+      <itemset>
+        <item rule-number="9" point="2"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="9" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="17">
+      <itemset>
+        <item rule-number="5" point="5"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="5" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="18">
+      <itemset>
+        <item rule-number="12" point="2"/>
+        <item rule-number="18" point="0">
+          <lookaheads>
+            <symbol>RPAR</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="19" point="0"/>
+        <item rule-number="22" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="20"/>
+          <transition type="goto" symbol="formals" state="21"/>
+          <transition type="goto" symbol="formal" state="22"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="18" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="19">
+      <itemset>
+        <item rule-number="10" point="2"/>
+        <item rule-number="11" point="2"/>
+        <item rule-number="13" point="0"/>
+        <item rule-number="14" point="0"/>
+        <item rule-number="15" point="0"/>
+        <item rule-number="16" point="0"/>
+        <item rule-number="17" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="BOOL" state="23"/>
+          <transition type="shift" symbol="INT32" state="24"/>
+          <transition type="shift" symbol="STRING" state="25"/>
+          <transition type="shift" symbol="UNIT" state="26"/>
+          <transition type="shift" symbol="TYPE_IDENTIFIER" state="27"/>
+          <transition type="goto" symbol="type" state="28"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="20">
+      <itemset>
+        <item rule-number="22" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="COLON" state="29"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="21">
+      <itemset>
+        <item rule-number="12" point="3"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="RPAR" state="30"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="22">
+      <itemset>
+        <item rule-number="19" point="1"/>
+        <item rule-number="20" point="0">
+          <lookaheads>
+            <symbol>RPAR</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="21" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="COMMA" state="31"/>
+          <transition type="goto" symbol="formalx" state="32"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="20" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="23">
+      <itemset>
+        <item rule-number="15" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="15" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="24">
+      <itemset>
+        <item rule-number="14" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="14" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="25">
+      <itemset>
+        <item rule-number="16" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="16" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="26">
+      <itemset>
+        <item rule-number="17" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="17" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="27">
+      <itemset>
+        <item rule-number="13" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="13" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="28">
+      <itemset>
+        <item rule-number="10" point="3"/>
+        <item rule-number="11" point="3"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="SEMICOLON" state="33"/>
+          <transition type="shift" symbol="ASSIGN" state="34"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="29">
+      <itemset>
+        <item rule-number="13" point="0"/>
+        <item rule-number="14" point="0"/>
+        <item rule-number="15" point="0"/>
+        <item rule-number="16" point="0"/>
+        <item rule-number="17" point="0"/>
+        <item rule-number="22" point="2"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="BOOL" state="23"/>
+          <transition type="shift" symbol="INT32" state="24"/>
+          <transition type="shift" symbol="STRING" state="25"/>
+          <transition type="shift" symbol="UNIT" state="26"/>
+          <transition type="shift" symbol="TYPE_IDENTIFIER" state="27"/>
+          <transition type="goto" symbol="type" state="35"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="30">
+      <itemset>
+        <item rule-number="12" point="4"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="COLON" state="36"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="31">
+      <itemset>
+        <item rule-number="21" point="1"/>
+        <item rule-number="22" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="20"/>
+          <transition type="goto" symbol="formal" state="37"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="32">
+      <itemset>
+        <item rule-number="19" point="2"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="19" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="33">
+      <itemset>
+        <item rule-number="10" point="4"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="10" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="34">
+      <itemset>
+        <item rule-number="11" point="4"/>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="53"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="35">
+      <itemset>
+        <item rule-number="22" point="3"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="22" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="36">
+      <itemset>
+        <item rule-number="12" point="5"/>
+        <item rule-number="13" point="0"/>
+        <item rule-number="14" point="0"/>
+        <item rule-number="15" point="0"/>
+        <item rule-number="16" point="0"/>
+        <item rule-number="17" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="BOOL" state="23"/>
+          <transition type="shift" symbol="INT32" state="24"/>
+          <transition type="shift" symbol="STRING" state="25"/>
+          <transition type="shift" symbol="UNIT" state="26"/>
+          <transition type="shift" symbol="TYPE_IDENTIFIER" state="27"/>
+          <transition type="goto" symbol="type" state="56"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="37">
+      <itemset>
+        <item rule-number="20" point="0">
+          <lookaheads>
+            <symbol>RPAR</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="21" point="0"/>
+        <item rule-number="21" point="2"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="COMMA" state="31"/>
+          <transition type="goto" symbol="formalx" state="57"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="20" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="38">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="23" point="1"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="58"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="39">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="49" point="1"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="50" point="1"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="RPAR" state="59"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="60"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="40">
+      <itemset>
+        <item rule-number="60" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="60" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="41">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="26" point="1"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="27" point="1"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="61"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="42">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="43" point="1"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="62"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="43">
+      <itemset>
+        <item rule-number="29" point="1"/>
+        <item rule-number="30" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="63"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="44">
+      <itemset>
+        <item rule-number="46" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="TYPE_IDENTIFIER" state="64"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="45">
+      <itemset>
+        <item rule-number="59" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="59" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="46">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="28" point="1"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="65"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="47">
+      <itemset>
+        <item rule-number="31" point="1"/>
+        <item rule-number="44" point="1"/>
+        <item rule-number="47" point="1">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+            <symbol>EQUAL</symbol>
+            <symbol>LOWER_EQUAL</symbol>
+            <symbol>LOWER</symbol>
+            <symbol>PLUS</symbol>
+            <symbol>MINUS</symbol>
+            <symbol>TIMES</symbol>
+            <symbol>DIV</symbol>
+            <symbol>POW</symbol>
+            <symbol>DOT</symbol>
+          </lookaheads>
+        </item>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LPAR" state="66"/>
+          <transition type="shift" symbol="ASSIGN" state="67"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="47" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="48">
+      <itemset>
+        <item rule-number="56" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="56" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="49">
+      <itemset>
+        <item rule-number="57" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="57" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="50">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="32" point="1"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="68"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="51">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="42" point="1"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="69"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="52">
+      <itemset>
+        <item rule-number="51" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="51" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="53">
+      <itemset>
+        <item rule-number="11" point="5"/>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="SEMICOLON" state="70"/>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="54">
+      <itemset>
+        <item rule-number="48" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="48" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="55">
+      <itemset>
+        <item rule-number="58" point="1"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="58" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="56">
+      <itemset>
+        <item rule-number="12" point="6"/>
+        <item rule-number="23" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="goto" symbol="block" state="81"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="57">
+      <itemset>
+        <item rule-number="21" point="3"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="21" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="58">
+      <itemset>
+        <item rule-number="23" point="2"/>
+        <item rule-number="24" point="0">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="25" point="0"/>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="SEMICOLON" state="82"/>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+          <transition type="goto" symbol="exprx" state="83"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="24" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="59">
+      <itemset>
+        <item rule-number="49" point="2"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="49" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="60">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+        <item rule-number="50" point="2"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="RPAR" state="84"/>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="61">
+      <itemset>
+        <item rule-number="26" point="2"/>
+        <item rule-number="27" point="2"/>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="THEN" state="85"/>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="62">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="43" point="2">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+            <symbol>EQUAL</symbol>
+            <symbol>LOWER_EQUAL</symbol>
+            <symbol>LOWER</symbol>
+            <symbol>PLUS</symbol>
+            <symbol>MINUS</symbol>
+            <symbol>TIMES</symbol>
+            <symbol>DIV</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="43" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="43" symbol="AND" type="reduce">AND &lt; ISNULL</resolution>
+        <resolution rule="43" symbol="EQUAL" type="reduce">EQUAL &lt; ISNULL</resolution>
+        <resolution rule="43" symbol="LOWER_EQUAL" type="reduce">LOWER_EQUAL &lt; ISNULL</resolution>
+        <resolution rule="43" symbol="LOWER" type="reduce">LOWER &lt; ISNULL</resolution>
+        <resolution rule="43" symbol="PLUS" type="reduce">PLUS &lt; ISNULL</resolution>
+        <resolution rule="43" symbol="MINUS" type="reduce">MINUS &lt; ISNULL</resolution>
+        <resolution rule="43" symbol="TIMES" type="reduce">TIMES &lt; ISNULL</resolution>
+        <resolution rule="43" symbol="DIV" type="reduce">DIV &lt; ISNULL</resolution>
+        <resolution rule="43" symbol="POW" type="shift">ISNULL &lt; POW</resolution>
+        <resolution rule="43" symbol="DOT" type="shift">ISNULL &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="63">
+      <itemset>
+        <item rule-number="29" point="2"/>
+        <item rule-number="30" point="2"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="COLON" state="86"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="64">
+      <itemset>
+        <item rule-number="46" point="2"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="46" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="65">
+      <itemset>
+        <item rule-number="28" point="2"/>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="DO" state="87"/>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="66">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="44" point="2"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="52" point="0">
+          <lookaheads>
+            <symbol>RPAR</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="53" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="88"/>
+          <transition type="goto" symbol="args" state="89"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="52" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="67">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="31" point="2"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="90"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="68">
+      <itemset>
+        <item rule-number="32" point="2">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="32" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="32" symbol="AND" type="reduce">AND &lt; NOT</resolution>
+        <resolution rule="32" symbol="EQUAL" type="shift">NOT &lt; EQUAL</resolution>
+        <resolution rule="32" symbol="LOWER_EQUAL" type="shift">NOT &lt; LOWER_EQUAL</resolution>
+        <resolution rule="32" symbol="LOWER" type="shift">NOT &lt; LOWER</resolution>
+        <resolution rule="32" symbol="PLUS" type="shift">NOT &lt; PLUS</resolution>
+        <resolution rule="32" symbol="MINUS" type="shift">NOT &lt; MINUS</resolution>
+        <resolution rule="32" symbol="TIMES" type="shift">NOT &lt; TIMES</resolution>
+        <resolution rule="32" symbol="DIV" type="shift">NOT &lt; DIV</resolution>
+        <resolution rule="32" symbol="POW" type="shift">NOT &lt; POW</resolution>
+        <resolution rule="32" symbol="DOT" type="shift">NOT &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="69">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="42" point="2">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+            <symbol>EQUAL</symbol>
+            <symbol>LOWER_EQUAL</symbol>
+            <symbol>LOWER</symbol>
+            <symbol>PLUS</symbol>
+            <symbol>MINUS</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="42" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="42" symbol="AND" type="reduce">AND &lt; MINUS</resolution>
+        <resolution rule="42" symbol="EQUAL" type="reduce">EQUAL &lt; MINUS</resolution>
+        <resolution rule="42" symbol="LOWER_EQUAL" type="reduce">LOWER_EQUAL &lt; MINUS</resolution>
+        <resolution rule="42" symbol="LOWER" type="reduce">LOWER &lt; MINUS</resolution>
+        <resolution rule="42" symbol="PLUS" type="reduce">%left PLUS</resolution>
+        <resolution rule="42" symbol="MINUS" type="reduce">%left MINUS</resolution>
+        <resolution rule="42" symbol="TIMES" type="shift">MINUS &lt; TIMES</resolution>
+        <resolution rule="42" symbol="DIV" type="shift">MINUS &lt; DIV</resolution>
+        <resolution rule="42" symbol="POW" type="shift">MINUS &lt; POW</resolution>
+        <resolution rule="42" symbol="DOT" type="shift">MINUS &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="70">
+      <itemset>
+        <item rule-number="11" point="6"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="11" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="71">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="33" point="2"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="91"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="72">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="34" point="2"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="92"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="73">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="36" point="2"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="93"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="74">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="35" point="2"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="94"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="75">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="37" point="2"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="95"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="76">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="38" point="2"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="96"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="77">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="39" point="2"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="97"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="78">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="40" point="2"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="98"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="79">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="41" point="2"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="99"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="80">
+      <itemset>
+        <item rule-number="45" point="2"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="100"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="81">
+      <itemset>
+        <item rule-number="12" point="7"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="12" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="82">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="25" point="1"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="101"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="83">
+      <itemset>
+        <item rule-number="23" point="3"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="RBRACE" state="102"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="84">
+      <itemset>
+        <item rule-number="50" point="3"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="50" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="85">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="26" point="3"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="27" point="3"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="103"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="86">
+      <itemset>
+        <item rule-number="13" point="0"/>
+        <item rule-number="14" point="0"/>
+        <item rule-number="15" point="0"/>
+        <item rule-number="16" point="0"/>
+        <item rule-number="17" point="0"/>
+        <item rule-number="29" point="3"/>
+        <item rule-number="30" point="3"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="BOOL" state="23"/>
+          <transition type="shift" symbol="INT32" state="24"/>
+          <transition type="shift" symbol="STRING" state="25"/>
+          <transition type="shift" symbol="UNIT" state="26"/>
+          <transition type="shift" symbol="TYPE_IDENTIFIER" state="27"/>
+          <transition type="goto" symbol="type" state="104"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="87">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="28" point="3"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="105"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="88">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+        <item rule-number="53" point="1"/>
+        <item rule-number="54" point="0">
+          <lookaheads>
+            <symbol>RPAR</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="55" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="COLON" state="106"/>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+          <transition type="goto" symbol="exprxx" state="107"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="54" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="89">
+      <itemset>
+        <item rule-number="44" point="3"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="RPAR" state="108"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="90">
+      <itemset>
+        <item rule-number="31" point="3">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="31" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="31" symbol="AND" type="shift">ASSIGN &lt; AND</resolution>
+        <resolution rule="31" symbol="EQUAL" type="shift">ASSIGN &lt; EQUAL</resolution>
+        <resolution rule="31" symbol="LOWER_EQUAL" type="shift">ASSIGN &lt; LOWER_EQUAL</resolution>
+        <resolution rule="31" symbol="LOWER" type="shift">ASSIGN &lt; LOWER</resolution>
+        <resolution rule="31" symbol="PLUS" type="shift">ASSIGN &lt; PLUS</resolution>
+        <resolution rule="31" symbol="MINUS" type="shift">ASSIGN &lt; MINUS</resolution>
+        <resolution rule="31" symbol="TIMES" type="shift">ASSIGN &lt; TIMES</resolution>
+        <resolution rule="31" symbol="DIV" type="shift">ASSIGN &lt; DIV</resolution>
+        <resolution rule="31" symbol="POW" type="shift">ASSIGN &lt; POW</resolution>
+        <resolution rule="31" symbol="DOT" type="shift">ASSIGN &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="91">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="33" point="3">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="33" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="33" symbol="AND" type="reduce">%left AND</resolution>
+        <resolution rule="33" symbol="EQUAL" type="shift">AND &lt; EQUAL</resolution>
+        <resolution rule="33" symbol="LOWER_EQUAL" type="shift">AND &lt; LOWER_EQUAL</resolution>
+        <resolution rule="33" symbol="LOWER" type="shift">AND &lt; LOWER</resolution>
+        <resolution rule="33" symbol="PLUS" type="shift">AND &lt; PLUS</resolution>
+        <resolution rule="33" symbol="MINUS" type="shift">AND &lt; MINUS</resolution>
+        <resolution rule="33" symbol="TIMES" type="shift">AND &lt; TIMES</resolution>
+        <resolution rule="33" symbol="DIV" type="shift">AND &lt; DIV</resolution>
+        <resolution rule="33" symbol="POW" type="shift">AND &lt; POW</resolution>
+        <resolution rule="33" symbol="DOT" type="shift">AND &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="92">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="34" point="3">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors>
+          <error symbol="EQUAL">nonassociative</error>
+          <error symbol="LOWER_EQUAL">nonassociative</error>
+          <error symbol="LOWER">nonassociative</error>
+        </errors>
+        <reductions>
+          <reduction symbol="$default" rule="34" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="34" symbol="AND" type="reduce">AND &lt; EQUAL</resolution>
+        <resolution rule="34" symbol="EQUAL" type="error">%nonassoc EQUAL</resolution>
+        <resolution rule="34" symbol="LOWER_EQUAL" type="error">%nonassoc LOWER_EQUAL</resolution>
+        <resolution rule="34" symbol="LOWER" type="error">%nonassoc LOWER</resolution>
+        <resolution rule="34" symbol="PLUS" type="shift">EQUAL &lt; PLUS</resolution>
+        <resolution rule="34" symbol="MINUS" type="shift">EQUAL &lt; MINUS</resolution>
+        <resolution rule="34" symbol="TIMES" type="shift">EQUAL &lt; TIMES</resolution>
+        <resolution rule="34" symbol="DIV" type="shift">EQUAL &lt; DIV</resolution>
+        <resolution rule="34" symbol="POW" type="shift">EQUAL &lt; POW</resolution>
+        <resolution rule="34" symbol="DOT" type="shift">EQUAL &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="93">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="36" point="3">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors>
+          <error symbol="EQUAL">nonassociative</error>
+          <error symbol="LOWER_EQUAL">nonassociative</error>
+          <error symbol="LOWER">nonassociative</error>
+        </errors>
+        <reductions>
+          <reduction symbol="$default" rule="36" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="36" symbol="AND" type="reduce">AND &lt; LOWER_EQUAL</resolution>
+        <resolution rule="36" symbol="EQUAL" type="error">%nonassoc EQUAL</resolution>
+        <resolution rule="36" symbol="LOWER_EQUAL" type="error">%nonassoc LOWER_EQUAL</resolution>
+        <resolution rule="36" symbol="LOWER" type="error">%nonassoc LOWER</resolution>
+        <resolution rule="36" symbol="PLUS" type="shift">LOWER_EQUAL &lt; PLUS</resolution>
+        <resolution rule="36" symbol="MINUS" type="shift">LOWER_EQUAL &lt; MINUS</resolution>
+        <resolution rule="36" symbol="TIMES" type="shift">LOWER_EQUAL &lt; TIMES</resolution>
+        <resolution rule="36" symbol="DIV" type="shift">LOWER_EQUAL &lt; DIV</resolution>
+        <resolution rule="36" symbol="POW" type="shift">LOWER_EQUAL &lt; POW</resolution>
+        <resolution rule="36" symbol="DOT" type="shift">LOWER_EQUAL &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="94">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="35" point="3">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors>
+          <error symbol="EQUAL">nonassociative</error>
+          <error symbol="LOWER_EQUAL">nonassociative</error>
+          <error symbol="LOWER">nonassociative</error>
+        </errors>
+        <reductions>
+          <reduction symbol="$default" rule="35" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="35" symbol="AND" type="reduce">AND &lt; LOWER</resolution>
+        <resolution rule="35" symbol="EQUAL" type="error">%nonassoc EQUAL</resolution>
+        <resolution rule="35" symbol="LOWER_EQUAL" type="error">%nonassoc LOWER_EQUAL</resolution>
+        <resolution rule="35" symbol="LOWER" type="error">%nonassoc LOWER</resolution>
+        <resolution rule="35" symbol="PLUS" type="shift">LOWER &lt; PLUS</resolution>
+        <resolution rule="35" symbol="MINUS" type="shift">LOWER &lt; MINUS</resolution>
+        <resolution rule="35" symbol="TIMES" type="shift">LOWER &lt; TIMES</resolution>
+        <resolution rule="35" symbol="DIV" type="shift">LOWER &lt; DIV</resolution>
+        <resolution rule="35" symbol="POW" type="shift">LOWER &lt; POW</resolution>
+        <resolution rule="35" symbol="DOT" type="shift">LOWER &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="95">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="37" point="3">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+            <symbol>EQUAL</symbol>
+            <symbol>LOWER_EQUAL</symbol>
+            <symbol>LOWER</symbol>
+            <symbol>PLUS</symbol>
+            <symbol>MINUS</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="37" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="37" symbol="AND" type="reduce">AND &lt; PLUS</resolution>
+        <resolution rule="37" symbol="EQUAL" type="reduce">EQUAL &lt; PLUS</resolution>
+        <resolution rule="37" symbol="LOWER_EQUAL" type="reduce">LOWER_EQUAL &lt; PLUS</resolution>
+        <resolution rule="37" symbol="LOWER" type="reduce">LOWER &lt; PLUS</resolution>
+        <resolution rule="37" symbol="PLUS" type="reduce">%left PLUS</resolution>
+        <resolution rule="37" symbol="MINUS" type="reduce">%left MINUS</resolution>
+        <resolution rule="37" symbol="TIMES" type="shift">PLUS &lt; TIMES</resolution>
+        <resolution rule="37" symbol="DIV" type="shift">PLUS &lt; DIV</resolution>
+        <resolution rule="37" symbol="POW" type="shift">PLUS &lt; POW</resolution>
+        <resolution rule="37" symbol="DOT" type="shift">PLUS &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="96">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="38" point="3">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+            <symbol>EQUAL</symbol>
+            <symbol>LOWER_EQUAL</symbol>
+            <symbol>LOWER</symbol>
+            <symbol>PLUS</symbol>
+            <symbol>MINUS</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="38" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="38" symbol="AND" type="reduce">AND &lt; MINUS</resolution>
+        <resolution rule="38" symbol="EQUAL" type="reduce">EQUAL &lt; MINUS</resolution>
+        <resolution rule="38" symbol="LOWER_EQUAL" type="reduce">LOWER_EQUAL &lt; MINUS</resolution>
+        <resolution rule="38" symbol="LOWER" type="reduce">LOWER &lt; MINUS</resolution>
+        <resolution rule="38" symbol="PLUS" type="reduce">%left PLUS</resolution>
+        <resolution rule="38" symbol="MINUS" type="reduce">%left MINUS</resolution>
+        <resolution rule="38" symbol="TIMES" type="shift">MINUS &lt; TIMES</resolution>
+        <resolution rule="38" symbol="DIV" type="shift">MINUS &lt; DIV</resolution>
+        <resolution rule="38" symbol="POW" type="shift">MINUS &lt; POW</resolution>
+        <resolution rule="38" symbol="DOT" type="shift">MINUS &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="97">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="39" point="3">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+            <symbol>EQUAL</symbol>
+            <symbol>LOWER_EQUAL</symbol>
+            <symbol>LOWER</symbol>
+            <symbol>PLUS</symbol>
+            <symbol>MINUS</symbol>
+            <symbol>TIMES</symbol>
+            <symbol>DIV</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="39" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="39" symbol="AND" type="reduce">AND &lt; TIMES</resolution>
+        <resolution rule="39" symbol="EQUAL" type="reduce">EQUAL &lt; TIMES</resolution>
+        <resolution rule="39" symbol="LOWER_EQUAL" type="reduce">LOWER_EQUAL &lt; TIMES</resolution>
+        <resolution rule="39" symbol="LOWER" type="reduce">LOWER &lt; TIMES</resolution>
+        <resolution rule="39" symbol="PLUS" type="reduce">PLUS &lt; TIMES</resolution>
+        <resolution rule="39" symbol="MINUS" type="reduce">MINUS &lt; TIMES</resolution>
+        <resolution rule="39" symbol="TIMES" type="reduce">%left TIMES</resolution>
+        <resolution rule="39" symbol="DIV" type="reduce">%left DIV</resolution>
+        <resolution rule="39" symbol="POW" type="shift">TIMES &lt; POW</resolution>
+        <resolution rule="39" symbol="DOT" type="shift">TIMES &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="98">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="40" point="3">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+            <symbol>EQUAL</symbol>
+            <symbol>LOWER_EQUAL</symbol>
+            <symbol>LOWER</symbol>
+            <symbol>PLUS</symbol>
+            <symbol>MINUS</symbol>
+            <symbol>TIMES</symbol>
+            <symbol>DIV</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="40" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="40" symbol="AND" type="reduce">AND &lt; DIV</resolution>
+        <resolution rule="40" symbol="EQUAL" type="reduce">EQUAL &lt; DIV</resolution>
+        <resolution rule="40" symbol="LOWER_EQUAL" type="reduce">LOWER_EQUAL &lt; DIV</resolution>
+        <resolution rule="40" symbol="LOWER" type="reduce">LOWER &lt; DIV</resolution>
+        <resolution rule="40" symbol="PLUS" type="reduce">PLUS &lt; DIV</resolution>
+        <resolution rule="40" symbol="MINUS" type="reduce">MINUS &lt; DIV</resolution>
+        <resolution rule="40" symbol="TIMES" type="reduce">%left TIMES</resolution>
+        <resolution rule="40" symbol="DIV" type="reduce">%left DIV</resolution>
+        <resolution rule="40" symbol="POW" type="shift">DIV &lt; POW</resolution>
+        <resolution rule="40" symbol="DOT" type="shift">DIV &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="99">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="41" point="3">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+            <symbol>AND</symbol>
+            <symbol>EQUAL</symbol>
+            <symbol>LOWER_EQUAL</symbol>
+            <symbol>LOWER</symbol>
+            <symbol>PLUS</symbol>
+            <symbol>MINUS</symbol>
+            <symbol>TIMES</symbol>
+            <symbol>DIV</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="41" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="41" symbol="AND" type="reduce">AND &lt; POW</resolution>
+        <resolution rule="41" symbol="EQUAL" type="reduce">EQUAL &lt; POW</resolution>
+        <resolution rule="41" symbol="LOWER_EQUAL" type="reduce">LOWER_EQUAL &lt; POW</resolution>
+        <resolution rule="41" symbol="LOWER" type="reduce">LOWER &lt; POW</resolution>
+        <resolution rule="41" symbol="PLUS" type="reduce">PLUS &lt; POW</resolution>
+        <resolution rule="41" symbol="MINUS" type="reduce">MINUS &lt; POW</resolution>
+        <resolution rule="41" symbol="TIMES" type="reduce">TIMES &lt; POW</resolution>
+        <resolution rule="41" symbol="DIV" type="reduce">DIV &lt; POW</resolution>
+        <resolution rule="41" symbol="POW" type="shift">%right POW</resolution>
+        <resolution rule="41" symbol="DOT" type="shift">POW &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="100">
+      <itemset>
+        <item rule-number="45" point="3"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LPAR" state="109"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="101">
+      <itemset>
+        <item rule-number="24" point="0">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="25" point="0"/>
+        <item rule-number="25" point="2"/>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="SEMICOLON" state="82"/>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+          <transition type="goto" symbol="exprx" state="110"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="24" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="102">
+      <itemset>
+        <item rule-number="23" point="4"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="23" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="103">
+      <itemset>
+        <item rule-number="26" point="4"/>
+        <item rule-number="27" point="4">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="ELSE" state="111"/>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="27" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="27" symbol="ELSE" type="shift">THEN &lt; ELSE</resolution>
+        <resolution rule="27" symbol="AND" type="shift">THEN &lt; AND</resolution>
+        <resolution rule="27" symbol="EQUAL" type="shift">THEN &lt; EQUAL</resolution>
+        <resolution rule="27" symbol="LOWER_EQUAL" type="shift">THEN &lt; LOWER_EQUAL</resolution>
+        <resolution rule="27" symbol="LOWER" type="shift">THEN &lt; LOWER</resolution>
+        <resolution rule="27" symbol="PLUS" type="shift">THEN &lt; PLUS</resolution>
+        <resolution rule="27" symbol="MINUS" type="shift">THEN &lt; MINUS</resolution>
+        <resolution rule="27" symbol="TIMES" type="shift">THEN &lt; TIMES</resolution>
+        <resolution rule="27" symbol="DIV" type="shift">THEN &lt; DIV</resolution>
+        <resolution rule="27" symbol="POW" type="shift">THEN &lt; POW</resolution>
+        <resolution rule="27" symbol="DOT" type="shift">THEN &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="104">
+      <itemset>
+        <item rule-number="29" point="4"/>
+        <item rule-number="30" point="4"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="ASSIGN" state="112"/>
+          <transition type="shift" symbol="IN" state="113"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="105">
+      <itemset>
+        <item rule-number="28" point="4">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="28" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="28" symbol="AND" type="shift">DO &lt; AND</resolution>
+        <resolution rule="28" symbol="EQUAL" type="shift">DO &lt; EQUAL</resolution>
+        <resolution rule="28" symbol="LOWER_EQUAL" type="shift">DO &lt; LOWER_EQUAL</resolution>
+        <resolution rule="28" symbol="LOWER" type="shift">DO &lt; LOWER</resolution>
+        <resolution rule="28" symbol="PLUS" type="shift">DO &lt; PLUS</resolution>
+        <resolution rule="28" symbol="MINUS" type="shift">DO &lt; MINUS</resolution>
+        <resolution rule="28" symbol="TIMES" type="shift">DO &lt; TIMES</resolution>
+        <resolution rule="28" symbol="DIV" type="shift">DO &lt; DIV</resolution>
+        <resolution rule="28" symbol="POW" type="shift">DO &lt; POW</resolution>
+        <resolution rule="28" symbol="DOT" type="shift">DO &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="106">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="55" point="1"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="114"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="107">
+      <itemset>
+        <item rule-number="53" point="2"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="53" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="108">
+      <itemset>
+        <item rule-number="44" point="4"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="44" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="109">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="45" point="4"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="52" point="0">
+          <lookaheads>
+            <symbol>RPAR</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="53" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="88"/>
+          <transition type="goto" symbol="args" state="115"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="52" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="110">
+      <itemset>
+        <item rule-number="25" point="3"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="25" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="111">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="26" point="5"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="116"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="112">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="30" point="5"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="117"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="113">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="29" point="5"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="118"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="114">
+      <itemset>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+        <item rule-number="54" point="0">
+          <lookaheads>
+            <symbol>RPAR</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="55" point="0"/>
+        <item rule-number="55" point="2"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="COLON" state="106"/>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+          <transition type="goto" symbol="exprxx" state="119"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="54" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="115">
+      <itemset>
+        <item rule-number="45" point="5"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="RPAR" state="120"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="116">
+      <itemset>
+        <item rule-number="26" point="6">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="26" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="26" symbol="AND" type="shift">ELSE &lt; AND</resolution>
+        <resolution rule="26" symbol="EQUAL" type="shift">ELSE &lt; EQUAL</resolution>
+        <resolution rule="26" symbol="LOWER_EQUAL" type="shift">ELSE &lt; LOWER_EQUAL</resolution>
+        <resolution rule="26" symbol="LOWER" type="shift">ELSE &lt; LOWER</resolution>
+        <resolution rule="26" symbol="PLUS" type="shift">ELSE &lt; PLUS</resolution>
+        <resolution rule="26" symbol="MINUS" type="shift">ELSE &lt; MINUS</resolution>
+        <resolution rule="26" symbol="TIMES" type="shift">ELSE &lt; TIMES</resolution>
+        <resolution rule="26" symbol="DIV" type="shift">ELSE &lt; DIV</resolution>
+        <resolution rule="26" symbol="POW" type="shift">ELSE &lt; POW</resolution>
+        <resolution rule="26" symbol="DOT" type="shift">ELSE &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="117">
+      <itemset>
+        <item rule-number="30" point="6"/>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="IN" state="121"/>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="118">
+      <itemset>
+        <item rule-number="29" point="6">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="29" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="29" symbol="AND" type="shift">IN &lt; AND</resolution>
+        <resolution rule="29" symbol="EQUAL" type="shift">IN &lt; EQUAL</resolution>
+        <resolution rule="29" symbol="LOWER_EQUAL" type="shift">IN &lt; LOWER_EQUAL</resolution>
+        <resolution rule="29" symbol="LOWER" type="shift">IN &lt; LOWER</resolution>
+        <resolution rule="29" symbol="PLUS" type="shift">IN &lt; PLUS</resolution>
+        <resolution rule="29" symbol="MINUS" type="shift">IN &lt; MINUS</resolution>
+        <resolution rule="29" symbol="TIMES" type="shift">IN &lt; TIMES</resolution>
+        <resolution rule="29" symbol="DIV" type="shift">IN &lt; DIV</resolution>
+        <resolution rule="29" symbol="POW" type="shift">IN &lt; POW</resolution>
+        <resolution rule="29" symbol="DOT" type="shift">IN &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+
+    <state number="119">
+      <itemset>
+        <item rule-number="55" point="3"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="55" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="120">
+      <itemset>
+        <item rule-number="45" point="6"/>
+      </itemset>
+      <actions>
+        <transitions/>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="45" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="121">
+      <itemset>
+        <item rule-number="23" point="0"/>
+        <item rule-number="26" point="0"/>
+        <item rule-number="27" point="0"/>
+        <item rule-number="28" point="0"/>
+        <item rule-number="29" point="0"/>
+        <item rule-number="30" point="0"/>
+        <item rule-number="30" point="7"/>
+        <item rule-number="31" point="0"/>
+        <item rule-number="32" point="0"/>
+        <item rule-number="33" point="0"/>
+        <item rule-number="34" point="0"/>
+        <item rule-number="35" point="0"/>
+        <item rule-number="36" point="0"/>
+        <item rule-number="37" point="0"/>
+        <item rule-number="38" point="0"/>
+        <item rule-number="39" point="0"/>
+        <item rule-number="40" point="0"/>
+        <item rule-number="41" point="0"/>
+        <item rule-number="42" point="0"/>
+        <item rule-number="43" point="0"/>
+        <item rule-number="44" point="0"/>
+        <item rule-number="45" point="0"/>
+        <item rule-number="46" point="0"/>
+        <item rule-number="47" point="0"/>
+        <item rule-number="48" point="0"/>
+        <item rule-number="49" point="0"/>
+        <item rule-number="50" point="0"/>
+        <item rule-number="51" point="0"/>
+        <item rule-number="56" point="0"/>
+        <item rule-number="57" point="0"/>
+        <item rule-number="58" point="0"/>
+        <item rule-number="59" point="0"/>
+        <item rule-number="60" point="0"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="LBRACE" state="38"/>
+          <transition type="shift" symbol="LPAR" state="39"/>
+          <transition type="shift" symbol="FALSE" state="40"/>
+          <transition type="shift" symbol="IF" state="41"/>
+          <transition type="shift" symbol="ISNULL" state="42"/>
+          <transition type="shift" symbol="LET" state="43"/>
+          <transition type="shift" symbol="NEW" state="44"/>
+          <transition type="shift" symbol="TRUE" state="45"/>
+          <transition type="shift" symbol="WHILE" state="46"/>
+          <transition type="shift" symbol="OBJECT_IDENTIFIER" state="47"/>
+          <transition type="shift" symbol="INTEGER_LITERAL" state="48"/>
+          <transition type="shift" symbol="STRING_LITERAL" state="49"/>
+          <transition type="shift" symbol="NOT" state="50"/>
+          <transition type="shift" symbol="MINUS" state="51"/>
+          <transition type="goto" symbol="block" state="52"/>
+          <transition type="goto" symbol="expr" state="122"/>
+          <transition type="goto" symbol="literal" state="54"/>
+          <transition type="goto" symbol="boolean-literal" state="55"/>
+        </transitions>
+        <errors/>
+        <reductions/>
+      </actions>
+      <solved-conflicts/>
+    </state>
+
+    <state number="122">
+      <itemset>
+        <item rule-number="30" point="8">
+          <lookaheads>
+            <symbol>RBRACE</symbol>
+            <symbol>RPAR</symbol>
+            <symbol>COLON</symbol>
+            <symbol>SEMICOLON</symbol>
+            <symbol>IN</symbol>
+            <symbol>THEN</symbol>
+            <symbol>DO</symbol>
+            <symbol>ELSE</symbol>
+          </lookaheads>
+        </item>
+        <item rule-number="33" point="1"/>
+        <item rule-number="34" point="1"/>
+        <item rule-number="35" point="1"/>
+        <item rule-number="36" point="1"/>
+        <item rule-number="37" point="1"/>
+        <item rule-number="38" point="1"/>
+        <item rule-number="39" point="1"/>
+        <item rule-number="40" point="1"/>
+        <item rule-number="41" point="1"/>
+        <item rule-number="45" point="1"/>
+      </itemset>
+      <actions>
+        <transitions>
+          <transition type="shift" symbol="AND" state="71"/>
+          <transition type="shift" symbol="EQUAL" state="72"/>
+          <transition type="shift" symbol="LOWER_EQUAL" state="73"/>
+          <transition type="shift" symbol="LOWER" state="74"/>
+          <transition type="shift" symbol="PLUS" state="75"/>
+          <transition type="shift" symbol="MINUS" state="76"/>
+          <transition type="shift" symbol="TIMES" state="77"/>
+          <transition type="shift" symbol="DIV" state="78"/>
+          <transition type="shift" symbol="POW" state="79"/>
+          <transition type="shift" symbol="DOT" state="80"/>
+        </transitions>
+        <errors/>
+        <reductions>
+          <reduction symbol="$default" rule="30" enabled="true"/>
+        </reductions>
+      </actions>
+      <solved-conflicts>
+        <resolution rule="30" symbol="AND" type="shift">IN &lt; AND</resolution>
+        <resolution rule="30" symbol="EQUAL" type="shift">IN &lt; EQUAL</resolution>
+        <resolution rule="30" symbol="LOWER_EQUAL" type="shift">IN &lt; LOWER_EQUAL</resolution>
+        <resolution rule="30" symbol="LOWER" type="shift">IN &lt; LOWER</resolution>
+        <resolution rule="30" symbol="PLUS" type="shift">IN &lt; PLUS</resolution>
+        <resolution rule="30" symbol="MINUS" type="shift">IN &lt; MINUS</resolution>
+        <resolution rule="30" symbol="TIMES" type="shift">IN &lt; TIMES</resolution>
+        <resolution rule="30" symbol="DIV" type="shift">IN &lt; DIV</resolution>
+        <resolution rule="30" symbol="POW" type="shift">IN &lt; POW</resolution>
+        <resolution rule="30" symbol="DOT" type="shift">IN &lt; DOT</resolution>
+      </solved-conflicts>
+    </state>
+  </automaton>
+</bison-xml-report>

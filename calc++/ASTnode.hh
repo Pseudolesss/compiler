@@ -22,15 +22,12 @@ struct ASTnode
     bool isempty;
 };
 
-template <typename E>
 struct Expr : ASTnode
 {
   public:
-    Expr(E*);
-    E* getData();
-
-  private:
-    E* data;
+    string getDataType();
+  protected:
+    string dataType;
 };
 
 struct Type : ASTnode
@@ -75,6 +72,7 @@ struct Formal : ASTnode
     string objID;
     Type* type;
 };
+struct Formalx;
 struct Formalx : ASTnode
 {
   public:
@@ -100,7 +98,7 @@ struct Formals : ASTnode
     Formal* formal;
     Formalx* formalx;
 };
-
+struct Exprx;
 struct Exprx : ASTnode
 {
   public:
@@ -114,7 +112,7 @@ struct Exprx : ASTnode
     Exprx* exprx;
 };
 
-struct Block : ASTnode
+struct Block : Expr
 {
   public:
     Block(Expr*, Exprx*);
@@ -206,7 +204,7 @@ struct Programm : ASTnode
     Classe* classe;
 };
 
-struct Dual : ASTnode
+struct Dual : Expr
 {
   public:
     Dual(Expr*, Expr*);
@@ -218,7 +216,7 @@ struct Dual : ASTnode
     Expr* right;
 };
 
-struct Unary : ASTnode
+struct Unary : Expr
 {
   public:
     Unary(Expr*);
@@ -228,7 +226,7 @@ struct Unary : ASTnode
     Expr* expr;
 };
 
-struct If : ASTnode
+struct If : Expr
 {
   public:
     If(Expr*, Expr*, Expr*);
@@ -243,7 +241,7 @@ struct If : ASTnode
     Expr* _else;
 };
 
-struct While : ASTnode
+struct While : Expr
 {
   public:
     While(Expr*, Expr*);
@@ -255,7 +253,7 @@ struct While : ASTnode
     Expr* _do;
 };
 
-struct Let : ASTnode
+struct Let : Expr
 {
   public:
     Let(string, Type*, Expr*);
@@ -272,7 +270,7 @@ struct Let : ASTnode
     Expr* in;
 };
 
-struct Assign : ASTnode
+struct Assign : Expr
 {
   public:
     Assign(string, Expr*);
@@ -331,6 +329,7 @@ struct Minus1 : Unary
 struct IsNull : Unary
 {
 };
+struct Exprxx;
 struct Exprxx
 {
     public:
@@ -356,7 +355,7 @@ struct Args
     Exprxx* exprxx;
 };
 
-struct Function : ASTnode
+struct Function : Expr
 {
   public:
     Function(string, Args*);
@@ -368,7 +367,7 @@ struct Function : ASTnode
     Args* args;
 };
 
-struct Dot : ASTnode
+struct Dot : Expr
 {
   public:
     Dot(Expr*, string, Args*);
@@ -381,7 +380,7 @@ struct Dot : ASTnode
     Args* args;
 };
 
-struct New : ASTnode
+struct New : Expr
 {
   public:
     New(string);
@@ -391,7 +390,7 @@ struct New : ASTnode
     string typeID;
 };
 
-struct ObjID : ASTnode
+struct ObjID : Expr
 {
   public:
     ObjID(string);
@@ -401,17 +400,15 @@ struct ObjID : ASTnode
     string ObjId;
 };
 
-template <typename L>
-struct Literal : ASTnode
+struct Literal : Expr
 {
-public:
-    Literal(L*);
-    L* getData();
-private:
-    L* data;
+  public:
+	string getType();
+  protected:
+	string litType;
 };
 
-struct IntLit : ASTnode
+struct IntLit : Literal
 {
   public:
     IntLit(int);
@@ -421,7 +418,7 @@ struct IntLit : ASTnode
     int value;
 };
 
-struct StrLit : ASTnode
+struct StrLit : Literal
 {
   public:
     StrLit(string);
@@ -431,7 +428,7 @@ struct StrLit : ASTnode
     string value;
 };
 
-struct BoolLit : ASTnode
+struct BoolLit : Literal
 {
   public:
     BoolLit(bool);
@@ -441,11 +438,11 @@ struct BoolLit : ASTnode
     bool value;
 };
 
-struct Lpar : ASTnode
+struct Lpar : Expr
 {
 };
 
-struct Rpar : ASTnode
+struct Rpar : Expr
 {
 };
 
