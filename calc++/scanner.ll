@@ -32,18 +32,18 @@ void printToken(string token){
         cerr << "filename" << ":" << line << ":" <<column << ": lexical error: " << error << endl;
     }
 
-    char escapedAscii(char c){
+    string escapedAscii(char c){
     switch (c) {
       case '\\':
-        return '\\';
+        return "\\";
       case 'b':
-        return '\b';
+        return "\b";
       case 't':
-        return '\t';
+        return "\t";
       case 'n':
-        return '\n';
+        return "\n";
       case 'r':
-        return '\r';
+        return "\r";
       case '\"':
         return '\"';
       }
