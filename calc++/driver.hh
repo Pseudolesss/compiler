@@ -15,7 +15,7 @@ class driver
 {
 public:
   driver ();
-
+  Programm* root;
   std::map<std::string, int> variables;
 
   int result;

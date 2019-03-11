@@ -11,6 +11,9 @@
   class driver;
 }
 
+%union{
+	ASTnode* astnode
+}
 // The parsing context.
 %param { driver& drv }
 
@@ -53,7 +56,7 @@
 %token <int> INTEGER_LITERAL
 %token <std::string> STRING_LITERAL
 
-%start program
+%start  program
 %token END  0  "end of file"
 %nonassoc IN
 %nonassoc THEN DO
@@ -72,14 +75,14 @@
 
 %%
 program:
-	classes
+	classes {Programm* a = new Programm($1);drv.root=a; $$ = a;}
 ;
 classes:
-	classes class
-	| class
+	classes class {$$ = Classes($1,$2);}
+	| class		  {$$ = Classes($1);}
 ;
 class:
-	CLASS TYPE_IDENTIFIER class-body
+	CLASS TYPE_IDENTIFIER class-body {new Classe($2,$3);}
 	| CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER class-body
 ;
 class-body:

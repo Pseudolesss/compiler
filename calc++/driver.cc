@@ -4,8 +4,7 @@
 driver::driver ()
   : trace_parsing (false), trace_scanning (false)
 {
-  variables["one"] = 1;
-  variables["two"] = 2;
+  Programm* root = nullptr;
 }
 
 int
