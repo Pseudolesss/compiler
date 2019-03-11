@@ -285,51 +285,75 @@ struct Assign : Expr
 };
 
 struct Not : Unary
-{
+{ 
+  public:
+  Not(Expr*);
 };
 
 struct And : Dual
 {
+  public:
+    And(Expr*,Expr*);
 };
 
 struct Equal : Dual
 {
+  public:
+  Equal(Expr*,Expr*);
 };
 
 struct Lower : Dual
 {
+  public:
+  Lower(Expr*,Expr*);
 };
 
 struct LowerEqual : Dual
 {
+  public:
+  LowerEqual(Expr*,Expr*);
 };
 
 struct Plus : Dual
 {
+  public:
+  Plus(Expr*,Expr*);
 };
 
 struct Minus : Dual
 {
+  public:
+  Minus(Expr*,Expr*);
 };
 
 struct Times : Dual
 {
+  public:
+  Times(Expr*,Expr*);
 };
 
 struct Div : Dual
 {
+  public:
+  Div(Expr*,Expr*);
 };
 
 struct Pow : Dual
 {
+  public:
+  Pow(Expr*,Expr*);
 };
 
 struct Minus1 : Unary
 {
+  public:
+  Minus1(Expr*);
 };
 
 struct IsNull : Unary
 {
+  public:
+  IsNull(Expr*);
 };
 struct Exprxx;
 struct Exprxx
@@ -450,6 +474,8 @@ struct Rpar : Expr
 
 struct Parenthese : Unary
 {
+  public:
+  Parenthese(Expr*);
 };
 
 #endif

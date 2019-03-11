@@ -159,3 +159,17 @@ string StrLit::getValue(){return value;}
 BoolLit::BoolLit(bool v) : value(v){litType = string("litType");}
 bool BoolLit::getValue(){return value;}
 
+
+And::And(Expr* e1,Expr* e2) : Dual(e1,e2) {};
+Not::Not(Expr* e) : Unary(e){};
+Equal::Equal(Expr* e1, Expr* e2) : Dual(e1,e2){};
+Lower::Lower(Expr* e1, Expr* e2) : Dual(e1,e2){};
+LowerEqual::LowerEqual(Expr* e1, Expr* e2) : Dual(e1,e2){};
+Plus::Plus(Expr* e1, Expr* e2) : Dual(e1,e2){};
+Minus::Minus(Expr* e1, Expr* e2) : Dual(e1,e2){};
+Times::Times(Expr* e1, Expr* e2) : Dual(e1,e2){};
+Div::Div(Expr* e1, Expr* e2) : Dual(e1,e2){};
+Pow::Pow(Expr* e1, Expr* e2) : Dual(e1,e2){};
+Minus1::Minus1(Expr* e) : Unary(e){};
+IsNull::IsNull(Expr* e) : Unary(e){};
+Parenthese::Parenthese(Expr* e) : Unary(e){};

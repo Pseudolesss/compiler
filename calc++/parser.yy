@@ -140,14 +140,14 @@ expr:
 	| WHILE expr DO expr		{$$ = new While($2,$4);}
 	| LET OBJECT_IDENTIFIER COLON type IN expr	{$$ = new Let($2,$4,$6);}
 	| LET OBJECT_IDENTIFIER COLON type ASSIGN expr IN expr {$$ = new Let($2,$4,$6,$8);}
-	| OBJECT_IDENTIFIER ASSIGN expr		
-	| NOT expr
-	| expr AND expr
-	| expr EQUAL expr
-	| expr LOWER expr
-	| expr LOWER_EQUAL expr
-	| expr PLUS expr
-	| expr MINUS expr
+	| OBJECT_IDENTIFIER ASSIGN expr		{$$ = new Assign($1,$3);}
+	| NOT expr							{$$ = new Not($2);}
+	| expr AND expr						{$$ = new And($1,$3);}
+	| expr EQUAL expr					{$$ = new Equal($1,$3);}
+	| expr LOWER expr					{$$ = new Lower($1,$3);}
+	| expr LOWER_EQUAL expr				{$$ = new LowerEqual($1,$3);}
+	| expr PLUS expr					{$$ = new Plus($1,$3);}
+	| expr MINUS expr					{$$ = new Minus($1,$3);}
 	| expr TIMES expr
 	| expr DIV expr
 	| expr POW expr
