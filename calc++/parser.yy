@@ -6,71 +6,20 @@
 
 %code requires {
   # include <string>
+  # include "ASTnode.hh"
   class driver;
 }
-
-
-%code {
-# include "driver.hh"
-# include "ASTnode.hh"
-}
-
-%union{
-	struct ASTnode* astnode;
-	Expr* expr;
-	Type* type;
-	Field* field;
-	Formal* formal;
-	Formalx* formalx;
-	Formals* formals;
-	Exprx* exprx;
-	Block* block;
-	Method* method;
-	FieldMethod* fieldmethod;
-	Body* body;
-	Classe* classe;
-	Classes* classes;
-	Programm* programm;
-	Dual* dual;
-	Unary* unary;
-	If* if;
-	While* while;
-	Let* let;
-	Assign* assign;
-	Not* not;
-	And* and;
-	Equal* equal;
-	Lower* lower;
-	LowerEqual* lowerequal;
-	Plus* plus; 
-	Minus* minus;
-	Times* times;
-	Div* div;
-	Pow* pow ;
-	Minus1* minus1 
-	IsNull* isnull 
-	Exprxx* exprxx 
-	Args* args 
-	Function* function 
-	Dot* dot 
-	New* new 
-	ObjID* objid 
-	Literal* literal 
-	IntLit* intlit 
-	StrLit* strlit 
-	BoolLit* boolit 
-	Lpar* lpar
-	Rpar* rpar 
-	Parenthese parenthese 
-}
-// The parsing context.
 %param { driver& drv }
-
 %locations
-
 %define parse.trace
 %define parse.error verbose
 
+%code {
+# include "driver.hh"
+}
+
+%define api.token.constructor
+%define api.value.type variant
 
 %define api.token.prefix {TOK_}
 
@@ -116,74 +65,82 @@
 %right POW
 %left DOT
 
-%printer { yyo << $$; } <*>;
+//%printer { yyo << $$; } <*>;
 
-%type <programm> program
-%type <classes> classes 
-%type <classe> class
-%type <body> class_body
-
-
-
+%type <Programm*> program
+%type <Classes*> classes
+%type <Classe*> class
+%type <Body*> class_body
+%type <FieldMethod*> field-method
+%type <Field*> field
+%type <Method*> method
+%type <Type*> type
+%type <Expr*> expr
+%type <Formals*> formals
+%type <Block*> block
+%type <Formalx*> formalx
+%type <Formal*> formal
+%type <Exprx*> exprx
+%type <Exprxx*> exprxx
 %%
 program:
-	classes {Programm* a = new Programm($1);drv.root=a; $$ = a;}
+	classes {$$ = new Programm($1);}
 ;
 classes:
-	classes class {$$ = Classes($1,$2);}
-	| class		  {$$ = Classes($1);}
+	classes class  {$$ = new Classes($1,$2);}
+	| class		  {$$ = new Classes($1);}
 ;
 class:
-	CLASS TYPE_IDENTIFIER class_body {new Classe($2,$3);}
-	| CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER class_body
+	CLASS TYPE_IDENTIFIER class_body  {$$ = new Classe($2,$3);}
+	| CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER class_body {$$ = new Classe($2,$4,$5);}
 ;
 class_body:
-	LBRACE field-method RBRACE
+	LBRACE field-method RBRACE {$$ = new Body($2);}
 ;
 field-method:
 	/*espilon*/
-	| field-method field
-	| field-method method
+	| field-method field {$$ = new FieldMethod($1,$2);}
+	| field-method method {$$ = new FieldMethod($1,$2);}
 ;
 field:
-	OBJECT_IDENTIFIER COLON type SEMICOLON
-	| OBJECT_IDENTIFIER COLON type ASSIGN expr SEMICOLON;
+	OBJECT_IDENTIFIER COLON type SEMICOLON {$$ = new Field($1,$3);}
+	| OBJECT_IDENTIFIER COLON type ASSIGN expr SEMICOLON {$$ = new Field($1,$3,$5);}
 ;
 method:
-	OBJECT_IDENTIFIER LPAR formals RPAR COLON type block
+	OBJECT_IDENTIFIER LPAR formals RPAR COLON type block {$$ = new Method($1,$3,$6,$7);}
 ;
 type:
-	TYPE_IDENTIFIER
-	| INT32
-	| BOOL
-	| STRING
-	| UNIT
+	TYPE_IDENTIFIER  {$$ = new Type($1);}
+	| INT32			 {$$ = new Type(std::string("INT32"));}
+	| BOOL			{$$ = new Type(std::string("BOOL"));}
+	| STRING		{$$ = new Type(std::string("STRING"));}
+	| UNIT			{$$ = new Type(std::string("UNIT"));}
 ;
 formals:
 	/*epsilon*/
-	| formal formalx
+	| formal formalx {$$ = new Formals($1,$2);}
 ;
 formalx:
 	/*epsilon*/
-	| COMMA formal formalx 
+	| COMMA formal formalx  {$$ = new Formalx($2,$3);}
 ;
 formal:
-	OBJECT_IDENTIFIER COLON type
+	OBJECT_IDENTIFIER COLON type {$$ = new Formal($1,$3);}
 ;
 block:
-	LBRACE expr exprx RBRACE
+	LBRACE expr exprx RBRACE {$$ = new Block($2,$3);}
 ;
 exprx:
 	/*epsilon*/
-	| SEMICOLON expr exprx
+	| SEMICOLON expr exprx {$$ = new Exprx($2,$3);}
 ;
 expr:
-	IF expr THEN expr ELSE expr
-	| IF expr THEN expr
-	| WHILE expr DO expr
-	| LET OBJECT_IDENTIFIER COLON type IN expr
-	| LET OBJECT_IDENTIFIER COLON type ASSIGN expr IN expr
-	| OBJECT_IDENTIFIER ASSIGN expr
+	IF expr THEN expr ELSE expr {$$ = new If($2,$4,$6);}
+	| IF expr THEN expr			{$$ = new If($2,$4);}
+	| WHILE expr DO expr		{$$ = new While($2,$4);}
+	| LET OBJECT_IDENTIFIER COLON type IN expr	{$$ = new Let($2,$4,$6);}
+	| LET OBJECT_IDENTIFIER COLON type ASSIGN expr IN expr {$$ = new Let($2,$4,$6,$8);}
+	| OBJECT_IDENTIFIER ASSIGN expr		
 	| NOT expr
 	| expr AND expr
 	| expr EQUAL expr

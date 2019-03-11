@@ -41,12 +41,11 @@
 
 
 // Unqualified %code blocks.
-#line 13 "parser.yy" // lalr1.cc:435
+#line 17 "parser.yy" // lalr1.cc:435
 
 # include "driver.hh"
-# include "ASTnode.hh"
 
-#line 50 "parser.cc" // lalr1.cc:435
+#line 49 "parser.cc" // lalr1.cc:435
 
 
 #ifndef YY_
@@ -141,7 +140,7 @@
 
 
 namespace yy {
-#line 145 "parser.cc" // lalr1.cc:510
+#line 144 "parser.cc" // lalr1.cc:510
 
   /* Return YYSTR after stripping away unnecessary quotes and
      backslashes, so that it's suitable for yyerror.  The heuristic is
@@ -204,94 +203,6 @@ namespace yy {
   | Symbol types.  |
   `---------------*/
 
-  // basic_symbol.
-#if 201103L <= YY_CPLUSPLUS
-  template <typename Base>
-  parser::basic_symbol<Base>::basic_symbol (basic_symbol&& that)
-    : Base (std::move (that))
-    , value (std::move (that.value))
-    , location (std::move (that.location))
-  {}
-#endif
-
-  template <typename Base>
-  parser::basic_symbol<Base>::basic_symbol (const basic_symbol& that)
-    : Base (that)
-    , value (that.value)
-    , location (that.location)
-  {}
-
-
-  /// Constructor for valueless symbols.
-  template <typename Base>
-  parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_MOVE_REF (location_type) l)
-    : Base (t)
-    , value ()
-    , location (l)
-  {}
-
-  template <typename Base>
-  parser::basic_symbol<Base>::basic_symbol (typename Base::kind_type t, YY_RVREF (semantic_type) v, YY_RVREF (location_type) l)
-    : Base (t)
-    , value (YY_MOVE (v))
-    , location (YY_MOVE (l))
-  {}
-
-  template <typename Base>
-  bool
-  parser::basic_symbol<Base>::empty () const YY_NOEXCEPT
-  {
-    return Base::type_get () == empty_symbol;
-  }
-
-  template <typename Base>
-  void
-  parser::basic_symbol<Base>::move (basic_symbol& s)
-  {
-    super_type::move (s);
-    value = YY_MOVE (s.value);
-    location = YY_MOVE (s.location);
-  }
-
-  // by_type.
-  parser::by_type::by_type ()
-    : type (empty_symbol)
-  {}
-
-#if 201103L <= YY_CPLUSPLUS
-  parser::by_type::by_type (by_type&& that)
-    : type (that.type)
-  {
-    that.clear ();
-  }
-#endif
-
-  parser::by_type::by_type (const by_type& that)
-    : type (that.type)
-  {}
-
-  parser::by_type::by_type (token_type t)
-    : type (yytranslate_ (t))
-  {}
-
-  void
-  parser::by_type::clear ()
-  {
-    type = empty_symbol;
-  }
-
-  void
-  parser::by_type::move (by_type& that)
-  {
-    type = that.type;
-    that.clear ();
-  }
-
-  int
-  parser::by_type::type_get () const YY_NOEXCEPT
-  {
-    return type;
-  }
 
 
   // by_state.
@@ -333,8 +244,84 @@ namespace yy {
   {}
 
   parser::stack_symbol_type::stack_symbol_type (YY_RVREF (stack_symbol_type) that)
-    : super_type (YY_MOVE (that.state), YY_MOVE (that.value), YY_MOVE (that.location))
+    : super_type (YY_MOVE (that.state), YY_MOVE (that.location))
   {
+    switch (that.type_get ())
+    {
+      case 55: // block
+        value.YY_MOVE_OR_COPY< Block* > (YY_MOVE (that.value));
+        break;
+
+      case 47: // class_body
+        value.YY_MOVE_OR_COPY< Body* > (YY_MOVE (that.value));
+        break;
+
+      case 46: // class
+        value.YY_MOVE_OR_COPY< Classe* > (YY_MOVE (that.value));
+        break;
+
+      case 45: // classes
+        value.YY_MOVE_OR_COPY< Classes* > (YY_MOVE (that.value));
+        break;
+
+      case 57: // expr
+        value.YY_MOVE_OR_COPY< Expr* > (YY_MOVE (that.value));
+        break;
+
+      case 56: // exprx
+        value.YY_MOVE_OR_COPY< Exprx* > (YY_MOVE (that.value));
+        break;
+
+      case 59: // exprxx
+        value.YY_MOVE_OR_COPY< Exprxx* > (YY_MOVE (that.value));
+        break;
+
+      case 49: // field
+        value.YY_MOVE_OR_COPY< Field* > (YY_MOVE (that.value));
+        break;
+
+      case 48: // field-method
+        value.YY_MOVE_OR_COPY< FieldMethod* > (YY_MOVE (that.value));
+        break;
+
+      case 54: // formal
+        value.YY_MOVE_OR_COPY< Formal* > (YY_MOVE (that.value));
+        break;
+
+      case 52: // formals
+        value.YY_MOVE_OR_COPY< Formals* > (YY_MOVE (that.value));
+        break;
+
+      case 53: // formalx
+        value.YY_MOVE_OR_COPY< Formalx* > (YY_MOVE (that.value));
+        break;
+
+      case 50: // method
+        value.YY_MOVE_OR_COPY< Method* > (YY_MOVE (that.value));
+        break;
+
+      case 44: // program
+        value.YY_MOVE_OR_COPY< Programm* > (YY_MOVE (that.value));
+        break;
+
+      case 51: // type
+        value.YY_MOVE_OR_COPY< Type* > (YY_MOVE (that.value));
+        break;
+
+      case 26: // INTEGER_LITERAL
+        value.YY_MOVE_OR_COPY< int > (YY_MOVE (that.value));
+        break;
+
+      case 24: // TYPE_IDENTIFIER
+      case 25: // OBJECT_IDENTIFIER
+      case 27: // STRING_LITERAL
+        value.YY_MOVE_OR_COPY< std::string > (YY_MOVE (that.value));
+        break;
+
+      default:
+        break;
+    }
+
 #if 201103L <= YY_CPLUSPLUS
     // that is emptied.
     that.state = empty_state;
@@ -342,8 +329,84 @@ namespace yy {
   }
 
   parser::stack_symbol_type::stack_symbol_type (state_type s, YY_MOVE_REF (symbol_type) that)
-    : super_type (s, YY_MOVE (that.value), YY_MOVE (that.location))
+    : super_type (s, YY_MOVE (that.location))
   {
+    switch (that.type_get ())
+    {
+      case 55: // block
+        value.move< Block* > (YY_MOVE (that.value));
+        break;
+
+      case 47: // class_body
+        value.move< Body* > (YY_MOVE (that.value));
+        break;
+
+      case 46: // class
+        value.move< Classe* > (YY_MOVE (that.value));
+        break;
+
+      case 45: // classes
+        value.move< Classes* > (YY_MOVE (that.value));
+        break;
+
+      case 57: // expr
+        value.move< Expr* > (YY_MOVE (that.value));
+        break;
+
+      case 56: // exprx
+        value.move< Exprx* > (YY_MOVE (that.value));
+        break;
+
+      case 59: // exprxx
+        value.move< Exprxx* > (YY_MOVE (that.value));
+        break;
+
+      case 49: // field
+        value.move< Field* > (YY_MOVE (that.value));
+        break;
+
+      case 48: // field-method
+        value.move< FieldMethod* > (YY_MOVE (that.value));
+        break;
+
+      case 54: // formal
+        value.move< Formal* > (YY_MOVE (that.value));
+        break;
+
+      case 52: // formals
+        value.move< Formals* > (YY_MOVE (that.value));
+        break;
+
+      case 53: // formalx
+        value.move< Formalx* > (YY_MOVE (that.value));
+        break;
+
+      case 50: // method
+        value.move< Method* > (YY_MOVE (that.value));
+        break;
+
+      case 44: // program
+        value.move< Programm* > (YY_MOVE (that.value));
+        break;
+
+      case 51: // type
+        value.move< Type* > (YY_MOVE (that.value));
+        break;
+
+      case 26: // INTEGER_LITERAL
+        value.move< int > (YY_MOVE (that.value));
+        break;
+
+      case 24: // TYPE_IDENTIFIER
+      case 25: // OBJECT_IDENTIFIER
+      case 27: // STRING_LITERAL
+        value.move< std::string > (YY_MOVE (that.value));
+        break;
+
+      default:
+        break;
+    }
+
     // that is emptied.
     that.type = empty_symbol;
   }
@@ -353,7 +416,82 @@ namespace yy {
   parser::stack_symbol_type::operator= (stack_symbol_type& that)
   {
     state = that.state;
-    value = that.value;
+    switch (that.type_get ())
+    {
+      case 55: // block
+        value.move< Block* > (that.value);
+        break;
+
+      case 47: // class_body
+        value.move< Body* > (that.value);
+        break;
+
+      case 46: // class
+        value.move< Classe* > (that.value);
+        break;
+
+      case 45: // classes
+        value.move< Classes* > (that.value);
+        break;
+
+      case 57: // expr
+        value.move< Expr* > (that.value);
+        break;
+
+      case 56: // exprx
+        value.move< Exprx* > (that.value);
+        break;
+
+      case 59: // exprxx
+        value.move< Exprxx* > (that.value);
+        break;
+
+      case 49: // field
+        value.move< Field* > (that.value);
+        break;
+
+      case 48: // field-method
+        value.move< FieldMethod* > (that.value);
+        break;
+
+      case 54: // formal
+        value.move< Formal* > (that.value);
+        break;
+
+      case 52: // formals
+        value.move< Formals* > (that.value);
+        break;
+
+      case 53: // formalx
+        value.move< Formalx* > (that.value);
+        break;
+
+      case 50: // method
+        value.move< Method* > (that.value);
+        break;
+
+      case 44: // program
+        value.move< Programm* > (that.value);
+        break;
+
+      case 51: // type
+        value.move< Type* > (that.value);
+        break;
+
+      case 26: // INTEGER_LITERAL
+        value.move< int > (that.value);
+        break;
+
+      case 24: // TYPE_IDENTIFIER
+      case 25: // OBJECT_IDENTIFIER
+      case 27: // STRING_LITERAL
+        value.move< std::string > (that.value);
+        break;
+
+      default:
+        break;
+    }
+
     location = that.location;
     // that is emptied.
     that.state = empty_state;
@@ -367,9 +505,6 @@ namespace yy {
   {
     if (yymsg)
       YY_SYMBOL_PRINT (yymsg, yysym);
-
-    // User destructor.
-    YYUSE (yysym.type_get ());
   }
 
 #if YYDEBUG
@@ -390,59 +525,7 @@ namespace yy {
     yyo << (yytype < yyntokens_ ? "token" : "nterm")
         << ' ' << yytname_[yytype] << " ("
         << yysym.location << ": ";
-    switch (yytype)
-    {
-      case 24: // TYPE_IDENTIFIER
-#line 119 "parser.yy" // lalr1.cc:676
-        { yyo << (yysym.value.std::string); }
-#line 399 "parser.cc" // lalr1.cc:676
-        break;
-
-      case 25: // OBJECT_IDENTIFIER
-#line 119 "parser.yy" // lalr1.cc:676
-        { yyo << (yysym.value.std::string); }
-#line 405 "parser.cc" // lalr1.cc:676
-        break;
-
-      case 26: // INTEGER_LITERAL
-#line 119 "parser.yy" // lalr1.cc:676
-        { yyo << (yysym.value.int); }
-#line 411 "parser.cc" // lalr1.cc:676
-        break;
-
-      case 27: // STRING_LITERAL
-#line 119 "parser.yy" // lalr1.cc:676
-        { yyo << (yysym.value.std::string); }
-#line 417 "parser.cc" // lalr1.cc:676
-        break;
-
-      case 44: // program
-#line 119 "parser.yy" // lalr1.cc:676
-        { yyo << (yysym.value.programm); }
-#line 423 "parser.cc" // lalr1.cc:676
-        break;
-
-      case 45: // classes
-#line 119 "parser.yy" // lalr1.cc:676
-        { yyo << (yysym.value.classes); }
-#line 429 "parser.cc" // lalr1.cc:676
-        break;
-
-      case 46: // class
-#line 119 "parser.yy" // lalr1.cc:676
-        { yyo << (yysym.value.classe); }
-#line 435 "parser.cc" // lalr1.cc:676
-        break;
-
-      case 47: // class_body
-#line 119 "parser.yy" // lalr1.cc:676
-        { yyo << (yysym.value.body); }
-#line 441 "parser.cc" // lalr1.cc:676
-        break;
-
-      default:
-        break;
-    }
+    YYUSE (yytype);
     yyo << ')';
   }
 #endif
@@ -592,7 +675,8 @@ namespace yy {
         try
 #endif // YY_EXCEPTIONS
           {
-            yyla.type = yytranslate_ (yylex (&yyla.value, &yyla.location, drv));
+            symbol_type yylookahead (yylex (drv));
+            yyla.move (yylookahead);
           }
 #if YY_EXCEPTIONS
         catch (const syntax_error& yyexc)
@@ -648,16 +732,85 @@ namespace yy {
     {
       stack_symbol_type yylhs;
       yylhs.state = yy_lr_goto_state_ (yystack_[yylen].state, yyr1_[yyn]);
-      /* If YYLEN is nonzero, implement the default value of the
-         action: '$$ = $1'.  Otherwise, use the top of the stack.
+      /* Variants are always initialized to an empty instance of the
+         correct type. The default '$$ = $1' action is NOT applied
+         when using variants.  */
+      switch (yyr1_[yyn])
+    {
+      case 55: // block
+        yylhs.value.emplace< Block* > ();
+        break;
 
-         Otherwise, the following line sets YYLHS.VALUE to garbage.
-         This behavior is undocumented and Bison users should not rely
-         upon it.  */
-      if (yylen)
-        yylhs.value = yystack_[yylen - 1].value;
-      else
-        yylhs.value = yystack_[0].value;
+      case 47: // class_body
+        yylhs.value.emplace< Body* > ();
+        break;
+
+      case 46: // class
+        yylhs.value.emplace< Classe* > ();
+        break;
+
+      case 45: // classes
+        yylhs.value.emplace< Classes* > ();
+        break;
+
+      case 57: // expr
+        yylhs.value.emplace< Expr* > ();
+        break;
+
+      case 56: // exprx
+        yylhs.value.emplace< Exprx* > ();
+        break;
+
+      case 59: // exprxx
+        yylhs.value.emplace< Exprxx* > ();
+        break;
+
+      case 49: // field
+        yylhs.value.emplace< Field* > ();
+        break;
+
+      case 48: // field-method
+        yylhs.value.emplace< FieldMethod* > ();
+        break;
+
+      case 54: // formal
+        yylhs.value.emplace< Formal* > ();
+        break;
+
+      case 52: // formals
+        yylhs.value.emplace< Formals* > ();
+        break;
+
+      case 53: // formalx
+        yylhs.value.emplace< Formalx* > ();
+        break;
+
+      case 50: // method
+        yylhs.value.emplace< Method* > ();
+        break;
+
+      case 44: // program
+        yylhs.value.emplace< Programm* > ();
+        break;
+
+      case 51: // type
+        yylhs.value.emplace< Type* > ();
+        break;
+
+      case 26: // INTEGER_LITERAL
+        yylhs.value.emplace< int > ();
+        break;
+
+      case 24: // TYPE_IDENTIFIER
+      case 25: // OBJECT_IDENTIFIER
+      case 27: // STRING_LITERAL
+        yylhs.value.emplace< std::string > ();
+        break;
+
+      default:
+        break;
+    }
+
 
       // Default location.
       {
@@ -675,31 +828,223 @@ namespace yy {
           switch (yyn)
             {
   case 2:
-#line 130 "parser.yy" // lalr1.cc:919
-    {Programm* a = new Programm((yystack_[0].value.classes));drv.root=a; (yylhs.value.programm) = a;}
-#line 681 "parser.cc" // lalr1.cc:919
+#line 87 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Programm* > () = new Programm(yystack_[0].value.as < Classes* > ());}
+#line 834 "parser.cc" // lalr1.cc:919
     break;
 
   case 3:
-#line 133 "parser.yy" // lalr1.cc:919
-    {(yylhs.value.classes) = Classes((yystack_[1].value.classes),(yystack_[0].value.classe));}
-#line 687 "parser.cc" // lalr1.cc:919
+#line 90 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Classes* > () = new Classes(yystack_[1].value.as < Classes* > (),yystack_[0].value.as < Classe* > ());}
+#line 840 "parser.cc" // lalr1.cc:919
     break;
 
   case 4:
-#line 134 "parser.yy" // lalr1.cc:919
-    {(yylhs.value.classes) = Classes((yystack_[0].value.classe));}
-#line 693 "parser.cc" // lalr1.cc:919
+#line 91 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Classes* > () = new Classes(yystack_[0].value.as < Classe* > ());}
+#line 846 "parser.cc" // lalr1.cc:919
     break;
 
   case 5:
-#line 137 "parser.yy" // lalr1.cc:919
-    {new Classe((yystack_[1].value.std::string),(yystack_[0].value.body));}
-#line 699 "parser.cc" // lalr1.cc:919
+#line 94 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Classe* > () = new Classe(yystack_[1].value.as < std::string > (),yystack_[0].value.as < Body* > ());}
+#line 852 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 6:
+#line 95 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Classe* > () = new Classe(yystack_[3].value.as < std::string > (),yystack_[1].value.as < std::string > (),yystack_[0].value.as < Body* > ());}
+#line 858 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 7:
+#line 98 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Body* > () = new Body(yystack_[1].value.as < FieldMethod* > ());}
+#line 864 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 9:
+#line 102 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < FieldMethod* > () = new FieldMethod(yystack_[1].value.as < FieldMethod* > (),yystack_[0].value.as < Field* > ());}
+#line 870 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 10:
+#line 103 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < FieldMethod* > () = new FieldMethod(yystack_[1].value.as < FieldMethod* > (),yystack_[0].value.as < Method* > ());}
+#line 876 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 11:
+#line 106 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Field* > () = new Field(yystack_[3].value.as < std::string > (),yystack_[1].value.as < Type* > ());}
+#line 882 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 12:
+#line 107 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Field* > () = new Field(yystack_[5].value.as < std::string > (),yystack_[3].value.as < Type* > (),yystack_[1].value.as < Expr* > ());}
+#line 888 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 13:
+#line 110 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Method* > () = new Method(yystack_[6].value.as < std::string > (),yystack_[4].value.as < Formals* > (),yystack_[1].value.as < Type* > (),yystack_[0].value.as < Block* > ());}
+#line 894 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 14:
+#line 113 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Type* > () = new Type(yystack_[0].value.as < std::string > ());}
+#line 900 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 15:
+#line 114 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Type* > () = new Type(std::string("INT32"));}
+#line 906 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 16:
+#line 115 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Type* > () = new Type(std::string("BOOL"));}
+#line 912 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 17:
+#line 116 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Type* > () = new Type(std::string("STRING"));}
+#line 918 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 18:
+#line 117 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Type* > () = new Type(std::string("UNIT"));}
+#line 924 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 20:
+#line 121 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Formals* > () = new Formals(yystack_[1].value.as < Formal* > (),yystack_[0].value.as < Formalx* > ());}
+#line 930 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 22:
+#line 125 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Formalx* > () = new Formalx(yystack_[1].value.as < Formal* > (),yystack_[0].value.as < Formalx* > ());}
+#line 936 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 23:
+#line 128 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Formal* > () = new Formal(yystack_[2].value.as < std::string > (),yystack_[0].value.as < Type* > ());}
+#line 942 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 24:
+#line 131 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Block* > () = new Block(yystack_[2].value.as < Expr* > (),yystack_[1].value.as < Exprx* > ());}
+#line 948 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 26:
+#line 135 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Exprx* > () = new Exprx(yystack_[1].value.as < Expr* > (),yystack_[0].value.as < Exprx* > ());}
+#line 954 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 27:
+#line 138 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new If(yystack_[4].value.as < Expr* > (),yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 960 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 28:
+#line 139 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new If(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 966 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 29:
+#line 140 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new While(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 972 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 30:
+#line 141 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Let(yystack_[4].value.as < std::string > (),yystack_[2].value.as < Type* > (),yystack_[0].value.as < Expr* > ());}
+#line 978 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 31:
+#line 142 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Let(yystack_[6].value.as < std::string > (),yystack_[4].value.as < Type* > (),yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 984 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 34:
+#line 145 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+#line 990 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 35:
+#line 146 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+#line 996 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 36:
+#line 147 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+#line 1002 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 37:
+#line 148 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+#line 1008 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 38:
+#line 149 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+#line 1014 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 39:
+#line 150 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+#line 1020 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 40:
+#line 151 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+#line 1026 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 41:
+#line 152 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+#line 1032 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 42:
+#line 153 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+#line 1038 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 46:
+#line 157 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < Expr* > () = yystack_[5].value.as < Expr* > (); }
+#line 1044 "parser.cc" // lalr1.cc:919
     break;
 
 
-#line 703 "parser.cc" // lalr1.cc:919
+#line 1048 "parser.cc" // lalr1.cc:919
             default:
               break;
             }
@@ -1150,13 +1495,13 @@ namespace yy {
   const unsigned char
   parser::yyrline_[] =
   {
-       0,   130,   130,   133,   134,   137,   138,   141,   143,   145,
-     146,   149,   150,   153,   156,   157,   158,   159,   160,   162,
-     164,   166,   168,   171,   174,   176,   178,   181,   182,   183,
-     184,   185,   186,   187,   188,   189,   190,   191,   192,   193,
-     194,   195,   196,   197,   198,   199,   200,   201,   202,   203,
-     204,   205,   206,   208,   210,   212,   214,   217,   218,   219,
-     222,   223
+       0,    87,    87,    90,    91,    94,    95,    98,   100,   102,
+     103,   106,   107,   110,   113,   114,   115,   116,   117,   119,
+     121,   123,   125,   128,   131,   133,   135,   138,   139,   140,
+     141,   142,   143,   144,   145,   146,   147,   148,   149,   150,
+     151,   152,   153,   154,   155,   156,   157,   158,   159,   160,
+     161,   162,   163,   165,   167,   169,   171,   174,   175,   176,
+     179,   180
   };
 
   // Print the state stack on the debug stream.
@@ -1188,61 +1533,11 @@ namespace yy {
   }
 #endif // YYDEBUG
 
-  parser::token_number_type
-  parser::yytranslate_ (int t)
-  {
-    // YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to
-    // TOKEN-NUM as returned by yylex.
-    static
-    const token_number_type
-    translate_table[] =
-    {
-       0,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     2,     2,     2,     2,
-       2,     2,     2,     2,     2,     2,     1,     2,     3,     4,
-       5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
-      15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
-      25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40,    41,    42
-    };
-    const unsigned user_token_number_max_ = 297;
-    const token_number_type undef_token_ = 2;
-
-    if (static_cast<int> (t) <= yyeof_)
-      return yyeof_;
-    else if (static_cast<unsigned> (t) <= user_token_number_max_)
-      return translate_table[t];
-    else
-      return undef_token_;
-  }
 
 
 } // yy
-#line 1245 "parser.cc" // lalr1.cc:1242
-#line 225 "parser.yy" // lalr1.cc:1243
+#line 1540 "parser.cc" // lalr1.cc:1242
+#line 182 "parser.yy" // lalr1.cc:1243
 
 
 void

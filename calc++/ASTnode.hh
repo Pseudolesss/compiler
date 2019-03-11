@@ -1,4 +1,6 @@
 //AST node class header.
+#ifndef ASTNODE_H
+#define ASTNODE_H
 
 #include <list>
 #include <string>
@@ -181,14 +183,14 @@ struct Classes;
 struct Classes : ASTnode
 {
   public:
-    Classes(Classes, Classe);
-    Classes(Classe);
-    Classe getClass();
-    Classes *nextClass();
+    Classes(Classes*, Classe*);
+    Classes(Classe*);
+    Classe* getClass();
+    Classes* nextClass();
 
   private:
-    Classe a_class;
-    Classes *next_class;
+    Classe* a_class;
+    Classes* next_class;
 };
 
 struct Programm : ASTnode
@@ -449,3 +451,5 @@ struct Rpar : Expr
 struct Parenthese : Unary
 {
 };
+
+#endif

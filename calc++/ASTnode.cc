@@ -74,9 +74,9 @@ Classe::Classe(string s, Body* b) : typeID(s), body(b){}
 Classe::Classe(string parent, string child,Body* b) :  typeID(parent), childID(child), body(b){}
 
 
-Classes::Classes(Classes cs, Classe c) : next_class(&cs), a_class(c){}
-Classes::Classes(Classe c) : a_class(c){ next_class = nullptr;}
-Classe Classes::getClass(){return a_class;}
+Classes::Classes(Classes* cs, Classe* c) : next_class(cs), a_class(c){}
+Classes::Classes(Classe* c) : a_class(c){ next_class = nullptr;}
+Classe* Classes::getClass(){return a_class;}
 Classes* Classes::nextClass(){return next_class;}
 
 

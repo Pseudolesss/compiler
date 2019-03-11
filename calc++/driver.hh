@@ -3,7 +3,7 @@
 # include <string>
 # include <map>
 # include "parser.hh"
-# include "ASTnode.hh"
+
 // Give Flex the prototype of yylex we want ...
 # define YY_DECL \
   yy::parser::symbol_type yylex (driver& drv)
@@ -15,7 +15,7 @@ class driver
 {
 public:
   driver ();
-  Programm* root;
+
   std::map<std::string, int> variables;
 
   int result;
