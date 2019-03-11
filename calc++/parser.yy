@@ -82,6 +82,9 @@
 %type <Formal*> formal
 %type <Exprx*> exprx
 %type <Exprxx*> exprxx
+%type <Args*> args
+%type <Literal*> literal
+%type <BoolLit*> boolean-literal
 %%
 program:
 	classes {$$ = new Programm($1);}
@@ -98,7 +101,7 @@ class_body:
 	LBRACE field-method RBRACE {$$ = new Body($2);}
 ;
 field-method:
-	/*espilon*/
+	/*espilon*/ { $$ = nullptr;}
 	| field-method field {$$ = new FieldMethod($1,$2);}
 	| field-method method {$$ = new FieldMethod($1,$2);}
 ;
@@ -117,11 +120,11 @@ type:
 	| UNIT			{$$ = new Type(std::string("UNIT"));}
 ;
 formals:
-	/*epsilon*/
+	/*epsilon*/ {$$ = nullptr;}
 	| formal formalx {$$ = new Formals($1,$2);}
 ;
 formalx:
-	/*epsilon*/
+	/*epsilon*/ {$$ = nullptr;}
 	| COMMA formal formalx  {$$ = new Formalx($2,$3);}
 ;
 formal:
@@ -131,7 +134,7 @@ block:
 	LBRACE expr exprx RBRACE {$$ = new Block($2,$3);}
 ;
 exprx:
-	/*epsilon*/
+	/*epsilon*/ {$$ = nullptr;}
 	| SEMICOLON expr exprx {$$ = new Exprx($2,$3);}
 ;
 expr:
@@ -148,36 +151,36 @@ expr:
 	| expr LOWER_EQUAL expr				{$$ = new LowerEqual($1,$3);}
 	| expr PLUS expr					{$$ = new Plus($1,$3);}
 	| expr MINUS expr					{$$ = new Minus($1,$3);}
-	| expr TIMES expr
-	| expr DIV expr
-	| expr POW expr
-	| MINUS expr
-	| ISNULL expr
-	| OBJECT_IDENTIFIER LPAR args RPAR
-	| expr DOT OBJECT_IDENTIFIER LPAR args RPAR
-	| NEW TYPE_IDENTIFIER
-	| OBJECT_IDENTIFIER
-	| literal
-	| LPAR RPAR
-	| LPAR expr RPAR
-	| block
+	| expr TIMES expr					{$$ = new Times($1,$3);}
+	| expr DIV expr						{$$ = new Div($1,$3);}
+	| expr POW expr						{$$ = new Pow($1,$3);}
+	| MINUS expr						{$$ = new Minus1($2);}
+	| ISNULL expr						{$$ = new IsNull($2);}
+	| OBJECT_IDENTIFIER LPAR args RPAR	{$$ = new Function($1,$3);}
+	| expr DOT OBJECT_IDENTIFIER LPAR args RPAR {$$ = new Dot($1,$3,$5);}
+	| NEW TYPE_IDENTIFIER				{$$ = new New($2);}
+	| OBJECT_IDENTIFIER					{ObjID tmp = ObjID($1);$$ = &tmp;}
+	| literal							{$$ = $1;}
+	| LPAR RPAR							{ObjID tmp = ObjID(std::string("()")); $$ = &tmp;}
+	| LPAR expr RPAR					{$$ = new Parenthese($2);}
+	| block								{$$ = $1;}
 ;
 args:
-	/*epsilon*/
-	| expr exprxx
+	/*epsilon*/ {$$ = new Args();}
+	| expr exprxx {$$ = new Args($1,$2);}
 ;
 exprxx:
-	/*epsilon*/
-	| COLON expr exprxx
+	/*epsilon*/ {$$ = nullptr;}
+	| COLON expr exprxx {$$ = new Exprxx($2,$3);}
 ;
 literal:
-	INTEGER_LITERAL
-	| STRING_LITERAL
-	| boolean-literal
+	INTEGER_LITERAL {$$ = new IntLit($1);}
+	| STRING_LITERAL {$$ = new StrLit($1);}
+	| boolean-literal {$$ = $1;}
 ;
 boolean-literal:
-	TRUE
-	| FALSE
+	TRUE       		{$$ = new BoolLit(true);}
+	| FALSE			{$$ = new BoolLit(false);}
 ;
 %%
 

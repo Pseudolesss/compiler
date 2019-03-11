@@ -369,58 +369,67 @@ namespace yy {
     /// An auxiliary type to compute the largest semantic type.
     union union_type
     {
+      // args
+      char dummy1[sizeof (Args*)];
+
       // block
-      char dummy1[sizeof (Block*)];
+      char dummy2[sizeof (Block*)];
 
       // class_body
-      char dummy2[sizeof (Body*)];
+      char dummy3[sizeof (Body*)];
+
+      // boolean-literal
+      char dummy4[sizeof (BoolLit*)];
 
       // class
-      char dummy3[sizeof (Classe*)];
+      char dummy5[sizeof (Classe*)];
 
       // classes
-      char dummy4[sizeof (Classes*)];
+      char dummy6[sizeof (Classes*)];
 
       // expr
-      char dummy5[sizeof (Expr*)];
+      char dummy7[sizeof (Expr*)];
 
       // exprx
-      char dummy6[sizeof (Exprx*)];
+      char dummy8[sizeof (Exprx*)];
 
       // exprxx
-      char dummy7[sizeof (Exprxx*)];
+      char dummy9[sizeof (Exprxx*)];
 
       // field
-      char dummy8[sizeof (Field*)];
+      char dummy10[sizeof (Field*)];
 
       // field-method
-      char dummy9[sizeof (FieldMethod*)];
+      char dummy11[sizeof (FieldMethod*)];
 
       // formal
-      char dummy10[sizeof (Formal*)];
+      char dummy12[sizeof (Formal*)];
 
       // formals
-      char dummy11[sizeof (Formals*)];
+      char dummy13[sizeof (Formals*)];
 
       // formalx
-      char dummy12[sizeof (Formalx*)];
+      char dummy14[sizeof (Formalx*)];
+
+      // literal
+      char dummy15[sizeof (Literal*)];
 
       // method
-      char dummy13[sizeof (Method*)];
+      char dummy16[sizeof (Method*)];
 
       // program
-      char dummy14[sizeof (Programm*)];
+      char dummy17[sizeof (Programm*)];
 
       // type
-      char dummy15[sizeof (Type*)];
+      char dummy18[sizeof (Type*)];
 
       // INTEGER_LITERAL
-      char dummy16[sizeof (int)];
+      char dummy19[sizeof (int)];
 
       // TYPE_IDENTIFIER
       // OBJECT_IDENTIFIER
       // STRING_LITERAL
-      char dummy17[sizeof (std::string)];
+      char dummy20[sizeof (std::string)];
     };
 
     /// The size of the largest semantic type.
@@ -563,6 +572,19 @@ namespace yy {
       {}
 #endif
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, Args*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const Args*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, Block*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -583,6 +605,19 @@ namespace yy {
       {}
 #else
       basic_symbol (typename Base::kind_type t, const Body*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, BoolLit*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const BoolLit*& v, const location_type& l)
         : Base (t)
         , value (v)
         , location (l)
@@ -719,6 +754,19 @@ namespace yy {
       {}
 #endif
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, Literal*&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const Literal*& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, Method*&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -806,12 +854,20 @@ namespace yy {
         // Type destructor.
 switch (yytype)
     {
+      case 58: // args
+        value.template destroy< Args* > ();
+        break;
+
       case 55: // block
         value.template destroy< Block* > ();
         break;
 
       case 47: // class_body
         value.template destroy< Body* > ();
+        break;
+
+      case 61: // boolean-literal
+        value.template destroy< BoolLit* > ();
         break;
 
       case 46: // class
@@ -852,6 +908,10 @@ switch (yytype)
 
       case 53: // formalx
         value.template destroy< Formalx* > ();
+        break;
+
+      case 60: // literal
+        value.template destroy< Literal* > ();
         break;
 
       case 50: // method
@@ -2023,12 +2083,20 @@ switch (yytype)
   {
     switch (this->type_get ())
     {
+      case 58: // args
+        value.move< Args* > (std::move (that.value));
+        break;
+
       case 55: // block
         value.move< Block* > (std::move (that.value));
         break;
 
       case 47: // class_body
         value.move< Body* > (std::move (that.value));
+        break;
+
+      case 61: // boolean-literal
+        value.move< BoolLit* > (std::move (that.value));
         break;
 
       case 46: // class
@@ -2071,6 +2139,10 @@ switch (yytype)
         value.move< Formalx* > (std::move (that.value));
         break;
 
+      case 60: // literal
+        value.move< Literal* > (std::move (that.value));
+        break;
+
       case 50: // method
         value.move< Method* > (std::move (that.value));
         break;
@@ -2108,12 +2180,20 @@ switch (yytype)
   {
     switch (this->type_get ())
     {
+      case 58: // args
+        value.copy< Args* > (YY_MOVE (that.value));
+        break;
+
       case 55: // block
         value.copy< Block* > (YY_MOVE (that.value));
         break;
 
       case 47: // class_body
         value.copy< Body* > (YY_MOVE (that.value));
+        break;
+
+      case 61: // boolean-literal
+        value.copy< BoolLit* > (YY_MOVE (that.value));
         break;
 
       case 46: // class
@@ -2154,6 +2234,10 @@ switch (yytype)
 
       case 53: // formalx
         value.copy< Formalx* > (YY_MOVE (that.value));
+        break;
+
+      case 60: // literal
+        value.copy< Literal* > (YY_MOVE (that.value));
         break;
 
       case 50: // method
@@ -2200,12 +2284,20 @@ switch (yytype)
     super_type::move (s);
     switch (this->type_get ())
     {
+      case 58: // args
+        value.move< Args* > (YY_MOVE (s.value));
+        break;
+
       case 55: // block
         value.move< Block* > (YY_MOVE (s.value));
         break;
 
       case 47: // class_body
         value.move< Body* > (YY_MOVE (s.value));
+        break;
+
+      case 61: // boolean-literal
+        value.move< BoolLit* > (YY_MOVE (s.value));
         break;
 
       case 46: // class
@@ -2246,6 +2338,10 @@ switch (yytype)
 
       case 53: // formalx
         value.move< Formalx* > (YY_MOVE (s.value));
+        break;
+
+      case 60: // literal
+        value.move< Literal* > (YY_MOVE (s.value));
         break;
 
       case 50: // method
@@ -2345,7 +2441,7 @@ switch (yytype)
 
 
 } // yy
-#line 2349 "parser.hh" // lalr1.cc:401
+#line 2445 "parser.hh" // lalr1.cc:401
 
 
 

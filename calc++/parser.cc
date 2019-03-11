@@ -248,12 +248,20 @@ namespace yy {
   {
     switch (that.type_get ())
     {
+      case 58: // args
+        value.YY_MOVE_OR_COPY< Args* > (YY_MOVE (that.value));
+        break;
+
       case 55: // block
         value.YY_MOVE_OR_COPY< Block* > (YY_MOVE (that.value));
         break;
 
       case 47: // class_body
         value.YY_MOVE_OR_COPY< Body* > (YY_MOVE (that.value));
+        break;
+
+      case 61: // boolean-literal
+        value.YY_MOVE_OR_COPY< BoolLit* > (YY_MOVE (that.value));
         break;
 
       case 46: // class
@@ -296,6 +304,10 @@ namespace yy {
         value.YY_MOVE_OR_COPY< Formalx* > (YY_MOVE (that.value));
         break;
 
+      case 60: // literal
+        value.YY_MOVE_OR_COPY< Literal* > (YY_MOVE (that.value));
+        break;
+
       case 50: // method
         value.YY_MOVE_OR_COPY< Method* > (YY_MOVE (that.value));
         break;
@@ -333,12 +345,20 @@ namespace yy {
   {
     switch (that.type_get ())
     {
+      case 58: // args
+        value.move< Args* > (YY_MOVE (that.value));
+        break;
+
       case 55: // block
         value.move< Block* > (YY_MOVE (that.value));
         break;
 
       case 47: // class_body
         value.move< Body* > (YY_MOVE (that.value));
+        break;
+
+      case 61: // boolean-literal
+        value.move< BoolLit* > (YY_MOVE (that.value));
         break;
 
       case 46: // class
@@ -381,6 +401,10 @@ namespace yy {
         value.move< Formalx* > (YY_MOVE (that.value));
         break;
 
+      case 60: // literal
+        value.move< Literal* > (YY_MOVE (that.value));
+        break;
+
       case 50: // method
         value.move< Method* > (YY_MOVE (that.value));
         break;
@@ -418,12 +442,20 @@ namespace yy {
     state = that.state;
     switch (that.type_get ())
     {
+      case 58: // args
+        value.move< Args* > (that.value);
+        break;
+
       case 55: // block
         value.move< Block* > (that.value);
         break;
 
       case 47: // class_body
         value.move< Body* > (that.value);
+        break;
+
+      case 61: // boolean-literal
+        value.move< BoolLit* > (that.value);
         break;
 
       case 46: // class
@@ -464,6 +496,10 @@ namespace yy {
 
       case 53: // formalx
         value.move< Formalx* > (that.value);
+        break;
+
+      case 60: // literal
+        value.move< Literal* > (that.value);
         break;
 
       case 50: // method
@@ -737,12 +773,20 @@ namespace yy {
          when using variants.  */
       switch (yyr1_[yyn])
     {
+      case 58: // args
+        yylhs.value.emplace< Args* > ();
+        break;
+
       case 55: // block
         yylhs.value.emplace< Block* > ();
         break;
 
       case 47: // class_body
         yylhs.value.emplace< Body* > ();
+        break;
+
+      case 61: // boolean-literal
+        yylhs.value.emplace< BoolLit* > ();
         break;
 
       case 46: // class
@@ -783,6 +827,10 @@ namespace yy {
 
       case 53: // formalx
         yylhs.value.emplace< Formalx* > ();
+        break;
+
+      case 60: // literal
+        yylhs.value.emplace< Literal* > ();
         break;
 
       case 50: // method
@@ -828,235 +876,367 @@ namespace yy {
           switch (yyn)
             {
   case 2:
-#line 87 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Programm* > () = new Programm(yystack_[0].value.as < Classes* > ());}
-#line 834 "parser.cc" // lalr1.cc:919
-    break;
-
-  case 3:
 #line 90 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Classes* > () = new Classes(yystack_[1].value.as < Classes* > (),yystack_[0].value.as < Classe* > ());}
-#line 840 "parser.cc" // lalr1.cc:919
-    break;
-
-  case 4:
-#line 91 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Classes* > () = new Classes(yystack_[0].value.as < Classe* > ());}
-#line 846 "parser.cc" // lalr1.cc:919
-    break;
-
-  case 5:
-#line 94 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Classe* > () = new Classe(yystack_[1].value.as < std::string > (),yystack_[0].value.as < Body* > ());}
-#line 852 "parser.cc" // lalr1.cc:919
-    break;
-
-  case 6:
-#line 95 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Classe* > () = new Classe(yystack_[3].value.as < std::string > (),yystack_[1].value.as < std::string > (),yystack_[0].value.as < Body* > ());}
-#line 858 "parser.cc" // lalr1.cc:919
-    break;
-
-  case 7:
-#line 98 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Body* > () = new Body(yystack_[1].value.as < FieldMethod* > ());}
-#line 864 "parser.cc" // lalr1.cc:919
-    break;
-
-  case 9:
-#line 102 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < FieldMethod* > () = new FieldMethod(yystack_[1].value.as < FieldMethod* > (),yystack_[0].value.as < Field* > ());}
-#line 870 "parser.cc" // lalr1.cc:919
-    break;
-
-  case 10:
-#line 103 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < FieldMethod* > () = new FieldMethod(yystack_[1].value.as < FieldMethod* > (),yystack_[0].value.as < Method* > ());}
-#line 876 "parser.cc" // lalr1.cc:919
-    break;
-
-  case 11:
-#line 106 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Field* > () = new Field(yystack_[3].value.as < std::string > (),yystack_[1].value.as < Type* > ());}
+    {yylhs.value.as < Programm* > () = new Programm(yystack_[0].value.as < Classes* > ());}
 #line 882 "parser.cc" // lalr1.cc:919
     break;
 
-  case 12:
-#line 107 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Field* > () = new Field(yystack_[5].value.as < std::string > (),yystack_[3].value.as < Type* > (),yystack_[1].value.as < Expr* > ());}
+  case 3:
+#line 93 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Classes* > () = new Classes(yystack_[1].value.as < Classes* > (),yystack_[0].value.as < Classe* > ());}
 #line 888 "parser.cc" // lalr1.cc:919
     break;
 
-  case 13:
-#line 110 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Method* > () = new Method(yystack_[6].value.as < std::string > (),yystack_[4].value.as < Formals* > (),yystack_[1].value.as < Type* > (),yystack_[0].value.as < Block* > ());}
+  case 4:
+#line 94 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Classes* > () = new Classes(yystack_[0].value.as < Classe* > ());}
 #line 894 "parser.cc" // lalr1.cc:919
     break;
 
-  case 14:
-#line 113 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Type* > () = new Type(yystack_[0].value.as < std::string > ());}
+  case 5:
+#line 97 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Classe* > () = new Classe(yystack_[1].value.as < std::string > (),yystack_[0].value.as < Body* > ());}
 #line 900 "parser.cc" // lalr1.cc:919
     break;
 
-  case 15:
-#line 114 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Type* > () = new Type(std::string("INT32"));}
+  case 6:
+#line 98 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Classe* > () = new Classe(yystack_[3].value.as < std::string > (),yystack_[1].value.as < std::string > (),yystack_[0].value.as < Body* > ());}
 #line 906 "parser.cc" // lalr1.cc:919
     break;
 
-  case 16:
-#line 115 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Type* > () = new Type(std::string("BOOL"));}
+  case 7:
+#line 101 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Body* > () = new Body(yystack_[1].value.as < FieldMethod* > ());}
 #line 912 "parser.cc" // lalr1.cc:919
     break;
 
-  case 17:
-#line 116 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Type* > () = new Type(std::string("STRING"));}
+  case 8:
+#line 104 "parser.yy" // lalr1.cc:919
+    { yylhs.value.as < FieldMethod* > () = nullptr;}
 #line 918 "parser.cc" // lalr1.cc:919
     break;
 
-  case 18:
-#line 117 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Type* > () = new Type(std::string("UNIT"));}
+  case 9:
+#line 105 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < FieldMethod* > () = new FieldMethod(yystack_[1].value.as < FieldMethod* > (),yystack_[0].value.as < Field* > ());}
 #line 924 "parser.cc" // lalr1.cc:919
     break;
 
-  case 20:
-#line 121 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Formals* > () = new Formals(yystack_[1].value.as < Formal* > (),yystack_[0].value.as < Formalx* > ());}
+  case 10:
+#line 106 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < FieldMethod* > () = new FieldMethod(yystack_[1].value.as < FieldMethod* > (),yystack_[0].value.as < Method* > ());}
 #line 930 "parser.cc" // lalr1.cc:919
     break;
 
-  case 22:
-#line 125 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Formalx* > () = new Formalx(yystack_[1].value.as < Formal* > (),yystack_[0].value.as < Formalx* > ());}
+  case 11:
+#line 109 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Field* > () = new Field(yystack_[3].value.as < std::string > (),yystack_[1].value.as < Type* > ());}
 #line 936 "parser.cc" // lalr1.cc:919
     break;
 
-  case 23:
-#line 128 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Formal* > () = new Formal(yystack_[2].value.as < std::string > (),yystack_[0].value.as < Type* > ());}
+  case 12:
+#line 110 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Field* > () = new Field(yystack_[5].value.as < std::string > (),yystack_[3].value.as < Type* > (),yystack_[1].value.as < Expr* > ());}
 #line 942 "parser.cc" // lalr1.cc:919
     break;
 
-  case 24:
-#line 131 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Block* > () = new Block(yystack_[2].value.as < Expr* > (),yystack_[1].value.as < Exprx* > ());}
+  case 13:
+#line 113 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Method* > () = new Method(yystack_[6].value.as < std::string > (),yystack_[4].value.as < Formals* > (),yystack_[1].value.as < Type* > (),yystack_[0].value.as < Block* > ());}
 #line 948 "parser.cc" // lalr1.cc:919
     break;
 
-  case 26:
-#line 135 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Exprx* > () = new Exprx(yystack_[1].value.as < Expr* > (),yystack_[0].value.as < Exprx* > ());}
+  case 14:
+#line 116 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Type* > () = new Type(yystack_[0].value.as < std::string > ());}
 #line 954 "parser.cc" // lalr1.cc:919
     break;
 
-  case 27:
-#line 138 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new If(yystack_[4].value.as < Expr* > (),yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+  case 15:
+#line 117 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Type* > () = new Type(std::string("INT32"));}
 #line 960 "parser.cc" // lalr1.cc:919
     break;
 
-  case 28:
-#line 139 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new If(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+  case 16:
+#line 118 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Type* > () = new Type(std::string("BOOL"));}
 #line 966 "parser.cc" // lalr1.cc:919
     break;
 
-  case 29:
-#line 140 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new While(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+  case 17:
+#line 119 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Type* > () = new Type(std::string("STRING"));}
 #line 972 "parser.cc" // lalr1.cc:919
     break;
 
-  case 30:
-#line 141 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new Let(yystack_[4].value.as < std::string > (),yystack_[2].value.as < Type* > (),yystack_[0].value.as < Expr* > ());}
+  case 18:
+#line 120 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Type* > () = new Type(std::string("UNIT"));}
 #line 978 "parser.cc" // lalr1.cc:919
     break;
 
-  case 31:
-#line 142 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new Let(yystack_[6].value.as < std::string > (),yystack_[4].value.as < Type* > (),yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+  case 19:
+#line 123 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Formals* > () = nullptr;}
 #line 984 "parser.cc" // lalr1.cc:919
     break;
 
-  case 32:
-#line 143 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new Assign(yystack_[2].value.as < std::string > (),yystack_[0].value.as < Expr* > ());}
+  case 20:
+#line 124 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Formals* > () = new Formals(yystack_[1].value.as < Formal* > (),yystack_[0].value.as < Formalx* > ());}
 #line 990 "parser.cc" // lalr1.cc:919
     break;
 
-  case 33:
-#line 144 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new Not(yystack_[0].value.as < Expr* > ());}
+  case 21:
+#line 127 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Formalx* > () = nullptr;}
 #line 996 "parser.cc" // lalr1.cc:919
     break;
 
-  case 34:
-#line 145 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new And(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+  case 22:
+#line 128 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Formalx* > () = new Formalx(yystack_[1].value.as < Formal* > (),yystack_[0].value.as < Formalx* > ());}
 #line 1002 "parser.cc" // lalr1.cc:919
     break;
 
-  case 35:
-#line 146 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new Equal(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+  case 23:
+#line 131 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Formal* > () = new Formal(yystack_[2].value.as < std::string > (),yystack_[0].value.as < Type* > ());}
 #line 1008 "parser.cc" // lalr1.cc:919
     break;
 
-  case 36:
-#line 147 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new Lower(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+  case 24:
+#line 134 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Block* > () = new Block(yystack_[2].value.as < Expr* > (),yystack_[1].value.as < Exprx* > ());}
 #line 1014 "parser.cc" // lalr1.cc:919
     break;
 
-  case 37:
-#line 148 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new LowerEqual(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+  case 25:
+#line 137 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Exprx* > () = nullptr;}
 #line 1020 "parser.cc" // lalr1.cc:919
     break;
 
-  case 38:
-#line 149 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new Plus(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+  case 26:
+#line 138 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Exprx* > () = new Exprx(yystack_[1].value.as < Expr* > (),yystack_[0].value.as < Exprx* > ());}
 #line 1026 "parser.cc" // lalr1.cc:919
     break;
 
-  case 39:
-#line 150 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Expr* > () = new Minus(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+  case 27:
+#line 141 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new If(yystack_[4].value.as < Expr* > (),yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
 #line 1032 "parser.cc" // lalr1.cc:919
     break;
 
-  case 40:
-#line 151 "parser.yy" // lalr1.cc:919
-    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+  case 28:
+#line 142 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new If(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
 #line 1038 "parser.cc" // lalr1.cc:919
     break;
 
-  case 41:
-#line 152 "parser.yy" // lalr1.cc:919
-    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+  case 29:
+#line 143 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new While(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
 #line 1044 "parser.cc" // lalr1.cc:919
     break;
 
-  case 42:
-#line 153 "parser.yy" // lalr1.cc:919
-    { yylhs.value.as < Expr* > () = yystack_[2].value.as < Expr* > (); }
+  case 30:
+#line 144 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Let(yystack_[4].value.as < std::string > (),yystack_[2].value.as < Type* > (),yystack_[0].value.as < Expr* > ());}
 #line 1050 "parser.cc" // lalr1.cc:919
     break;
 
-  case 46:
-#line 157 "parser.yy" // lalr1.cc:919
-    { yylhs.value.as < Expr* > () = yystack_[5].value.as < Expr* > (); }
+  case 31:
+#line 145 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Let(yystack_[6].value.as < std::string > (),yystack_[4].value.as < Type* > (),yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
 #line 1056 "parser.cc" // lalr1.cc:919
     break;
 
+  case 32:
+#line 146 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Assign(yystack_[2].value.as < std::string > (),yystack_[0].value.as < Expr* > ());}
+#line 1062 "parser.cc" // lalr1.cc:919
+    break;
 
-#line 1060 "parser.cc" // lalr1.cc:919
+  case 33:
+#line 147 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Not(yystack_[0].value.as < Expr* > ());}
+#line 1068 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 34:
+#line 148 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new And(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 1074 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 35:
+#line 149 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Equal(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 1080 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 36:
+#line 150 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Lower(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 1086 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 37:
+#line 151 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new LowerEqual(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 1092 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 38:
+#line 152 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Plus(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 1098 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 39:
+#line 153 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Minus(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 1104 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 40:
+#line 154 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Times(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 1110 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 41:
+#line 155 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Div(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 1116 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 42:
+#line 156 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Pow(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
+#line 1122 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 43:
+#line 157 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Minus1(yystack_[0].value.as < Expr* > ());}
+#line 1128 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 44:
+#line 158 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new IsNull(yystack_[0].value.as < Expr* > ());}
+#line 1134 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 45:
+#line 159 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Function(yystack_[3].value.as < std::string > (),yystack_[1].value.as < Args* > ());}
+#line 1140 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 46:
+#line 160 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Dot(yystack_[5].value.as < Expr* > (),yystack_[3].value.as < std::string > (),yystack_[1].value.as < Args* > ());}
+#line 1146 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 47:
+#line 161 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new New(yystack_[0].value.as < std::string > ());}
+#line 1152 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 48:
+#line 162 "parser.yy" // lalr1.cc:919
+    {ObjID tmp = ObjID(yystack_[0].value.as < std::string > ());yylhs.value.as < Expr* > () = &tmp;}
+#line 1158 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 49:
+#line 163 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = yystack_[0].value.as < Literal* > ();}
+#line 1164 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 50:
+#line 164 "parser.yy" // lalr1.cc:919
+    {ObjID tmp = ObjID(std::string("()")); yylhs.value.as < Expr* > () = &tmp;}
+#line 1170 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 51:
+#line 165 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = new Parenthese(yystack_[1].value.as < Expr* > ());}
+#line 1176 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 52:
+#line 166 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Expr* > () = yystack_[0].value.as < Block* > ();}
+#line 1182 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 53:
+#line 169 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Args* > () = new Args();}
+#line 1188 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 54:
+#line 170 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Args* > () = new Args(yystack_[1].value.as < Expr* > (),yystack_[0].value.as < Exprxx* > ());}
+#line 1194 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 55:
+#line 173 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Exprxx* > () = nullptr;}
+#line 1200 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 56:
+#line 174 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Exprxx* > () = new Exprxx(yystack_[1].value.as < Expr* > (),yystack_[0].value.as < Exprxx* > ());}
+#line 1206 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 57:
+#line 177 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Literal* > () = new IntLit(yystack_[0].value.as < int > ());}
+#line 1212 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 58:
+#line 178 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Literal* > () = new StrLit(yystack_[0].value.as < std::string > ());}
+#line 1218 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 59:
+#line 179 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < Literal* > () = yystack_[0].value.as < BoolLit* > ();}
+#line 1224 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 60:
+#line 182 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < BoolLit* > () = new BoolLit(true);}
+#line 1230 "parser.cc" // lalr1.cc:919
+    break;
+
+  case 61:
+#line 183 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < BoolLit* > () = new BoolLit(false);}
+#line 1236 "parser.cc" // lalr1.cc:919
+    break;
+
+
+#line 1240 "parser.cc" // lalr1.cc:919
             default:
               break;
             }
@@ -1507,13 +1687,13 @@ namespace yy {
   const unsigned char
   parser::yyrline_[] =
   {
-       0,    87,    87,    90,    91,    94,    95,    98,   100,   102,
-     103,   106,   107,   110,   113,   114,   115,   116,   117,   119,
-     121,   123,   125,   128,   131,   133,   135,   138,   139,   140,
-     141,   142,   143,   144,   145,   146,   147,   148,   149,   150,
-     151,   152,   153,   154,   155,   156,   157,   158,   159,   160,
-     161,   162,   163,   165,   167,   169,   171,   174,   175,   176,
-     179,   180
+       0,    90,    90,    93,    94,    97,    98,   101,   104,   105,
+     106,   109,   110,   113,   116,   117,   118,   119,   120,   123,
+     124,   127,   128,   131,   134,   137,   138,   141,   142,   143,
+     144,   145,   146,   147,   148,   149,   150,   151,   152,   153,
+     154,   155,   156,   157,   158,   159,   160,   161,   162,   163,
+     164,   165,   166,   169,   170,   173,   174,   177,   178,   179,
+     182,   183
   };
 
   // Print the state stack on the debug stream.
@@ -1548,8 +1728,8 @@ namespace yy {
 
 
 } // yy
-#line 1552 "parser.cc" // lalr1.cc:1242
-#line 182 "parser.yy" // lalr1.cc:1243
+#line 1732 "parser.cc" // lalr1.cc:1242
+#line 185 "parser.yy" // lalr1.cc:1243
 
 
 void

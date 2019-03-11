@@ -428,10 +428,6 @@ struct ObjID : Expr
 
 struct Literal : Expr
 {
-  public:
-	string getType();
-  protected:
-	string litType;
 };
 
 struct IntLit : Literal
