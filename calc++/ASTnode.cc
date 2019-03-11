@@ -148,15 +148,15 @@ string New::getTypeID(){return typeID;}
 ObjID::ObjID(string s) : ObjId(s) {dataType = string("ObjID");}
 string ObjID::getID() {return ObjId;}
 
-IntLit::IntLit(int i) : value(i){litType = string("IntLit");}
+IntLit::IntLit(int i) : value(i){}
 int IntLit::getValue() {return value;}
 
 
-StrLit::StrLit(string s) : value(s) {litType = string("StrLit");}
+StrLit::StrLit(string s) : value(s) {}
 string StrLit::getValue(){return value;}
 
 
-BoolLit::BoolLit(bool v) : value(v){litType = string("litType");}
+BoolLit::BoolLit(bool v) : value(v){}
 bool BoolLit::getValue(){return value;}
 
 
