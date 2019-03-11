@@ -2,8 +2,6 @@
 %require "3.3"
 %defines
 
-%define api.token.constructor
-%define api.value.type variant
 %define parse.assert
 
 %code requires {
@@ -11,8 +9,59 @@
   class driver;
 }
 
+
+%code {
+# include "driver.hh"
+# include "ASTnode.hh"
+}
+
 %union{
-	ASTnode* astnode
+	struct ASTnode* astnode;
+	Expr* expr;
+	Type* type;
+	Field* field;
+	Formal* formal;
+	Formalx* formalx;
+	Formals* formals;
+	Exprx* exprx;
+	Block* block;
+	Method* method;
+	FieldMethod* fieldmethod;
+	Body* body;
+	Classe* classe;
+	Classes* classes;
+	Programm* programm;
+	Dual* dual;
+	Unary* unary;
+	If* if;
+	While* while;
+	Let* let;
+	Assign* assign;
+	Not* not;
+	And* and;
+	Equal* equal;
+	Lower* lower;
+	LowerEqual* lowerequal;
+	Plus* plus; 
+	Minus* minus;
+	Times* times;
+	Div* div;
+	Pow* pow ;
+	Minus1* minus1 
+	IsNull* isnull 
+	Exprxx* exprxx 
+	Args* args 
+	Function* function 
+	Dot* dot 
+	New* new 
+	ObjID* objid 
+	Literal* literal 
+	IntLit* intlit 
+	StrLit* strlit 
+	BoolLit* boolit 
+	Lpar* lpar
+	Rpar* rpar 
+	Parenthese parenthese 
 }
 // The parsing context.
 %param { driver& drv }
@@ -22,10 +71,6 @@
 %define parse.trace
 %define parse.error verbose
 
-%code {
-# include "driver.hh"
-# include "ASTnode.hh"
-}
 
 %define api.token.prefix {TOK_}
 
@@ -73,6 +118,13 @@
 
 %printer { yyo << $$; } <*>;
 
+%type <programm> program
+%type <classes> classes 
+%type <classe> class
+%type <body> class_body
+
+
+
 %%
 program:
 	classes {Programm* a = new Programm($1);drv.root=a; $$ = a;}
@@ -82,10 +134,10 @@ classes:
 	| class		  {$$ = Classes($1);}
 ;
 class:
-	CLASS TYPE_IDENTIFIER class-body {new Classe($2,$3);}
-	| CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER class-body
+	CLASS TYPE_IDENTIFIER class_body {new Classe($2,$3);}
+	| CLASS TYPE_IDENTIFIER EXTENDS TYPE_IDENTIFIER class_body
 ;
-class-body:
+class_body:
 	LBRACE field-method RBRACE
 ;
 field-method:
