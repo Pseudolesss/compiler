@@ -162,7 +162,7 @@ std::string Function::accept(Visitor* v) { return v->visit(this); }
 Dot::Dot(Expr* e, string s, Args* a) : expr(e),ID(s),args(a) {dataType = string("Dot");}
 Expr* Dot::getExpr(){return expr;}
 Args* Dot::getArgs(){return args;}
-std::string Dot::getID(){return ID}
+std::string Dot::getID(){return ID;}
 std::string Dot::accept(Visitor* v) { return v->visit(this); }
 
 
