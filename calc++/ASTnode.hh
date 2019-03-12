@@ -15,7 +15,7 @@ struct ASTnode
   public:
     ASTnode();
     ASTnode(bool);
-    std::string accept(Visitor);
+    virtual std::string accept(Visitor*);
     bool isEmpty();
 
   private:
