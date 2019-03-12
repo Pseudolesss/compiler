@@ -19,7 +19,7 @@ std::string Type::accept(Visitor* v) { return v->visit(this); }
 
 
 Field::Field(string object_id, Type* a_type) : objID(object_id), type(a_type) { expr = nullptr; }
-Field::Field(string object_id, Type* a_type, Expr* an_expr) : objID(object_id), type(a_type){};
+Field::Field(string object_id, Type* a_type, Expr* an_expr) : objID(object_id), type(a_type),expr(an_expr){};
 string Field::getID() { return objID; }
 Type* Field::getType() { return type; }
 Expr* Field::getExpr() { return expr; }

@@ -1,7 +1,7 @@
 # This Makefile is designed to be simple and readable.  It does not
 # aim at portability.  It requires GNU Make.
 
-BASE = comp
+BASE = vsopc
 BISON = bison
 CXX = g++
 FLEX = flex
@@ -28,6 +28,8 @@ scanner.o: parser.hh
 run: $(BASE)
 	@echo "Type arithmetic expressions.  Quit with ctrl-d."
 	./$< -
+install-tools: 
+	echo "Soit plus doux que la derniere fois pls Cyril my love"
 
 html: parser.html
 %.html: %.xml

@@ -1,4 +1,6 @@
 #include <string>
+#include <iostream>
+#include <ostream>
 #include "ASTnode.hh"
 #include <boost/tokenizer.hpp>
 
@@ -47,7 +49,12 @@ std::string Visitor::visit(Exprxx *exprxx){
     }
 }
 
-std::string Visitor::visit(Block *block){return "[" +  block->getExpr()->accept(this) + block->getExprx()->accept(this)+ "]";}
+std::string Visitor::visit(Block *block){
+    std::string ret = "[" +  block->getExpr()->accept(this) + block->getExprx()->accept(this)+ "]";
+    if(ret.find(',') == std::string::npos)
+        return ret.substr(1,ret.size()-2);
+    return ret;
+}
 
 std::string Visitor::visit(Method *method){return "Method(" + method->getID()+ ", " + method->getFormals()->accept(this) + ", " + method->getType()->accept(this) + ", " + method->getBlock()->accept(this) + ")" ;}
 
@@ -55,9 +62,9 @@ std::string Visitor::visit(FieldMethod *fieldMethod){
     if(fieldMethod->getFieldMethod() == nullptr)
         return "";
     if(fieldMethod->getMethod() == nullptr)
-        return fieldMethod->getField()->accept(this) + "$" + fieldMethod->getField()->accept(this);
+        return fieldMethod->getFieldMethod()->accept(this) + "$" + fieldMethod->getField()->accept(this);
     else
-        return fieldMethod->getMethod()->accept(this) + "$" + fieldMethod->getField()->accept(this);
+        return fieldMethod->getFieldMethod()->accept(this) + "$" + fieldMethod->getMethod()->accept(this);
 }
 
 std::string Visitor::visit(Body *body){

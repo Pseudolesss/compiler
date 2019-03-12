@@ -115,10 +115,10 @@ method:
 ;
 type:
 	TYPE_IDENTIFIER  {$$ = new Type($1);}
-	| INT32			 {$$ = new Type(std::string("INT32"));}
-	| BOOL			{$$ = new Type(std::string("BOOL"));}
-	| STRING		{$$ = new Type(std::string("STRING"));}
-	| UNIT			{$$ = new Type(std::string("UNIT"));}
+	| INT32			 {$$ = new Type(std::string("int32"));}
+	| BOOL			{$$ = new Type(std::string("bool"));}
+	| STRING		{$$ = new Type(std::string("string"));}
+	| UNIT			{$$ = new Type(std::string("unit"));}
 ;
 formals:
 	/*epsilon*/ {$$ = new Formals();}
@@ -160,9 +160,9 @@ expr:
 	| OBJECT_IDENTIFIER LPAR args RPAR	{$$ = new Function($1,$3);}
 	| expr DOT OBJECT_IDENTIFIER LPAR args RPAR {$$ = new Dot($1,$3,$5);}
 	| NEW TYPE_IDENTIFIER				{$$ = new New($2);}
-	| OBJECT_IDENTIFIER					{ObjID tmp = ObjID($1);$$ = &tmp;}
+	| OBJECT_IDENTIFIER					{$$ = new ObjID($1);}
 	| literal							{$$ = $1;}
-	| LPAR RPAR							{ObjID tmp = ObjID(std::string("()")); $$ = &tmp;}
+	| LPAR RPAR							{$$ = new ObjID("()");}
 	| LPAR expr RPAR					{$$ = new Parenthese($2);}
 	| block								{$$ = $1;}
 ;
@@ -187,6 +187,6 @@ boolean-literal:
 
 void
 yy::parser::error (const location_type& l, const std::string& m)
-{
+{ if(drv.setting == 1)
   std::cerr << l << ": " << m << '\n';
 }

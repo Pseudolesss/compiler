@@ -17,7 +17,7 @@ public:
   driver ();
 
   Programm* root;
-
+  int setting; //0 = -lex, 1 = -parse
   // Run the parser on file F.  Return 0 on success.
   int parse (const std::string& f);
   // The name of the file being parsed.
