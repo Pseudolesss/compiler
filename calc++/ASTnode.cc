@@ -82,7 +82,7 @@ std::string Body::accept(Visitor* v) { return v->visit(this); }
 
 
 Classe::Classe(string s, Body* b) : typeID(s), body(b){}
-Classe::Classe(string name, string parent,Body* b) :  typeID(name), parentID(parent), body(b){}
+Classe::Classe(string typeID, string parent,Body* b) :  typeID(typeID), parentID(parent), body(b){}
 std::string Classe::getTypeID() {return typeID;}
 std::string Classe::getParentID() {return parentID;}
 Body* Classe::getBody() { return body;}
