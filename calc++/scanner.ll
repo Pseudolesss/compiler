@@ -187,7 +187,7 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 "do"            { printToken(yytext); return yy::parser::make_DO(loc); }
 "else"          { printToken(yytext); return yy::parser::make_ELSE(loc); }
 "extends"       { printToken(yytext); return yy::parser::make_EXTENDS(loc); }
-"false"         { printToken(yytext); return yy::parser::make_FALSE(loc); }
+"false"         { printToken(yytext); return yy::parser::make_FALSE(false, loc); }
 "if"            { printToken(yytext); return yy::parser::make_IF(loc); }
 "in"            { printToken(yytext); return yy::parser::make_IN(loc); }
 "int32"         { printToken(yytext); return yy::parser::make_INT32(loc); }
@@ -197,7 +197,7 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 "not"           { printToken(yytext); return yy::parser::make_NOT(loc); }
 "string"        { printToken(yytext); return yy::parser::make_STRING(loc); }
 "then"          { printToken(yytext); return yy::parser::make_THEN(loc); }
-"true"          { printToken(yytext); return yy::parser::make_TRUE(loc); }
+"true"          { printToken(yytext); return yy::parser::make_TRUE(true, loc); }
 "unit"          { printToken(yytext); return yy::parser::make_UNIT(loc); }
 "while"         { printToken(yytext); return yy::parser::make_WHILE(loc); }
 

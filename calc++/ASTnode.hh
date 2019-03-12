@@ -4,20 +4,18 @@
 
 #include <list>
 #include <string>
+#include "Visitor.hh"
 
 using namespace std;
 
 //faut pas oublier d'inclure visitor.cpp à cause du template !
-template <class T>
-class Visitor;
 
 struct ASTnode
 {
   public:
     ASTnode();
     ASTnode(bool);
-    template <class T> T
-    accept(struct Visitor<T>);
+    std::string accept(Visitor);
     bool isEmpty();
 
   private:
@@ -37,8 +35,6 @@ struct Type : ASTnode
   public:
     Type();
     Type(string);
-    template <typename T>
-    T accept(struct Visitor<T>);
     string getID();
 
   private:
@@ -51,8 +47,6 @@ struct Field : ASTnode
     Field();
     Field(string, Type*);
     Field(string, Type*, Expr*);
-    template <typename T>
-    T accept(struct Visitor<T>);
     string getID();
     Type* getType();
     Expr* getExpr();

@@ -2,11 +2,11 @@
 
 using namespace std;
 
+
 ASTnode::ASTnode(){isempty = false;}
 ASTnode::ASTnode(bool b) : isempty(b){};
 bool ASTnode::isEmpty(){return isempty;}
-template <class T>
-T ASTnode::accept(struct Visitor<T> v) { return v.visit(this); }
+std::string ASTnode::accept(Visitor v) { return v.visit(this); }
 
 
 string Expr::getDataType(){return dataType;}

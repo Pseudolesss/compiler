@@ -1,54 +1,109 @@
-#include "ASTnode.hh"
+
+#ifndef VISITOR_H
+#define VISITOR_H
+
 //inclure visit.cpp pour le compilateur.
-template <class T>
+
+struct ASTnode;
+struct Expr;
+struct Type;
+struct Field;
+struct Format;
+struct Formalx;
+struct Formals;
+struct Exprx;
+struct Exprxx;
+struct Block;
+struct Method;
+struct FieldMethod;
+struct Body;
+struct Classe;
+struct Classes;
+struct Programm;
+struct Dual;
+struct Unary;
+struct If;
+struct While;
+struct Let;
+struct Assign;
+struct Not;
+struct And;
+struct Equal;
+struct Lower;
+struct LowerEqual;
+struct Plus;
+struct Minus;
+struct Times;
+struct Div;
+struct Pow;
+struct Minus1;
+struct IsNull;
+struct Exprxx;
+struct Args;
+struct Function;
+struct Dot;
+struct New;
+struct ObjID;
+struct Literal;
+struct IntLit;
+struct StrLit;
+struct BoolLit;
+struct Lpar;
+struct Rpar;
+struct Parenthese;
+
+
+
 class Visitor
 {
-  public:
-    T visit(ASTnode* );
-    T visit(Expr *);//
-    T visit(Type *);//
-    T visit(Field *);//
-    T visit(Format *);//
-    T visit(Formalx *);//
-    T visit(Formals *);//
-    T visit(Exprx *);//
-    T visit(Exprxx *);
-    T visit(Block *);//
-    T visit(Method *);//
-    T visit(FieldMethod *);//
-    T visit(Body *);
-    T visit(Classe *);
-    T visit(Classes *);
-    T visit(Programm *);
-    T visit(Dual *);
-    T visit(Unary *);
-    T visit(If *);
-    T visit(While *);
-    T visit(Let *);
-    T visit(Assign *);
-    T visit(Not *);
-    T visit(And *);
-    T visit(Equal *);
-    T visit(Lower *);
-    T visit(LowerEqual *);
-    T visit(Plus *);
-    T visit(Minus *);
-    T visit(Times *);
-    T visit(Div *);
-    T visit(Pow *);
-    T visit1(Minus1 *);
-    T visit(IsNull *);
-    T visit(Exprxx*);
-    T visit(Args *);
-    T visit(Function *);
-    T visit(Dot *);
-    T visit(New *);
-    T visit(ObjID *);
-    T visit(Literal *);
-    T visit(IntList *);
-    T visit(StrLit *);
-    T visit(BoolLit *);
-    T visit(Lpar *);
-    T visit(Rpar *);
-    T visit(Parenthese *);
-}
+public:
+    std::string visit(ASTnode* );
+    std::string visit(Expr *);//
+    std::string visit(Type *);//
+    std::string visit(Field *);//
+    std::string visit(Format *);//
+    std::string visit(Formalx *);//
+    std::string visit(Formals *);//
+    std::string visit(Exprx *);//
+    std::string visit(Exprxx *);
+    std::string visit(Block *);//
+    std::string visit(Method *);//
+    std::string visit(FieldMethod *);//
+    std::string visit(Body *);
+    std::string visit(Classe *);
+    std::string visit(Classes *);
+    std::string visit(Programm *);
+    std::string visit(Dual *);
+    std::string visit(Unary *);
+    std::string visit(If *);
+    std::string visit(While *);
+    std::string visit(Let *);
+    std::string visit(Assign *);
+    std::string visit(Not *);
+    std::string visit(And *);
+    std::string visit(Equal *);
+    std::string visit(Lower *);
+    std::string visit(LowerEqual *);
+    std::string visit(Plus *);
+    std::string visit(Minus *);
+    std::string visit(Times *);
+    std::string visit(Div *);
+    std::string visit(Pow *);
+    std::string visit(Minus1 *);
+    std::string visit(IsNull *);
+    std::string visit(Args *);
+    std::string visit(Function *);
+    std::string visit(Dot *);
+    std::string visit(New *);
+    std::string visit(ObjID *);
+    std::string visit(Literal *);
+    std::string visit(IntLit *);
+    std::string visit(StrLit *);
+    std::string visit(BoolLit *);
+    std::string visit(Lpar *);
+    std::string visit(Rpar *);
+    std::string visit(Parenthese *);
+};
+
+
+#endif

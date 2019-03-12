@@ -1,5 +1,5 @@
 %skeleton "lalr1.cc" /* -*- C++ -*- */
-%require "3.3"
+%require "3.2"
 %defines
 
 %define parse.assert
@@ -34,7 +34,7 @@
 %token BOOL
 %token CLASS
 %token EXTENDS
-%token FALSE
+%token <bool> FALSE
 %token IF
 
 %token INT32
@@ -42,7 +42,7 @@
 %token LET
 %token NEW
 %token STRING
-%token TRUE
+%token <bool> TRUE
 %token UNIT
 %token WHILE
 %token <std::string> TYPE_IDENTIFIER
@@ -61,7 +61,8 @@
 %nonassoc EQUAL LOWER_EQUAL LOWER
 %left PLUS MINUS
 %left TIMES DIV
-%right ISNULL 
+%right ISNULL
+%precedence NEG
 %right POW
 %left DOT
 
@@ -154,7 +155,7 @@ expr:
 	| expr TIMES expr					{$$ = new Times($1,$3);}
 	| expr DIV expr						{$$ = new Div($1,$3);}
 	| expr POW expr						{$$ = new Pow($1,$3);}
-	| MINUS expr						{$$ = new Minus1($2);}
+	| MINUS expr %prec NEG				{$$ = new Minus1($2);}
 	| ISNULL expr						{$$ = new IsNull($2);}
 	| OBJECT_IDENTIFIER LPAR args RPAR	{$$ = new Function($1,$3);}
 	| expr DOT OBJECT_IDENTIFIER LPAR args RPAR {$$ = new Dot($1,$3,$5);}
@@ -179,8 +180,8 @@ literal:
 	| boolean-literal {$$ = $1;}
 ;
 boolean-literal:
-	TRUE       		{$$ = new BoolLit(true);}
-	| FALSE			{$$ = new BoolLit(false);}
+	TRUE       		{$$ = new BoolLit($1);}
+	| FALSE			{$$ = new BoolLit($1);}
 ;
 %%
 
