@@ -11,11 +11,21 @@ std::string Visitor::visit(Type *type){return type->getID();}
 
 std::string Visitor::visit(Field *field){return "2-";}
 
-std::string Visitor::visit(Format *format){return "3-";}
+std::string Visitor::visit(Formal *formal){return formal->getID() + " : " + formal->getType()->accept(this);}
 
-std::string Visitor::visit(Formalx *formalx){return "4-";}
+std::string Visitor::visit(Formalx *formalx){
+    if(formalx->getFormal() == nullptr)
+        return "";
+    else
+        return ", " + formalx->getFormal()->accept(this) + formalx->getFormalx()->accept(this);
+}
 
-std::string Visitor::visit(Formals *formals){return "5-";}
+std::string Visitor::visit(Formals *formals){
+    if(formals->getFormal() == nullptr)
+        return "[]";
+    else
+        return "[" + formals->getFormal()->accept(this) + formals->getFormalx()->accept(this) + "]";
+}
 
 std::string Visitor::visit(Exprx *exprx){
     if(exprx->getExprx() == nullptr)

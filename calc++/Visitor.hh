@@ -6,7 +6,7 @@ struct ASTnode;
 struct Expr;
 struct Type;
 struct Field;
-struct Format;
+struct Formal;
 struct Formalx;
 struct Formals;
 struct Exprx;
@@ -59,7 +59,7 @@ public:
     std::string visit(Expr *);//
     std::string visit(Type *);//
     std::string visit(Field *);//
-    std::string visit(Format *);//
+    std::string visit(Formal *);//
     std::string visit(Formalx *);//
     std::string visit(Formals *);//
     std::string visit(Exprx *);//

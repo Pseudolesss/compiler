@@ -102,7 +102,7 @@ class_body:
 	LBRACE field-method RBRACE {$$ = new Body($2);}
 ;
 field-method:
-	/*espilon*/ { $$ = nullptr;}
+	/*espilon*/ { $$ = new FieldMethod();}
 	| field-method field {$$ = new FieldMethod($1,$2);}
 	| field-method method {$$ = new FieldMethod($1,$2);}
 ;
@@ -121,11 +121,11 @@ type:
 	| UNIT			{$$ = new Type(std::string("UNIT"));}
 ;
 formals:
-	/*epsilon*/ {$$ = nullptr;}
+	/*epsilon*/ {$$ = new Formals();}
 	| formal formalx {$$ = new Formals($1,$2);}
 ;
 formalx:
-	/*epsilon*/ {$$ = nullptr;}
+	/*epsilon*/ {$$ = new Formalx();}
 	| COMMA formal formalx  {$$ = new Formalx($2,$3);}
 ;
 formal:
@@ -135,7 +135,7 @@ block:
 	LBRACE expr exprx RBRACE {$$ = new Block($2,$3);}
 ;
 exprx:
-	/*epsilon*/ {$$ = nullptr;}
+	/*epsilon*/ {$$ = new Exprx();}
 	| SEMICOLON expr exprx {$$ = new Exprx($2,$3);}
 ;
 expr:
@@ -171,7 +171,7 @@ args:
 	| expr exprxx {$$ = new Args($1,$2);}
 ;
 exprxx:
-	/*epsilon*/ {$$ = nullptr;}
+	/*epsilon*/ {$$ = new Exprxx();}
 	| COLON expr exprxx {$$ = new Exprxx($2,$3);}
 ;
 literal:
