@@ -9,7 +9,12 @@ std::string Visitor::visit(Expr * expr){return "NOT SUPPOSED TO HAPPEN EXPRESSIO
 
 std::string Visitor::visit(Type *type){return type->getID();}
 
-std::string Visitor::visit(Field *field){return "2-";}
+std::string Visitor::visit(Field *field){
+    if(Field->getExpr() == nullptr){
+        return "Field(" + field->getDataType() + ", " + field->getType()->accept(this) + " )";
+    }
+    return "Field(" + field->getDataType() + ", " + field->getType()->accept(this) + ", " + field->getExpr()->accept(this) + " )";
+}
 
 std::string Visitor::visit(Format *format){return "3-";}
 
