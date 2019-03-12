@@ -423,13 +423,17 @@ namespace yy {
       // type
       char dummy18[sizeof (Type*)];
 
+      // FALSE
+      // TRUE
+      char dummy19[sizeof (bool)];
+
       // INTEGER_LITERAL
-      char dummy19[sizeof (int)];
+      char dummy20[sizeof (int)];
 
       // TYPE_IDENTIFIER
       // OBJECT_IDENTIFIER
       // STRING_LITERAL
-      char dummy20[sizeof (std::string)];
+      char dummy21[sizeof (std::string)];
     };
 
     /// The size of the largest semantic type.
@@ -516,8 +520,9 @@ namespace yy {
         TOK_MINUS = 293,
         TOK_TIMES = 294,
         TOK_DIV = 295,
-        TOK_POW = 296,
-        TOK_DOT = 297
+        TOK_NEG = 296,
+        TOK_POW = 297,
+        TOK_DOT = 298
       };
     };
 
@@ -806,6 +811,19 @@ namespace yy {
       {}
 #endif
 #if 201103L <= YY_CPLUSPLUS
+      basic_symbol (typename Base::kind_type t, bool&& v, location_type&& l)
+        : Base (t)
+        , value (std::move (v))
+        , location (std::move (l))
+      {}
+#else
+      basic_symbol (typename Base::kind_type t, const bool& v, const location_type& l)
+        : Base (t)
+        , value (v)
+        , location (l)
+      {}
+#endif
+#if 201103L <= YY_CPLUSPLUS
       basic_symbol (typename Base::kind_type t, int&& v, location_type&& l)
         : Base (t)
         , value (std::move (v))
@@ -854,76 +872,81 @@ namespace yy {
         // Type destructor.
 switch (yytype)
     {
-      case 58: // args
+      case 59: // args
         value.template destroy< Args* > ();
         break;
 
-      case 55: // block
+      case 56: // block
         value.template destroy< Block* > ();
         break;
 
-      case 47: // class_body
+      case 48: // class_body
         value.template destroy< Body* > ();
         break;
 
-      case 61: // boolean-literal
+      case 62: // boolean-literal
         value.template destroy< BoolLit* > ();
         break;
 
-      case 46: // class
+      case 47: // class
         value.template destroy< Classe* > ();
         break;
 
-      case 45: // classes
+      case 46: // classes
         value.template destroy< Classes* > ();
         break;
 
-      case 57: // expr
+      case 58: // expr
         value.template destroy< Expr* > ();
         break;
 
-      case 56: // exprx
+      case 57: // exprx
         value.template destroy< Exprx* > ();
         break;
 
-      case 59: // exprxx
+      case 60: // exprxx
         value.template destroy< Exprxx* > ();
         break;
 
-      case 49: // field
+      case 50: // field
         value.template destroy< Field* > ();
         break;
 
-      case 48: // field-method
+      case 49: // field-method
         value.template destroy< FieldMethod* > ();
         break;
 
-      case 54: // formal
+      case 55: // formal
         value.template destroy< Formal* > ();
         break;
 
-      case 52: // formals
+      case 53: // formals
         value.template destroy< Formals* > ();
         break;
 
-      case 53: // formalx
+      case 54: // formalx
         value.template destroy< Formalx* > ();
         break;
 
-      case 60: // literal
+      case 61: // literal
         value.template destroy< Literal* > ();
         break;
 
-      case 50: // method
+      case 51: // method
         value.template destroy< Method* > ();
         break;
 
-      case 44: // program
+      case 45: // program
         value.template destroy< Programm* > ();
         break;
 
-      case 51: // type
+      case 52: // type
         value.template destroy< Type* > ();
+        break;
+
+      case 14: // FALSE
+      case 21: // TRUE
+        value.template destroy< bool > ();
         break;
 
       case 26: // INTEGER_LITERAL
@@ -1015,13 +1038,26 @@ switch (yytype)
       symbol_type (int tok, location_type l)
         : super_type(token_type (tok), std::move (l))
       {
-        YYASSERT (tok == token::TOK_END || tok == token::TOK_LBRACE || tok == token::TOK_RBRACE || tok == token::TOK_LPAR || tok == token::TOK_RPAR || tok == token::TOK_COLON || tok == token::TOK_SEMICOLON || tok == token::TOK_COMMA || tok == token::TOK_ASSIGN || tok == token::TOK_BOOL || tok == token::TOK_CLASS || tok == token::TOK_EXTENDS || tok == token::TOK_FALSE || tok == token::TOK_IF || tok == token::TOK_INT32 || tok == token::TOK_ISNULL || tok == token::TOK_LET || tok == token::TOK_NEW || tok == token::TOK_STRING || tok == token::TOK_TRUE || tok == token::TOK_UNIT || tok == token::TOK_WHILE || tok == token::TOK_IN || tok == token::TOK_THEN || tok == token::TOK_DO || tok == token::TOK_ELSE || tok == token::TOK_AND || tok == token::TOK_NOT || tok == token::TOK_EQUAL || tok == token::TOK_LOWER_EQUAL || tok == token::TOK_LOWER || tok == token::TOK_PLUS || tok == token::TOK_MINUS || tok == token::TOK_TIMES || tok == token::TOK_DIV || tok == token::TOK_POW || tok == token::TOK_DOT);
+        YYASSERT (tok == token::TOK_END || tok == token::TOK_LBRACE || tok == token::TOK_RBRACE || tok == token::TOK_LPAR || tok == token::TOK_RPAR || tok == token::TOK_COLON || tok == token::TOK_SEMICOLON || tok == token::TOK_COMMA || tok == token::TOK_ASSIGN || tok == token::TOK_BOOL || tok == token::TOK_CLASS || tok == token::TOK_EXTENDS || tok == token::TOK_IF || tok == token::TOK_INT32 || tok == token::TOK_ISNULL || tok == token::TOK_LET || tok == token::TOK_NEW || tok == token::TOK_STRING || tok == token::TOK_UNIT || tok == token::TOK_WHILE || tok == token::TOK_IN || tok == token::TOK_THEN || tok == token::TOK_DO || tok == token::TOK_ELSE || tok == token::TOK_AND || tok == token::TOK_NOT || tok == token::TOK_EQUAL || tok == token::TOK_LOWER_EQUAL || tok == token::TOK_LOWER || tok == token::TOK_PLUS || tok == token::TOK_MINUS || tok == token::TOK_TIMES || tok == token::TOK_DIV || tok == token::TOK_NEG || tok == token::TOK_POW || tok == token::TOK_DOT);
       }
 #else
       symbol_type (int tok, const location_type& l)
         : super_type(token_type (tok), l)
       {
-        YYASSERT (tok == token::TOK_END || tok == token::TOK_LBRACE || tok == token::TOK_RBRACE || tok == token::TOK_LPAR || tok == token::TOK_RPAR || tok == token::TOK_COLON || tok == token::TOK_SEMICOLON || tok == token::TOK_COMMA || tok == token::TOK_ASSIGN || tok == token::TOK_BOOL || tok == token::TOK_CLASS || tok == token::TOK_EXTENDS || tok == token::TOK_FALSE || tok == token::TOK_IF || tok == token::TOK_INT32 || tok == token::TOK_ISNULL || tok == token::TOK_LET || tok == token::TOK_NEW || tok == token::TOK_STRING || tok == token::TOK_TRUE || tok == token::TOK_UNIT || tok == token::TOK_WHILE || tok == token::TOK_IN || tok == token::TOK_THEN || tok == token::TOK_DO || tok == token::TOK_ELSE || tok == token::TOK_AND || tok == token::TOK_NOT || tok == token::TOK_EQUAL || tok == token::TOK_LOWER_EQUAL || tok == token::TOK_LOWER || tok == token::TOK_PLUS || tok == token::TOK_MINUS || tok == token::TOK_TIMES || tok == token::TOK_DIV || tok == token::TOK_POW || tok == token::TOK_DOT);
+        YYASSERT (tok == token::TOK_END || tok == token::TOK_LBRACE || tok == token::TOK_RBRACE || tok == token::TOK_LPAR || tok == token::TOK_RPAR || tok == token::TOK_COLON || tok == token::TOK_SEMICOLON || tok == token::TOK_COMMA || tok == token::TOK_ASSIGN || tok == token::TOK_BOOL || tok == token::TOK_CLASS || tok == token::TOK_EXTENDS || tok == token::TOK_IF || tok == token::TOK_INT32 || tok == token::TOK_ISNULL || tok == token::TOK_LET || tok == token::TOK_NEW || tok == token::TOK_STRING || tok == token::TOK_UNIT || tok == token::TOK_WHILE || tok == token::TOK_IN || tok == token::TOK_THEN || tok == token::TOK_DO || tok == token::TOK_ELSE || tok == token::TOK_AND || tok == token::TOK_NOT || tok == token::TOK_EQUAL || tok == token::TOK_LOWER_EQUAL || tok == token::TOK_LOWER || tok == token::TOK_PLUS || tok == token::TOK_MINUS || tok == token::TOK_TIMES || tok == token::TOK_DIV || tok == token::TOK_NEG || tok == token::TOK_POW || tok == token::TOK_DOT);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      symbol_type (int tok, bool v, location_type l)
+        : super_type(token_type (tok), std::move (v), std::move (l))
+      {
+        YYASSERT (tok == token::TOK_FALSE || tok == token::TOK_TRUE);
+      }
+#else
+      symbol_type (int tok, const bool& v, const location_type& l)
+        : super_type(token_type (tok), v, l)
+      {
+        YYASSERT (tok == token::TOK_FALSE || tok == token::TOK_TRUE);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -1270,16 +1306,16 @@ switch (yytype)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_FALSE (location_type l)
+      make_FALSE (bool v, location_type l)
       {
-        return symbol_type (token::TOK_FALSE, std::move (l));
+        return symbol_type (token::TOK_FALSE, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_FALSE (const location_type& l)
+      make_FALSE (const bool& v, const location_type& l)
       {
-        return symbol_type (token::TOK_FALSE, l);
+        return symbol_type (token::TOK_FALSE, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -1375,16 +1411,16 @@ switch (yytype)
 #if 201103L <= YY_CPLUSPLUS
       static
       symbol_type
-      make_TRUE (location_type l)
+      make_TRUE (bool v, location_type l)
       {
-        return symbol_type (token::TOK_TRUE, std::move (l));
+        return symbol_type (token::TOK_TRUE, std::move (v), std::move (l));
       }
 #else
       static
       symbol_type
-      make_TRUE (const location_type& l)
+      make_TRUE (const bool& v, const location_type& l)
       {
-        return symbol_type (token::TOK_TRUE, l);
+        return symbol_type (token::TOK_TRUE, v, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -1670,6 +1706,21 @@ switch (yytype)
       make_DIV (const location_type& l)
       {
         return symbol_type (token::TOK_DIV, l);
+      }
+#endif
+#if 201103L <= YY_CPLUSPLUS
+      static
+      symbol_type
+      make_NEG (location_type l)
+      {
+        return symbol_type (token::TOK_NEG, std::move (l));
+      }
+#else
+      static
+      symbol_type
+      make_NEG (const location_type& l)
+      {
+        return symbol_type (token::TOK_NEG, l);
       }
 #endif
 #if 201103L <= YY_CPLUSPLUS
@@ -2008,12 +2059,12 @@ switch (yytype)
     enum
     {
       yyeof_ = 0,
-      yylast_ = 254,     ///< Last index in yytable_.
+      yylast_ = 263,     ///< Last index in yytable_.
       yynnts_ = 19,  ///< Number of nonterminal symbols.
       yyfinal_ = 6, ///< Termination state number.
       yyterror_ = 1,
       yyerrcode_ = 256,
-      yyntokens_ = 43  ///< Number of tokens.
+      yyntokens_ = 44  ///< Number of tokens.
     };
 
 
@@ -2060,9 +2111,9 @@ switch (yytype)
        5,     6,     7,     8,     9,    10,    11,    12,    13,    14,
       15,    16,    17,    18,    19,    20,    21,    22,    23,    24,
       25,    26,    27,    28,    29,    30,    31,    32,    33,    34,
-      35,    36,    37,    38,    39,    40,    41,    42
+      35,    36,    37,    38,    39,    40,    41,    42,    43
     };
-    const unsigned user_token_number_max_ = 297;
+    const unsigned user_token_number_max_ = 298;
     const token_number_type undef_token_ = 2;
 
     if (static_cast<int> (t) <= yyeof_)
@@ -2083,76 +2134,81 @@ switch (yytype)
   {
     switch (this->type_get ())
     {
-      case 58: // args
+      case 59: // args
         value.move< Args* > (std::move (that.value));
         break;
 
-      case 55: // block
+      case 56: // block
         value.move< Block* > (std::move (that.value));
         break;
 
-      case 47: // class_body
+      case 48: // class_body
         value.move< Body* > (std::move (that.value));
         break;
 
-      case 61: // boolean-literal
+      case 62: // boolean-literal
         value.move< BoolLit* > (std::move (that.value));
         break;
 
-      case 46: // class
+      case 47: // class
         value.move< Classe* > (std::move (that.value));
         break;
 
-      case 45: // classes
+      case 46: // classes
         value.move< Classes* > (std::move (that.value));
         break;
 
-      case 57: // expr
+      case 58: // expr
         value.move< Expr* > (std::move (that.value));
         break;
 
-      case 56: // exprx
+      case 57: // exprx
         value.move< Exprx* > (std::move (that.value));
         break;
 
-      case 59: // exprxx
+      case 60: // exprxx
         value.move< Exprxx* > (std::move (that.value));
         break;
 
-      case 49: // field
+      case 50: // field
         value.move< Field* > (std::move (that.value));
         break;
 
-      case 48: // field-method
+      case 49: // field-method
         value.move< FieldMethod* > (std::move (that.value));
         break;
 
-      case 54: // formal
+      case 55: // formal
         value.move< Formal* > (std::move (that.value));
         break;
 
-      case 52: // formals
+      case 53: // formals
         value.move< Formals* > (std::move (that.value));
         break;
 
-      case 53: // formalx
+      case 54: // formalx
         value.move< Formalx* > (std::move (that.value));
         break;
 
-      case 60: // literal
+      case 61: // literal
         value.move< Literal* > (std::move (that.value));
         break;
 
-      case 50: // method
+      case 51: // method
         value.move< Method* > (std::move (that.value));
         break;
 
-      case 44: // program
+      case 45: // program
         value.move< Programm* > (std::move (that.value));
         break;
 
-      case 51: // type
+      case 52: // type
         value.move< Type* > (std::move (that.value));
+        break;
+
+      case 14: // FALSE
+      case 21: // TRUE
+        value.move< bool > (std::move (that.value));
         break;
 
       case 26: // INTEGER_LITERAL
@@ -2180,76 +2236,81 @@ switch (yytype)
   {
     switch (this->type_get ())
     {
-      case 58: // args
+      case 59: // args
         value.copy< Args* > (YY_MOVE (that.value));
         break;
 
-      case 55: // block
+      case 56: // block
         value.copy< Block* > (YY_MOVE (that.value));
         break;
 
-      case 47: // class_body
+      case 48: // class_body
         value.copy< Body* > (YY_MOVE (that.value));
         break;
 
-      case 61: // boolean-literal
+      case 62: // boolean-literal
         value.copy< BoolLit* > (YY_MOVE (that.value));
         break;
 
-      case 46: // class
+      case 47: // class
         value.copy< Classe* > (YY_MOVE (that.value));
         break;
 
-      case 45: // classes
+      case 46: // classes
         value.copy< Classes* > (YY_MOVE (that.value));
         break;
 
-      case 57: // expr
+      case 58: // expr
         value.copy< Expr* > (YY_MOVE (that.value));
         break;
 
-      case 56: // exprx
+      case 57: // exprx
         value.copy< Exprx* > (YY_MOVE (that.value));
         break;
 
-      case 59: // exprxx
+      case 60: // exprxx
         value.copy< Exprxx* > (YY_MOVE (that.value));
         break;
 
-      case 49: // field
+      case 50: // field
         value.copy< Field* > (YY_MOVE (that.value));
         break;
 
-      case 48: // field-method
+      case 49: // field-method
         value.copy< FieldMethod* > (YY_MOVE (that.value));
         break;
 
-      case 54: // formal
+      case 55: // formal
         value.copy< Formal* > (YY_MOVE (that.value));
         break;
 
-      case 52: // formals
+      case 53: // formals
         value.copy< Formals* > (YY_MOVE (that.value));
         break;
 
-      case 53: // formalx
+      case 54: // formalx
         value.copy< Formalx* > (YY_MOVE (that.value));
         break;
 
-      case 60: // literal
+      case 61: // literal
         value.copy< Literal* > (YY_MOVE (that.value));
         break;
 
-      case 50: // method
+      case 51: // method
         value.copy< Method* > (YY_MOVE (that.value));
         break;
 
-      case 44: // program
+      case 45: // program
         value.copy< Programm* > (YY_MOVE (that.value));
         break;
 
-      case 51: // type
+      case 52: // type
         value.copy< Type* > (YY_MOVE (that.value));
+        break;
+
+      case 14: // FALSE
+      case 21: // TRUE
+        value.copy< bool > (YY_MOVE (that.value));
         break;
 
       case 26: // INTEGER_LITERAL
@@ -2284,76 +2345,81 @@ switch (yytype)
     super_type::move (s);
     switch (this->type_get ())
     {
-      case 58: // args
+      case 59: // args
         value.move< Args* > (YY_MOVE (s.value));
         break;
 
-      case 55: // block
+      case 56: // block
         value.move< Block* > (YY_MOVE (s.value));
         break;
 
-      case 47: // class_body
+      case 48: // class_body
         value.move< Body* > (YY_MOVE (s.value));
         break;
 
-      case 61: // boolean-literal
+      case 62: // boolean-literal
         value.move< BoolLit* > (YY_MOVE (s.value));
         break;
 
-      case 46: // class
+      case 47: // class
         value.move< Classe* > (YY_MOVE (s.value));
         break;
 
-      case 45: // classes
+      case 46: // classes
         value.move< Classes* > (YY_MOVE (s.value));
         break;
 
-      case 57: // expr
+      case 58: // expr
         value.move< Expr* > (YY_MOVE (s.value));
         break;
 
-      case 56: // exprx
+      case 57: // exprx
         value.move< Exprx* > (YY_MOVE (s.value));
         break;
 
-      case 59: // exprxx
+      case 60: // exprxx
         value.move< Exprxx* > (YY_MOVE (s.value));
         break;
 
-      case 49: // field
+      case 50: // field
         value.move< Field* > (YY_MOVE (s.value));
         break;
 
-      case 48: // field-method
+      case 49: // field-method
         value.move< FieldMethod* > (YY_MOVE (s.value));
         break;
 
-      case 54: // formal
+      case 55: // formal
         value.move< Formal* > (YY_MOVE (s.value));
         break;
 
-      case 52: // formals
+      case 53: // formals
         value.move< Formals* > (YY_MOVE (s.value));
         break;
 
-      case 53: // formalx
+      case 54: // formalx
         value.move< Formalx* > (YY_MOVE (s.value));
         break;
 
-      case 60: // literal
+      case 61: // literal
         value.move< Literal* > (YY_MOVE (s.value));
         break;
 
-      case 50: // method
+      case 51: // method
         value.move< Method* > (YY_MOVE (s.value));
         break;
 
-      case 44: // program
+      case 45: // program
         value.move< Programm* > (YY_MOVE (s.value));
         break;
 
-      case 51: // type
+      case 52: // type
         value.move< Type* > (YY_MOVE (s.value));
+        break;
+
+      case 14: // FALSE
+      case 21: // TRUE
+        value.move< bool > (YY_MOVE (s.value));
         break;
 
       case 26: // INTEGER_LITERAL
@@ -2434,14 +2500,14 @@ switch (yytype)
      265,   266,   267,   268,   269,   270,   271,   272,   273,   274,
      275,   276,   277,   278,   279,   280,   281,   282,   283,   284,
      285,   286,   287,   288,   289,   290,   291,   292,   293,   294,
-     295,   296,   297
+     295,   296,   297,   298
     };
     return token_type (yytoken_number_[type]);
   }
 
 
 } // yy
-#line 2445 "parser.hh" // lalr1.cc:401
+#line 2511 "parser.hh" // lalr1.cc:401
 
 
 

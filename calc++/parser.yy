@@ -88,7 +88,7 @@
 %type <BoolLit*> boolean-literal
 %%
 program:
-	classes {$$ = new Programm($1);}
+	classes {Programm* a = new Programm($1); $$ = a; drv.root = a;}
 ;
 classes:
 	classes class  {$$ = new Classes($1,$2);}

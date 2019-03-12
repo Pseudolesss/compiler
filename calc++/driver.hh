@@ -16,9 +16,7 @@ class driver
 public:
   driver ();
 
-  std::map<std::string, int> variables;
-
-  int result;
+  Programm* root;
 
   // Run the parser on file F.  Return 0 on success.
   int parse (const std::string& f);
