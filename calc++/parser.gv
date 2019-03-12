@@ -458,8 +458,6 @@ digraph "parser.yy"
   68 -> "68R32" [style=solid]
  "68R32" [label="R32", fillcolor=3, shape=diamond, style=filled]
   69 [label="État 69\n\l 33 expr: expr . AND expr\l 34     | expr . EQUAL expr\l 35     | expr . LOWER expr\l 36     | expr . LOWER_EQUAL expr\l 37     | expr . PLUS expr\l 38     | expr . MINUS expr\l 39     | expr . TIMES expr\l 40     | expr . DIV expr\l 41     | expr . POW expr\l 42     | MINUS expr .\l 45     | expr . DOT OBJECT_IDENTIFIER LPAR args RPAR\l"]
-  69 -> 77 [style=solid label="TIMES"]
-  69 -> 78 [style=solid label="DIV"]
   69 -> 79 [style=solid label="POW"]
   69 -> 80 [style=solid label="DOT"]
   69 -> "69R42" [style=solid]

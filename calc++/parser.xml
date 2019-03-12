@@ -338,7 +338,7 @@
           <symbol>expr</symbol>
         </rhs>
       </rule>
-      <rule number="42" usefulness="useful">
+      <rule number="42" usefulness="useful" percent_prec="NEG">
         <lhs>expr</lhs>
         <rhs>
           <symbol>MINUS</symbol>
@@ -511,29 +511,30 @@
       <terminal symbol-number="38" token-number="293" name="MINUS" usefulness="useful" prec="8" assoc="left"/>
       <terminal symbol-number="39" token-number="294" name="TIMES" usefulness="useful" prec="9" assoc="left"/>
       <terminal symbol-number="40" token-number="295" name="DIV" usefulness="useful" prec="9" assoc="left"/>
-      <terminal symbol-number="41" token-number="296" name="POW" usefulness="useful" prec="11" assoc="right"/>
-      <terminal symbol-number="42" token-number="297" name="DOT" usefulness="useful" prec="12" assoc="left"/>
+      <terminal symbol-number="41" token-number="296" name="NEG" usefulness="useful" prec="11" assoc="precedence"/>
+      <terminal symbol-number="42" token-number="297" name="POW" usefulness="useful" prec="12" assoc="right"/>
+      <terminal symbol-number="43" token-number="298" name="DOT" usefulness="useful" prec="13" assoc="left"/>
     </terminals>
     <nonterminals>
-      <nonterminal symbol-number="43" name="$accept" usefulness="useful"/>
-      <nonterminal symbol-number="44" name="program" usefulness="useful"/>
-      <nonterminal symbol-number="45" name="classes" usefulness="useful"/>
-      <nonterminal symbol-number="46" name="class" usefulness="useful"/>
-      <nonterminal symbol-number="47" name="class_body" usefulness="useful"/>
-      <nonterminal symbol-number="48" name="field-method" usefulness="useful"/>
-      <nonterminal symbol-number="49" name="field" usefulness="useful"/>
-      <nonterminal symbol-number="50" name="method" usefulness="useful"/>
-      <nonterminal symbol-number="51" name="type" usefulness="useful"/>
-      <nonterminal symbol-number="52" name="formals" usefulness="useful"/>
-      <nonterminal symbol-number="53" name="formalx" usefulness="useful"/>
-      <nonterminal symbol-number="54" name="formal" usefulness="useful"/>
-      <nonterminal symbol-number="55" name="block" usefulness="useful"/>
-      <nonterminal symbol-number="56" name="exprx" usefulness="useful"/>
-      <nonterminal symbol-number="57" name="expr" usefulness="useful"/>
-      <nonterminal symbol-number="58" name="args" usefulness="useful"/>
-      <nonterminal symbol-number="59" name="exprxx" usefulness="useful"/>
-      <nonterminal symbol-number="60" name="literal" usefulness="useful"/>
-      <nonterminal symbol-number="61" name="boolean-literal" usefulness="useful"/>
+      <nonterminal symbol-number="44" name="$accept" usefulness="useful"/>
+      <nonterminal symbol-number="45" name="program" usefulness="useful"/>
+      <nonterminal symbol-number="46" name="classes" usefulness="useful"/>
+      <nonterminal symbol-number="47" name="class" usefulness="useful"/>
+      <nonterminal symbol-number="48" name="class_body" usefulness="useful"/>
+      <nonterminal symbol-number="49" name="field-method" usefulness="useful"/>
+      <nonterminal symbol-number="50" name="field" usefulness="useful"/>
+      <nonterminal symbol-number="51" name="method" usefulness="useful"/>
+      <nonterminal symbol-number="52" name="type" usefulness="useful"/>
+      <nonterminal symbol-number="53" name="formals" usefulness="useful"/>
+      <nonterminal symbol-number="54" name="formalx" usefulness="useful"/>
+      <nonterminal symbol-number="55" name="formal" usefulness="useful"/>
+      <nonterminal symbol-number="56" name="block" usefulness="useful"/>
+      <nonterminal symbol-number="57" name="exprx" usefulness="useful"/>
+      <nonterminal symbol-number="58" name="expr" usefulness="useful"/>
+      <nonterminal symbol-number="59" name="args" usefulness="useful"/>
+      <nonterminal symbol-number="60" name="exprxx" usefulness="useful"/>
+      <nonterminal symbol-number="61" name="literal" usefulness="useful"/>
+      <nonterminal symbol-number="62" name="boolean-literal" usefulness="useful"/>
     </nonterminals>
   </grammar>
 
@@ -2365,14 +2366,14 @@
             <symbol>LOWER</symbol>
             <symbol>PLUS</symbol>
             <symbol>MINUS</symbol>
+            <symbol>TIMES</symbol>
+            <symbol>DIV</symbol>
           </lookaheads>
         </item>
         <item rule-number="45" point="1"/>
       </itemset>
       <actions>
         <transitions>
-          <transition type="shift" symbol="TIMES" state="77"/>
-          <transition type="shift" symbol="DIV" state="78"/>
           <transition type="shift" symbol="POW" state="79"/>
           <transition type="shift" symbol="DOT" state="80"/>
         </transitions>
@@ -2382,16 +2383,16 @@
         </reductions>
       </actions>
       <solved-conflicts>
-        <resolution rule="42" symbol="AND" type="reduce">AND &lt; MINUS</resolution>
-        <resolution rule="42" symbol="EQUAL" type="reduce">EQUAL &lt; MINUS</resolution>
-        <resolution rule="42" symbol="LOWER_EQUAL" type="reduce">LOWER_EQUAL &lt; MINUS</resolution>
-        <resolution rule="42" symbol="LOWER" type="reduce">LOWER &lt; MINUS</resolution>
-        <resolution rule="42" symbol="PLUS" type="reduce">%left PLUS</resolution>
-        <resolution rule="42" symbol="MINUS" type="reduce">%left MINUS</resolution>
-        <resolution rule="42" symbol="TIMES" type="shift">MINUS &lt; TIMES</resolution>
-        <resolution rule="42" symbol="DIV" type="shift">MINUS &lt; DIV</resolution>
-        <resolution rule="42" symbol="POW" type="shift">MINUS &lt; POW</resolution>
-        <resolution rule="42" symbol="DOT" type="shift">MINUS &lt; DOT</resolution>
+        <resolution rule="42" symbol="AND" type="reduce">AND &lt; NEG</resolution>
+        <resolution rule="42" symbol="EQUAL" type="reduce">EQUAL &lt; NEG</resolution>
+        <resolution rule="42" symbol="LOWER_EQUAL" type="reduce">LOWER_EQUAL &lt; NEG</resolution>
+        <resolution rule="42" symbol="LOWER" type="reduce">LOWER &lt; NEG</resolution>
+        <resolution rule="42" symbol="PLUS" type="reduce">PLUS &lt; NEG</resolution>
+        <resolution rule="42" symbol="MINUS" type="reduce">MINUS &lt; NEG</resolution>
+        <resolution rule="42" symbol="TIMES" type="reduce">TIMES &lt; NEG</resolution>
+        <resolution rule="42" symbol="DIV" type="reduce">DIV &lt; NEG</resolution>
+        <resolution rule="42" symbol="POW" type="shift">NEG &lt; POW</resolution>
+        <resolution rule="42" symbol="DOT" type="shift">NEG &lt; DOT</resolution>
       </solved-conflicts>
     </state>
 

@@ -248,76 +248,81 @@ namespace yy {
   {
     switch (that.type_get ())
     {
-      case 58: // args
+      case 59: // args
         value.YY_MOVE_OR_COPY< Args* > (YY_MOVE (that.value));
         break;
 
-      case 55: // block
+      case 56: // block
         value.YY_MOVE_OR_COPY< Block* > (YY_MOVE (that.value));
         break;
 
-      case 47: // class_body
+      case 48: // class_body
         value.YY_MOVE_OR_COPY< Body* > (YY_MOVE (that.value));
         break;
 
-      case 61: // boolean-literal
+      case 62: // boolean-literal
         value.YY_MOVE_OR_COPY< BoolLit* > (YY_MOVE (that.value));
         break;
 
-      case 46: // class
+      case 47: // class
         value.YY_MOVE_OR_COPY< Classe* > (YY_MOVE (that.value));
         break;
 
-      case 45: // classes
+      case 46: // classes
         value.YY_MOVE_OR_COPY< Classes* > (YY_MOVE (that.value));
         break;
 
-      case 57: // expr
+      case 58: // expr
         value.YY_MOVE_OR_COPY< Expr* > (YY_MOVE (that.value));
         break;
 
-      case 56: // exprx
+      case 57: // exprx
         value.YY_MOVE_OR_COPY< Exprx* > (YY_MOVE (that.value));
         break;
 
-      case 59: // exprxx
+      case 60: // exprxx
         value.YY_MOVE_OR_COPY< Exprxx* > (YY_MOVE (that.value));
         break;
 
-      case 49: // field
+      case 50: // field
         value.YY_MOVE_OR_COPY< Field* > (YY_MOVE (that.value));
         break;
 
-      case 48: // field-method
+      case 49: // field-method
         value.YY_MOVE_OR_COPY< FieldMethod* > (YY_MOVE (that.value));
         break;
 
-      case 54: // formal
+      case 55: // formal
         value.YY_MOVE_OR_COPY< Formal* > (YY_MOVE (that.value));
         break;
 
-      case 52: // formals
+      case 53: // formals
         value.YY_MOVE_OR_COPY< Formals* > (YY_MOVE (that.value));
         break;
 
-      case 53: // formalx
+      case 54: // formalx
         value.YY_MOVE_OR_COPY< Formalx* > (YY_MOVE (that.value));
         break;
 
-      case 60: // literal
+      case 61: // literal
         value.YY_MOVE_OR_COPY< Literal* > (YY_MOVE (that.value));
         break;
 
-      case 50: // method
+      case 51: // method
         value.YY_MOVE_OR_COPY< Method* > (YY_MOVE (that.value));
         break;
 
-      case 44: // program
+      case 45: // program
         value.YY_MOVE_OR_COPY< Programm* > (YY_MOVE (that.value));
         break;
 
-      case 51: // type
+      case 52: // type
         value.YY_MOVE_OR_COPY< Type* > (YY_MOVE (that.value));
+        break;
+
+      case 14: // FALSE
+      case 21: // TRUE
+        value.YY_MOVE_OR_COPY< bool > (YY_MOVE (that.value));
         break;
 
       case 26: // INTEGER_LITERAL
@@ -345,76 +350,81 @@ namespace yy {
   {
     switch (that.type_get ())
     {
-      case 58: // args
+      case 59: // args
         value.move< Args* > (YY_MOVE (that.value));
         break;
 
-      case 55: // block
+      case 56: // block
         value.move< Block* > (YY_MOVE (that.value));
         break;
 
-      case 47: // class_body
+      case 48: // class_body
         value.move< Body* > (YY_MOVE (that.value));
         break;
 
-      case 61: // boolean-literal
+      case 62: // boolean-literal
         value.move< BoolLit* > (YY_MOVE (that.value));
         break;
 
-      case 46: // class
+      case 47: // class
         value.move< Classe* > (YY_MOVE (that.value));
         break;
 
-      case 45: // classes
+      case 46: // classes
         value.move< Classes* > (YY_MOVE (that.value));
         break;
 
-      case 57: // expr
+      case 58: // expr
         value.move< Expr* > (YY_MOVE (that.value));
         break;
 
-      case 56: // exprx
+      case 57: // exprx
         value.move< Exprx* > (YY_MOVE (that.value));
         break;
 
-      case 59: // exprxx
+      case 60: // exprxx
         value.move< Exprxx* > (YY_MOVE (that.value));
         break;
 
-      case 49: // field
+      case 50: // field
         value.move< Field* > (YY_MOVE (that.value));
         break;
 
-      case 48: // field-method
+      case 49: // field-method
         value.move< FieldMethod* > (YY_MOVE (that.value));
         break;
 
-      case 54: // formal
+      case 55: // formal
         value.move< Formal* > (YY_MOVE (that.value));
         break;
 
-      case 52: // formals
+      case 53: // formals
         value.move< Formals* > (YY_MOVE (that.value));
         break;
 
-      case 53: // formalx
+      case 54: // formalx
         value.move< Formalx* > (YY_MOVE (that.value));
         break;
 
-      case 60: // literal
+      case 61: // literal
         value.move< Literal* > (YY_MOVE (that.value));
         break;
 
-      case 50: // method
+      case 51: // method
         value.move< Method* > (YY_MOVE (that.value));
         break;
 
-      case 44: // program
+      case 45: // program
         value.move< Programm* > (YY_MOVE (that.value));
         break;
 
-      case 51: // type
+      case 52: // type
         value.move< Type* > (YY_MOVE (that.value));
+        break;
+
+      case 14: // FALSE
+      case 21: // TRUE
+        value.move< bool > (YY_MOVE (that.value));
         break;
 
       case 26: // INTEGER_LITERAL
@@ -442,76 +452,81 @@ namespace yy {
     state = that.state;
     switch (that.type_get ())
     {
-      case 58: // args
+      case 59: // args
         value.move< Args* > (that.value);
         break;
 
-      case 55: // block
+      case 56: // block
         value.move< Block* > (that.value);
         break;
 
-      case 47: // class_body
+      case 48: // class_body
         value.move< Body* > (that.value);
         break;
 
-      case 61: // boolean-literal
+      case 62: // boolean-literal
         value.move< BoolLit* > (that.value);
         break;
 
-      case 46: // class
+      case 47: // class
         value.move< Classe* > (that.value);
         break;
 
-      case 45: // classes
+      case 46: // classes
         value.move< Classes* > (that.value);
         break;
 
-      case 57: // expr
+      case 58: // expr
         value.move< Expr* > (that.value);
         break;
 
-      case 56: // exprx
+      case 57: // exprx
         value.move< Exprx* > (that.value);
         break;
 
-      case 59: // exprxx
+      case 60: // exprxx
         value.move< Exprxx* > (that.value);
         break;
 
-      case 49: // field
+      case 50: // field
         value.move< Field* > (that.value);
         break;
 
-      case 48: // field-method
+      case 49: // field-method
         value.move< FieldMethod* > (that.value);
         break;
 
-      case 54: // formal
+      case 55: // formal
         value.move< Formal* > (that.value);
         break;
 
-      case 52: // formals
+      case 53: // formals
         value.move< Formals* > (that.value);
         break;
 
-      case 53: // formalx
+      case 54: // formalx
         value.move< Formalx* > (that.value);
         break;
 
-      case 60: // literal
+      case 61: // literal
         value.move< Literal* > (that.value);
         break;
 
-      case 50: // method
+      case 51: // method
         value.move< Method* > (that.value);
         break;
 
-      case 44: // program
+      case 45: // program
         value.move< Programm* > (that.value);
         break;
 
-      case 51: // type
+      case 52: // type
         value.move< Type* > (that.value);
+        break;
+
+      case 14: // FALSE
+      case 21: // TRUE
+        value.move< bool > (that.value);
         break;
 
       case 26: // INTEGER_LITERAL
@@ -773,76 +788,81 @@ namespace yy {
          when using variants.  */
       switch (yyr1_[yyn])
     {
-      case 58: // args
+      case 59: // args
         yylhs.value.emplace< Args* > ();
         break;
 
-      case 55: // block
+      case 56: // block
         yylhs.value.emplace< Block* > ();
         break;
 
-      case 47: // class_body
+      case 48: // class_body
         yylhs.value.emplace< Body* > ();
         break;
 
-      case 61: // boolean-literal
+      case 62: // boolean-literal
         yylhs.value.emplace< BoolLit* > ();
         break;
 
-      case 46: // class
+      case 47: // class
         yylhs.value.emplace< Classe* > ();
         break;
 
-      case 45: // classes
+      case 46: // classes
         yylhs.value.emplace< Classes* > ();
         break;
 
-      case 57: // expr
+      case 58: // expr
         yylhs.value.emplace< Expr* > ();
         break;
 
-      case 56: // exprx
+      case 57: // exprx
         yylhs.value.emplace< Exprx* > ();
         break;
 
-      case 59: // exprxx
+      case 60: // exprxx
         yylhs.value.emplace< Exprxx* > ();
         break;
 
-      case 49: // field
+      case 50: // field
         yylhs.value.emplace< Field* > ();
         break;
 
-      case 48: // field-method
+      case 49: // field-method
         yylhs.value.emplace< FieldMethod* > ();
         break;
 
-      case 54: // formal
+      case 55: // formal
         yylhs.value.emplace< Formal* > ();
         break;
 
-      case 52: // formals
+      case 53: // formals
         yylhs.value.emplace< Formals* > ();
         break;
 
-      case 53: // formalx
+      case 54: // formalx
         yylhs.value.emplace< Formalx* > ();
         break;
 
-      case 60: // literal
+      case 61: // literal
         yylhs.value.emplace< Literal* > ();
         break;
 
-      case 50: // method
+      case 51: // method
         yylhs.value.emplace< Method* > ();
         break;
 
-      case 44: // program
+      case 45: // program
         yylhs.value.emplace< Programm* > ();
         break;
 
-      case 51: // type
+      case 52: // type
         yylhs.value.emplace< Type* > ();
+        break;
+
+      case 14: // FALSE
+      case 21: // TRUE
+        yylhs.value.emplace< bool > ();
         break;
 
       case 26: // INTEGER_LITERAL
@@ -876,367 +896,367 @@ namespace yy {
           switch (yyn)
             {
   case 2:
-#line 90 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < Programm* > () = new Programm(yystack_[0].value.as < Classes* > ());}
-#line 882 "parser.cc" // lalr1.cc:919
+#line 91 "parser.yy" // lalr1.cc:919
+    {Programm* a = new Programm(yystack_[0].value.as < Classes* > ()); yylhs.value.as < Programm* > () = a; drv.root = a;}
+#line 902 "parser.cc" // lalr1.cc:919
     break;
 
   case 3:
-#line 93 "parser.yy" // lalr1.cc:919
+#line 94 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Classes* > () = new Classes(yystack_[1].value.as < Classes* > (),yystack_[0].value.as < Classe* > ());}
-#line 888 "parser.cc" // lalr1.cc:919
+#line 908 "parser.cc" // lalr1.cc:919
     break;
 
   case 4:
-#line 94 "parser.yy" // lalr1.cc:919
+#line 95 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Classes* > () = new Classes(yystack_[0].value.as < Classe* > ());}
-#line 894 "parser.cc" // lalr1.cc:919
+#line 914 "parser.cc" // lalr1.cc:919
     break;
 
   case 5:
-#line 97 "parser.yy" // lalr1.cc:919
+#line 98 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Classe* > () = new Classe(yystack_[1].value.as < std::string > (),yystack_[0].value.as < Body* > ());}
-#line 900 "parser.cc" // lalr1.cc:919
+#line 920 "parser.cc" // lalr1.cc:919
     break;
 
   case 6:
-#line 98 "parser.yy" // lalr1.cc:919
+#line 99 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Classe* > () = new Classe(yystack_[3].value.as < std::string > (),yystack_[1].value.as < std::string > (),yystack_[0].value.as < Body* > ());}
-#line 906 "parser.cc" // lalr1.cc:919
+#line 926 "parser.cc" // lalr1.cc:919
     break;
 
   case 7:
-#line 101 "parser.yy" // lalr1.cc:919
+#line 102 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Body* > () = new Body(yystack_[1].value.as < FieldMethod* > ());}
-#line 912 "parser.cc" // lalr1.cc:919
+#line 932 "parser.cc" // lalr1.cc:919
     break;
 
   case 8:
-#line 104 "parser.yy" // lalr1.cc:919
+#line 105 "parser.yy" // lalr1.cc:919
     { yylhs.value.as < FieldMethod* > () = nullptr;}
-#line 918 "parser.cc" // lalr1.cc:919
+#line 938 "parser.cc" // lalr1.cc:919
     break;
 
   case 9:
-#line 105 "parser.yy" // lalr1.cc:919
+#line 106 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < FieldMethod* > () = new FieldMethod(yystack_[1].value.as < FieldMethod* > (),yystack_[0].value.as < Field* > ());}
-#line 924 "parser.cc" // lalr1.cc:919
+#line 944 "parser.cc" // lalr1.cc:919
     break;
 
   case 10:
-#line 106 "parser.yy" // lalr1.cc:919
+#line 107 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < FieldMethod* > () = new FieldMethod(yystack_[1].value.as < FieldMethod* > (),yystack_[0].value.as < Method* > ());}
-#line 930 "parser.cc" // lalr1.cc:919
+#line 950 "parser.cc" // lalr1.cc:919
     break;
 
   case 11:
-#line 109 "parser.yy" // lalr1.cc:919
+#line 110 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Field* > () = new Field(yystack_[3].value.as < std::string > (),yystack_[1].value.as < Type* > ());}
-#line 936 "parser.cc" // lalr1.cc:919
+#line 956 "parser.cc" // lalr1.cc:919
     break;
 
   case 12:
-#line 110 "parser.yy" // lalr1.cc:919
+#line 111 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Field* > () = new Field(yystack_[5].value.as < std::string > (),yystack_[3].value.as < Type* > (),yystack_[1].value.as < Expr* > ());}
-#line 942 "parser.cc" // lalr1.cc:919
+#line 962 "parser.cc" // lalr1.cc:919
     break;
 
   case 13:
-#line 113 "parser.yy" // lalr1.cc:919
+#line 114 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Method* > () = new Method(yystack_[6].value.as < std::string > (),yystack_[4].value.as < Formals* > (),yystack_[1].value.as < Type* > (),yystack_[0].value.as < Block* > ());}
-#line 948 "parser.cc" // lalr1.cc:919
+#line 968 "parser.cc" // lalr1.cc:919
     break;
 
   case 14:
-#line 116 "parser.yy" // lalr1.cc:919
+#line 117 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Type* > () = new Type(yystack_[0].value.as < std::string > ());}
-#line 954 "parser.cc" // lalr1.cc:919
+#line 974 "parser.cc" // lalr1.cc:919
     break;
 
   case 15:
-#line 117 "parser.yy" // lalr1.cc:919
+#line 118 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Type* > () = new Type(std::string("INT32"));}
-#line 960 "parser.cc" // lalr1.cc:919
+#line 980 "parser.cc" // lalr1.cc:919
     break;
 
   case 16:
-#line 118 "parser.yy" // lalr1.cc:919
+#line 119 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Type* > () = new Type(std::string("BOOL"));}
-#line 966 "parser.cc" // lalr1.cc:919
+#line 986 "parser.cc" // lalr1.cc:919
     break;
 
   case 17:
-#line 119 "parser.yy" // lalr1.cc:919
+#line 120 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Type* > () = new Type(std::string("STRING"));}
-#line 972 "parser.cc" // lalr1.cc:919
+#line 992 "parser.cc" // lalr1.cc:919
     break;
 
   case 18:
-#line 120 "parser.yy" // lalr1.cc:919
+#line 121 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Type* > () = new Type(std::string("UNIT"));}
-#line 978 "parser.cc" // lalr1.cc:919
+#line 998 "parser.cc" // lalr1.cc:919
     break;
 
   case 19:
-#line 123 "parser.yy" // lalr1.cc:919
+#line 124 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Formals* > () = nullptr;}
-#line 984 "parser.cc" // lalr1.cc:919
+#line 1004 "parser.cc" // lalr1.cc:919
     break;
 
   case 20:
-#line 124 "parser.yy" // lalr1.cc:919
+#line 125 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Formals* > () = new Formals(yystack_[1].value.as < Formal* > (),yystack_[0].value.as < Formalx* > ());}
-#line 990 "parser.cc" // lalr1.cc:919
+#line 1010 "parser.cc" // lalr1.cc:919
     break;
 
   case 21:
-#line 127 "parser.yy" // lalr1.cc:919
+#line 128 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Formalx* > () = nullptr;}
-#line 996 "parser.cc" // lalr1.cc:919
+#line 1016 "parser.cc" // lalr1.cc:919
     break;
 
   case 22:
-#line 128 "parser.yy" // lalr1.cc:919
+#line 129 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Formalx* > () = new Formalx(yystack_[1].value.as < Formal* > (),yystack_[0].value.as < Formalx* > ());}
-#line 1002 "parser.cc" // lalr1.cc:919
+#line 1022 "parser.cc" // lalr1.cc:919
     break;
 
   case 23:
-#line 131 "parser.yy" // lalr1.cc:919
+#line 132 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Formal* > () = new Formal(yystack_[2].value.as < std::string > (),yystack_[0].value.as < Type* > ());}
-#line 1008 "parser.cc" // lalr1.cc:919
+#line 1028 "parser.cc" // lalr1.cc:919
     break;
 
   case 24:
-#line 134 "parser.yy" // lalr1.cc:919
+#line 135 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Block* > () = new Block(yystack_[2].value.as < Expr* > (),yystack_[1].value.as < Exprx* > ());}
-#line 1014 "parser.cc" // lalr1.cc:919
+#line 1034 "parser.cc" // lalr1.cc:919
     break;
 
   case 25:
-#line 137 "parser.yy" // lalr1.cc:919
+#line 138 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Exprx* > () = nullptr;}
-#line 1020 "parser.cc" // lalr1.cc:919
+#line 1040 "parser.cc" // lalr1.cc:919
     break;
 
   case 26:
-#line 138 "parser.yy" // lalr1.cc:919
+#line 139 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Exprx* > () = new Exprx(yystack_[1].value.as < Expr* > (),yystack_[0].value.as < Exprx* > ());}
-#line 1026 "parser.cc" // lalr1.cc:919
+#line 1046 "parser.cc" // lalr1.cc:919
     break;
 
   case 27:
-#line 141 "parser.yy" // lalr1.cc:919
+#line 142 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new If(yystack_[4].value.as < Expr* > (),yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1032 "parser.cc" // lalr1.cc:919
+#line 1052 "parser.cc" // lalr1.cc:919
     break;
 
   case 28:
-#line 142 "parser.yy" // lalr1.cc:919
+#line 143 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new If(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1038 "parser.cc" // lalr1.cc:919
+#line 1058 "parser.cc" // lalr1.cc:919
     break;
 
   case 29:
-#line 143 "parser.yy" // lalr1.cc:919
+#line 144 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new While(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1044 "parser.cc" // lalr1.cc:919
+#line 1064 "parser.cc" // lalr1.cc:919
     break;
 
   case 30:
-#line 144 "parser.yy" // lalr1.cc:919
+#line 145 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Let(yystack_[4].value.as < std::string > (),yystack_[2].value.as < Type* > (),yystack_[0].value.as < Expr* > ());}
-#line 1050 "parser.cc" // lalr1.cc:919
+#line 1070 "parser.cc" // lalr1.cc:919
     break;
 
   case 31:
-#line 145 "parser.yy" // lalr1.cc:919
+#line 146 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Let(yystack_[6].value.as < std::string > (),yystack_[4].value.as < Type* > (),yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1056 "parser.cc" // lalr1.cc:919
+#line 1076 "parser.cc" // lalr1.cc:919
     break;
 
   case 32:
-#line 146 "parser.yy" // lalr1.cc:919
+#line 147 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Assign(yystack_[2].value.as < std::string > (),yystack_[0].value.as < Expr* > ());}
-#line 1062 "parser.cc" // lalr1.cc:919
+#line 1082 "parser.cc" // lalr1.cc:919
     break;
 
   case 33:
-#line 147 "parser.yy" // lalr1.cc:919
+#line 148 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Not(yystack_[0].value.as < Expr* > ());}
-#line 1068 "parser.cc" // lalr1.cc:919
+#line 1088 "parser.cc" // lalr1.cc:919
     break;
 
   case 34:
-#line 148 "parser.yy" // lalr1.cc:919
+#line 149 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new And(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1074 "parser.cc" // lalr1.cc:919
+#line 1094 "parser.cc" // lalr1.cc:919
     break;
 
   case 35:
-#line 149 "parser.yy" // lalr1.cc:919
+#line 150 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Equal(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1080 "parser.cc" // lalr1.cc:919
+#line 1100 "parser.cc" // lalr1.cc:919
     break;
 
   case 36:
-#line 150 "parser.yy" // lalr1.cc:919
+#line 151 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Lower(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1086 "parser.cc" // lalr1.cc:919
+#line 1106 "parser.cc" // lalr1.cc:919
     break;
 
   case 37:
-#line 151 "parser.yy" // lalr1.cc:919
+#line 152 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new LowerEqual(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1092 "parser.cc" // lalr1.cc:919
+#line 1112 "parser.cc" // lalr1.cc:919
     break;
 
   case 38:
-#line 152 "parser.yy" // lalr1.cc:919
+#line 153 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Plus(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1098 "parser.cc" // lalr1.cc:919
+#line 1118 "parser.cc" // lalr1.cc:919
     break;
 
   case 39:
-#line 153 "parser.yy" // lalr1.cc:919
+#line 154 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Minus(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1104 "parser.cc" // lalr1.cc:919
+#line 1124 "parser.cc" // lalr1.cc:919
     break;
 
   case 40:
-#line 154 "parser.yy" // lalr1.cc:919
+#line 155 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Times(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1110 "parser.cc" // lalr1.cc:919
+#line 1130 "parser.cc" // lalr1.cc:919
     break;
 
   case 41:
-#line 155 "parser.yy" // lalr1.cc:919
+#line 156 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Div(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1116 "parser.cc" // lalr1.cc:919
+#line 1136 "parser.cc" // lalr1.cc:919
     break;
 
   case 42:
-#line 156 "parser.yy" // lalr1.cc:919
+#line 157 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Pow(yystack_[2].value.as < Expr* > (),yystack_[0].value.as < Expr* > ());}
-#line 1122 "parser.cc" // lalr1.cc:919
+#line 1142 "parser.cc" // lalr1.cc:919
     break;
 
   case 43:
-#line 157 "parser.yy" // lalr1.cc:919
+#line 158 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Minus1(yystack_[0].value.as < Expr* > ());}
-#line 1128 "parser.cc" // lalr1.cc:919
+#line 1148 "parser.cc" // lalr1.cc:919
     break;
 
   case 44:
-#line 158 "parser.yy" // lalr1.cc:919
+#line 159 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new IsNull(yystack_[0].value.as < Expr* > ());}
-#line 1134 "parser.cc" // lalr1.cc:919
+#line 1154 "parser.cc" // lalr1.cc:919
     break;
 
   case 45:
-#line 159 "parser.yy" // lalr1.cc:919
+#line 160 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Function(yystack_[3].value.as < std::string > (),yystack_[1].value.as < Args* > ());}
-#line 1140 "parser.cc" // lalr1.cc:919
+#line 1160 "parser.cc" // lalr1.cc:919
     break;
 
   case 46:
-#line 160 "parser.yy" // lalr1.cc:919
+#line 161 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Dot(yystack_[5].value.as < Expr* > (),yystack_[3].value.as < std::string > (),yystack_[1].value.as < Args* > ());}
-#line 1146 "parser.cc" // lalr1.cc:919
+#line 1166 "parser.cc" // lalr1.cc:919
     break;
 
   case 47:
-#line 161 "parser.yy" // lalr1.cc:919
+#line 162 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new New(yystack_[0].value.as < std::string > ());}
-#line 1152 "parser.cc" // lalr1.cc:919
+#line 1172 "parser.cc" // lalr1.cc:919
     break;
 
   case 48:
-#line 162 "parser.yy" // lalr1.cc:919
+#line 163 "parser.yy" // lalr1.cc:919
     {ObjID tmp = ObjID(yystack_[0].value.as < std::string > ());yylhs.value.as < Expr* > () = &tmp;}
-#line 1158 "parser.cc" // lalr1.cc:919
+#line 1178 "parser.cc" // lalr1.cc:919
     break;
 
   case 49:
-#line 163 "parser.yy" // lalr1.cc:919
+#line 164 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = yystack_[0].value.as < Literal* > ();}
-#line 1164 "parser.cc" // lalr1.cc:919
+#line 1184 "parser.cc" // lalr1.cc:919
     break;
 
   case 50:
-#line 164 "parser.yy" // lalr1.cc:919
+#line 165 "parser.yy" // lalr1.cc:919
     {ObjID tmp = ObjID(std::string("()")); yylhs.value.as < Expr* > () = &tmp;}
-#line 1170 "parser.cc" // lalr1.cc:919
+#line 1190 "parser.cc" // lalr1.cc:919
     break;
 
   case 51:
-#line 165 "parser.yy" // lalr1.cc:919
+#line 166 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = new Parenthese(yystack_[1].value.as < Expr* > ());}
-#line 1176 "parser.cc" // lalr1.cc:919
+#line 1196 "parser.cc" // lalr1.cc:919
     break;
 
   case 52:
-#line 166 "parser.yy" // lalr1.cc:919
+#line 167 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Expr* > () = yystack_[0].value.as < Block* > ();}
-#line 1182 "parser.cc" // lalr1.cc:919
+#line 1202 "parser.cc" // lalr1.cc:919
     break;
 
   case 53:
-#line 169 "parser.yy" // lalr1.cc:919
+#line 170 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Args* > () = new Args();}
-#line 1188 "parser.cc" // lalr1.cc:919
+#line 1208 "parser.cc" // lalr1.cc:919
     break;
 
   case 54:
-#line 170 "parser.yy" // lalr1.cc:919
+#line 171 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Args* > () = new Args(yystack_[1].value.as < Expr* > (),yystack_[0].value.as < Exprxx* > ());}
-#line 1194 "parser.cc" // lalr1.cc:919
+#line 1214 "parser.cc" // lalr1.cc:919
     break;
 
   case 55:
-#line 173 "parser.yy" // lalr1.cc:919
+#line 174 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Exprxx* > () = nullptr;}
-#line 1200 "parser.cc" // lalr1.cc:919
+#line 1220 "parser.cc" // lalr1.cc:919
     break;
 
   case 56:
-#line 174 "parser.yy" // lalr1.cc:919
+#line 175 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Exprxx* > () = new Exprxx(yystack_[1].value.as < Expr* > (),yystack_[0].value.as < Exprxx* > ());}
-#line 1206 "parser.cc" // lalr1.cc:919
+#line 1226 "parser.cc" // lalr1.cc:919
     break;
 
   case 57:
-#line 177 "parser.yy" // lalr1.cc:919
+#line 178 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Literal* > () = new IntLit(yystack_[0].value.as < int > ());}
-#line 1212 "parser.cc" // lalr1.cc:919
+#line 1232 "parser.cc" // lalr1.cc:919
     break;
 
   case 58:
-#line 178 "parser.yy" // lalr1.cc:919
+#line 179 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Literal* > () = new StrLit(yystack_[0].value.as < std::string > ());}
-#line 1218 "parser.cc" // lalr1.cc:919
+#line 1238 "parser.cc" // lalr1.cc:919
     break;
 
   case 59:
-#line 179 "parser.yy" // lalr1.cc:919
+#line 180 "parser.yy" // lalr1.cc:919
     {yylhs.value.as < Literal* > () = yystack_[0].value.as < BoolLit* > ();}
-#line 1224 "parser.cc" // lalr1.cc:919
+#line 1244 "parser.cc" // lalr1.cc:919
     break;
 
   case 60:
-#line 182 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < BoolLit* > () = new BoolLit(true);}
-#line 1230 "parser.cc" // lalr1.cc:919
+#line 183 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < BoolLit* > () = new BoolLit(yystack_[0].value.as < bool > ());}
+#line 1250 "parser.cc" // lalr1.cc:919
     break;
 
   case 61:
-#line 183 "parser.yy" // lalr1.cc:919
-    {yylhs.value.as < BoolLit* > () = new BoolLit(false);}
-#line 1236 "parser.cc" // lalr1.cc:919
+#line 184 "parser.yy" // lalr1.cc:919
+    {yylhs.value.as < BoolLit* > () = new BoolLit(yystack_[0].value.as < bool > ());}
+#line 1256 "parser.cc" // lalr1.cc:919
     break;
 
 
-#line 1240 "parser.cc" // lalr1.cc:919
+#line 1260 "parser.cc" // lalr1.cc:919
             default:
               break;
             }
@@ -1513,19 +1533,19 @@ namespace yy {
   const short
   parser::yypact_[] =
   {
-       6,    10,    46,     6,   -35,     7,   -35,   -35,   -35,    23,
-     -35,    -3,    47,   -35,     8,   -35,   -35,   -35,    24,     3,
-      45,    48,    60,   -35,   -35,   -35,   -35,   -35,    16,     3,
-      49,    24,   -35,   -35,   102,   -35,     3,    60,   102,    77,
-     -35,   102,   102,    30,    33,   -35,   102,     1,   -35,   -35,
-     102,   102,   -35,   118,   -35,   -35,    67,   -35,   129,   -35,
-      26,   158,    -6,    64,   -35,   171,   102,   102,   203,   -11,
-     -35,   102,   102,   102,   102,   102,   102,   102,   102,   102,
-      50,   -35,   102,    69,   -35,   102,     3,   102,   107,    68,
-     194,   203,   212,   212,   212,   -11,   -11,    -6,    -6,    -6,
-      71,   129,   -35,   183,    -7,   194,   102,   -35,   -35,   102,
-     -35,   102,   102,   102,   107,    75,   194,   144,   194,   -35,
-     -35,   102,   194
+       6,    10,    30,     6,   -35,     7,   -35,   -35,   -35,    11,
+     -35,    -3,    28,   -35,     8,   -35,   -35,   -35,    21,     3,
+      29,    41,    40,   -35,   -35,   -35,   -35,   -35,    16,     3,
+      43,    21,   -35,   -35,   126,   -35,     3,    40,   126,   101,
+     -35,   126,   126,    27,    32,   -35,   126,     1,   -35,   -35,
+     126,   126,   -35,   134,   -35,   -35,    51,   -35,   146,   -35,
+      26,   171,   -14,    48,   -35,   185,   126,   126,    46,   -14,
+     -35,   126,   126,   126,   126,   126,   126,   126,   126,   126,
+      50,   -35,   126,    53,   -35,   126,     3,   126,    60,    70,
+     210,    46,   220,   220,   220,    31,    31,   -14,   -14,   -14,
+      85,   146,   -35,   198,    -7,   210,   126,   -35,   -35,   126,
+     -35,   126,   126,   126,    60,    87,   210,   159,   210,   -35,
+     -35,   126,   210
   };
 
   const unsigned char
@@ -1549,8 +1569,8 @@ namespace yy {
   const signed char
   parser::yypgoto_[] =
   {
-     -35,   -35,   -35,    81,    73,   -35,   -35,   -35,   -27,   -35,
-      51,    55,    34,   -12,   -34,   -16,   -17,   -35,   -35
+     -35,   -35,   -35,    88,    89,   -35,   -35,   -35,   -27,   -35,
+      68,    77,    54,    12,   -34,     0,    -2,   -35,   -35
   };
 
   const signed char
@@ -1565,30 +1585,31 @@ namespace yy {
   {
       53,    13,    35,   112,    58,    60,    66,    61,    62,    56,
        8,    67,    65,    18,    23,    19,    68,    69,     1,    24,
-       9,   113,    14,    25,    33,    26,    34,    27,    77,    78,
-      79,    80,    84,    90,     5,    79,    80,    91,    92,    93,
-      94,    95,    96,    97,    98,    99,     6,    12,   101,    20,
-       8,   103,    29,   105,    30,    63,    36,    64,    71,   104,
-      72,    73,    74,    75,    76,    77,    78,    79,    80,    31,
-      38,    86,   114,   102,   108,   100,   109,   116,   117,   118,
-      38,   120,    39,    59,     7,    17,    37,   122,    57,   110,
-      81,    40,    41,   115,    42,    43,    44,   119,    45,     0,
-      46,     0,    47,    48,    49,    38,     0,    39,     0,     0,
-      50,     0,     0,     0,   106,    51,    40,    41,     0,    42,
-      43,    44,     0,    45,     0,    46,    70,    47,    48,    49,
-       0,     0,     0,     0,     0,    50,     0,    82,     0,    71,
-      51,    72,    73,    74,    75,    76,    77,    78,    79,    80,
-      71,     0,    72,    73,    74,    75,    76,    77,    78,    79,
-      80,    71,     0,    72,    73,    74,    75,    76,    77,    78,
-      79,    80,   121,     0,     0,     0,    71,     0,    72,    73,
-      74,    75,    76,    77,    78,    79,    80,    85,     0,     0,
-      71,     0,    72,    73,    74,    75,    76,    77,    78,    79,
-      80,    87,     0,    71,     0,    72,    73,    74,    75,    76,
-      77,    78,    79,    80,   111,    71,     0,    72,    73,    74,
-      75,    76,    77,    78,    79,    80,    71,     0,    72,    73,
-      74,    75,    76,    77,    78,    79,    80,    72,    73,    74,
-      75,    76,    77,    78,    79,    80,    -1,    -1,    -1,    75,
-      76,    77,    78,    79,    80
+       9,   113,    14,    25,    33,    26,    34,    27,    79,    80,
+       6,     8,    84,    90,     5,    12,    29,    91,    92,    93,
+      94,    95,    96,    97,    98,    99,    20,    30,   101,    31,
+      36,   103,    63,   105,    38,    86,    64,   102,    71,   104,
+      72,    73,    74,    75,    76,    77,    78,   106,    79,    80,
+      77,    78,   114,    79,    80,   100,   108,   116,   117,   118,
+      72,    73,    74,    75,    76,    77,    78,   122,    79,    80,
+     109,     7,    71,   120,    72,    73,    74,    75,    76,    77,
+      78,    17,    79,    80,    38,    57,    39,    59,    37,   115,
+      81,     0,   119,   110,     0,    40,    41,     0,    42,    43,
+      44,     0,    45,     0,    46,     0,    47,    48,    49,    38,
+       0,    39,     0,     0,    50,     0,     0,     0,     0,    51,
+      40,    41,    70,    42,    43,    44,     0,    45,     0,    46,
+       0,    47,    48,    49,    82,     0,     0,     0,     0,    50,
+       0,     0,     0,     0,    51,     0,    71,     0,    72,    73,
+      74,    75,    76,    77,    78,     0,    79,    80,    71,     0,
+      72,    73,    74,    75,    76,    77,    78,   121,    79,    80,
+       0,    71,     0,    72,    73,    74,    75,    76,    77,    78,
+      85,    79,    80,    71,     0,    72,    73,    74,    75,    76,
+      77,    78,     0,    79,    80,    87,     0,    71,     0,    72,
+      73,    74,    75,    76,    77,    78,     0,    79,    80,   111,
+      71,     0,    72,    73,    74,    75,    76,    77,    78,     0,
+      79,    80,    71,     0,    72,    73,    74,    75,    76,    77,
+      78,     0,    79,    80,    -1,    -1,    -1,    75,    76,    77,
+      78,     0,    79,    80
   };
 
   const signed char
@@ -1596,60 +1617,61 @@ namespace yy {
   {
       34,     4,    29,    10,    38,    39,     5,    41,    42,    36,
        3,    10,    46,     5,    11,     7,    50,    51,    12,    16,
-      13,    28,    25,    20,     8,    22,    10,    24,    39,    40,
-      41,    42,     6,    67,    24,    41,    42,    71,    72,    73,
-      74,    75,    76,    77,    78,    79,     0,    24,    82,    25,
-       3,    85,     7,    87,     6,    25,     7,    24,    32,    86,
-      34,    35,    36,    37,    38,    39,    40,    41,    42,     9,
-       3,     7,   106,     4,     6,    25,     5,   111,   112,   113,
-       3,     6,     5,     6,     3,    12,    31,   121,    37,   101,
-      56,    14,    15,   109,    17,    18,    19,   114,    21,    -1,
-      23,    -1,    25,    26,    27,     3,    -1,     5,    -1,    -1,
-      33,    -1,    -1,    -1,     7,    38,    14,    15,    -1,    17,
-      18,    19,    -1,    21,    -1,    23,     8,    25,    26,    27,
-      -1,    -1,    -1,    -1,    -1,    33,    -1,     8,    -1,    32,
-      38,    34,    35,    36,    37,    38,    39,    40,    41,    42,
-      32,    -1,    34,    35,    36,    37,    38,    39,    40,    41,
-      42,    32,    -1,    34,    35,    36,    37,    38,    39,    40,
-      41,    42,    28,    -1,    -1,    -1,    32,    -1,    34,    35,
-      36,    37,    38,    39,    40,    41,    42,    29,    -1,    -1,
-      32,    -1,    34,    35,    36,    37,    38,    39,    40,    41,
-      42,    30,    -1,    32,    -1,    34,    35,    36,    37,    38,
-      39,    40,    41,    42,    31,    32,    -1,    34,    35,    36,
-      37,    38,    39,    40,    41,    42,    32,    -1,    34,    35,
-      36,    37,    38,    39,    40,    41,    42,    34,    35,    36,
-      37,    38,    39,    40,    41,    42,    34,    35,    36,    37,
-      38,    39,    40,    41,    42
+      13,    28,    25,    20,     8,    22,    10,    24,    42,    43,
+       0,     3,     6,    67,    24,    24,     7,    71,    72,    73,
+      74,    75,    76,    77,    78,    79,    25,     6,    82,     9,
+       7,    85,    25,    87,     3,     7,    24,     4,    32,    86,
+      34,    35,    36,    37,    38,    39,    40,     7,    42,    43,
+      39,    40,   106,    42,    43,    25,     6,   111,   112,   113,
+      34,    35,    36,    37,    38,    39,    40,   121,    42,    43,
+       5,     3,    32,     6,    34,    35,    36,    37,    38,    39,
+      40,    12,    42,    43,     3,    37,     5,     6,    31,   109,
+      56,    -1,   114,   101,    -1,    14,    15,    -1,    17,    18,
+      19,    -1,    21,    -1,    23,    -1,    25,    26,    27,     3,
+      -1,     5,    -1,    -1,    33,    -1,    -1,    -1,    -1,    38,
+      14,    15,     8,    17,    18,    19,    -1,    21,    -1,    23,
+      -1,    25,    26,    27,     8,    -1,    -1,    -1,    -1,    33,
+      -1,    -1,    -1,    -1,    38,    -1,    32,    -1,    34,    35,
+      36,    37,    38,    39,    40,    -1,    42,    43,    32,    -1,
+      34,    35,    36,    37,    38,    39,    40,    28,    42,    43,
+      -1,    32,    -1,    34,    35,    36,    37,    38,    39,    40,
+      29,    42,    43,    32,    -1,    34,    35,    36,    37,    38,
+      39,    40,    -1,    42,    43,    30,    -1,    32,    -1,    34,
+      35,    36,    37,    38,    39,    40,    -1,    42,    43,    31,
+      32,    -1,    34,    35,    36,    37,    38,    39,    40,    -1,
+      42,    43,    32,    -1,    34,    35,    36,    37,    38,    39,
+      40,    -1,    42,    43,    34,    35,    36,    37,    38,    39,
+      40,    -1,    42,    43
   };
 
   const unsigned char
   parser::yystos_[] =
   {
-       0,    12,    44,    45,    46,    24,     0,    46,     3,    13,
-      47,    48,    24,     4,    25,    49,    50,    47,     5,     7,
-      25,    52,    54,    11,    16,    20,    22,    24,    51,     7,
-       6,     9,    53,     8,    10,    51,     7,    54,     3,     5,
+       0,    12,    45,    46,    47,    24,     0,    47,     3,    13,
+      48,    49,    24,     4,    25,    50,    51,    48,     5,     7,
+      25,    53,    55,    11,    16,    20,    22,    24,    52,     7,
+       6,     9,    54,     8,    10,    52,     7,    55,     3,     5,
       14,    15,    17,    18,    19,    21,    23,    25,    26,    27,
-      33,    38,    55,    57,    60,    61,    51,    53,    57,     6,
-      57,    57,    57,    25,    24,    57,     5,    10,    57,    57,
-       8,    32,    34,    35,    36,    37,    38,    39,    40,    41,
-      42,    55,     8,    56,     6,    29,     7,    30,    57,    58,
-      57,    57,    57,    57,    57,    57,    57,    57,    57,    57,
-      25,    57,     4,    57,    51,    57,     7,    59,     6,     5,
-      56,    31,    10,    28,    57,    58,    57,    57,    57,    59,
-       6,    28,    57
+      33,    38,    56,    58,    61,    62,    52,    54,    58,     6,
+      58,    58,    58,    25,    24,    58,     5,    10,    58,    58,
+       8,    32,    34,    35,    36,    37,    38,    39,    40,    42,
+      43,    56,     8,    57,     6,    29,     7,    30,    58,    59,
+      58,    58,    58,    58,    58,    58,    58,    58,    58,    58,
+      25,    58,     4,    58,    52,    58,     7,    60,     6,     5,
+      57,    31,    10,    28,    58,    59,    58,    58,    58,    60,
+       6,    28,    58
   };
 
   const unsigned char
   parser::yyr1_[] =
   {
-       0,    43,    44,    45,    45,    46,    46,    47,    48,    48,
-      48,    49,    49,    50,    51,    51,    51,    51,    51,    52,
-      52,    53,    53,    54,    55,    56,    56,    57,    57,    57,
-      57,    57,    57,    57,    57,    57,    57,    57,    57,    57,
-      57,    57,    57,    57,    57,    57,    57,    57,    57,    57,
-      57,    57,    57,    58,    58,    59,    59,    60,    60,    60,
-      61,    61
+       0,    44,    45,    46,    46,    47,    47,    48,    49,    49,
+      49,    50,    50,    51,    52,    52,    52,    52,    52,    53,
+      53,    54,    54,    55,    56,    57,    57,    58,    58,    58,
+      58,    58,    58,    58,    58,    58,    58,    58,    58,    58,
+      58,    58,    58,    58,    58,    58,    58,    58,    58,    58,
+      58,    58,    58,    59,    59,    60,    60,    61,    61,    61,
+      62,    62
   };
 
   const unsigned char
@@ -1677,23 +1699,23 @@ namespace yy {
   "TRUE", "UNIT", "WHILE", "TYPE_IDENTIFIER", "OBJECT_IDENTIFIER",
   "INTEGER_LITERAL", "STRING_LITERAL", "IN", "THEN", "DO", "ELSE", "AND",
   "NOT", "EQUAL", "LOWER_EQUAL", "LOWER", "PLUS", "MINUS", "TIMES", "DIV",
-  "POW", "DOT", "$accept", "program", "classes", "class", "class_body",
-  "field-method", "field", "method", "type", "formals", "formalx",
-  "formal", "block", "exprx", "expr", "args", "exprxx", "literal",
-  "boolean-literal", YY_NULLPTR
+  "NEG", "POW", "DOT", "$accept", "program", "classes", "class",
+  "class_body", "field-method", "field", "method", "type", "formals",
+  "formalx", "formal", "block", "exprx", "expr", "args", "exprxx",
+  "literal", "boolean-literal", YY_NULLPTR
   };
 
 #if YYDEBUG
   const unsigned char
   parser::yyrline_[] =
   {
-       0,    90,    90,    93,    94,    97,    98,   101,   104,   105,
-     106,   109,   110,   113,   116,   117,   118,   119,   120,   123,
-     124,   127,   128,   131,   134,   137,   138,   141,   142,   143,
-     144,   145,   146,   147,   148,   149,   150,   151,   152,   153,
-     154,   155,   156,   157,   158,   159,   160,   161,   162,   163,
-     164,   165,   166,   169,   170,   173,   174,   177,   178,   179,
-     182,   183
+       0,    91,    91,    94,    95,    98,    99,   102,   105,   106,
+     107,   110,   111,   114,   117,   118,   119,   120,   121,   124,
+     125,   128,   129,   132,   135,   138,   139,   142,   143,   144,
+     145,   146,   147,   148,   149,   150,   151,   152,   153,   154,
+     155,   156,   157,   158,   159,   160,   161,   162,   163,   164,
+     165,   166,   167,   170,   171,   174,   175,   178,   179,   180,
+     183,   184
   };
 
   // Print the state stack on the debug stream.
@@ -1728,8 +1750,8 @@ namespace yy {
 
 
 } // yy
-#line 1732 "parser.cc" // lalr1.cc:1242
-#line 185 "parser.yy" // lalr1.cc:1243
+#line 1754 "parser.cc" // lalr1.cc:1242
+#line 186 "parser.yy" // lalr1.cc:1243
 
 
 void
