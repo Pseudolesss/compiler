@@ -428,6 +428,7 @@ struct Dot : Expr
     Dot(Expr*, string, Args*);
     Expr* getExpr();
     Args* getArgs();
+    string getID();
     std::string accept(Visitor*);
 
   private:
