@@ -1,5 +1,6 @@
 #include <string>
 #include "ASTnode.hh"
+#include <boost/tokenizer.hpp>
 
 
 std::string Visitor::visit(ASTnode* asTnode){return "NOT SUPPOSED TO HAPPEN ASTNODE";}
@@ -16,7 +17,11 @@ std::string Visitor::visit(Formalx *formalx){return "4-";}
 
 std::string Visitor::visit(Formals *formals){return "5-";}
 
-std::string Visitor::visit(Exprx *exprx){return exprx->getExpr()->accept(this) + ", " + exprx->getExprx()->accept(this);}
+std::string Visitor::visit(Exprx *exprx){
+    if(exprx->getExprx() == nullptr)
+        return "";
+    return ", " + exprx->getExpr()->accept(this) + exprx->getExprx()->accept(this);
+}
 
 std::string Visitor::visit(Exprxx *exprxx){
     if(exprxx->getExpr() == nullptr){
@@ -29,26 +34,110 @@ std::string Visitor::visit(Exprxx *exprxx){
 
 std::string Visitor::visit(Block *block){return "[" +  block->getExpr()->accept(this) + block->getExprx()->accept(this)+ "]";}
 
-std::string Visitor::visit(Method *method){return "9-";}
+std::string Visitor::visit(Method *method){return "Method(" + method->getID()+ ", " + method->getFormals()->accept(this) + ", " + method->getType()->accept(this) + ", " + method->getBlock()->accept(this) + ")" ;}
 
-std::string Visitor::visit(FieldMethod *fieldMethod){return "10-";}
+std::string Visitor::visit(FieldMethod *fieldMethod){
+    if(fieldMethod->getFieldMethod() == nullptr)
+        return "";
+    if(fieldMethod->getMethod() == nullptr)
+        return fieldMethod->getField()->accept(this) + "$" + fieldMethod->getField()->accept(this);
+    else
+        return fieldMethod->getMethod()->accept(this) + "$" + fieldMethod->getField()->accept(this);
+}
 
-std::string Visitor::visit(Body *body){return "11-";}
+std::string Visitor::visit(Body *body){
 
-std::string Visitor::visit(Classe *classe){return "12-";}
+    std::vector<std::string> m;
+    std::vector<std::string> f;
+
+    std::string text =  body->getFieldMethod()->accept(this);
+
+    boost::char_separator<char> sep("$");
+    boost::tokenizer<boost::char_separator<char>> tokens(text, sep);
+    for (const auto& t : tokens) {
+        if(t[0] == 'M')
+            m.push_back(t);
+        else if(t[0] == 'F')
+            f.push_back(t);
+        else
+            m.push_back("ERROR: " + t);
+    }
+
+    std::string ret;
+
+    // if no element
+    if(f.empty())
+        ret += "[], ";
+    else
+        for(int i = 0; i < f.size(); i++){
+            // if one element only
+            if(f.size()==1){
+                ret += "[" + f[i] + "], ";
+                continue;
+            }
+            // initial elem for size > 1
+            if(i == 0){
+                ret += "[" + f[i];
+                continue;
+            }
+            // last elem for size > 1
+            if(i == f.size()-1){
+                ret += ", " + f[i] + "] ,";
+                continue;
+            }
+            // intermediate for size > 1
+            ret += ", " + f[i];
+
+        }
+
+    // if no element
+    if(m.empty())
+        ret += "[]";
+    else
+        for(int i = 0; i < m.size(); i++){
+            // if one element only
+            if(m.size()==1){
+                ret += "[" + m[i] + "]";
+                continue;
+            }
+            // initial elem for size > 1
+            if(i == 0){
+                ret += "[" + m[i];
+                continue;
+            }
+            // last elem for size > 1
+            if(i == m.size()-1){
+                ret += ", " + m[i] + "]";
+                continue;
+            }
+            // intermediate for size > 1
+            ret += ", " + m[i];
+
+        }
+
+
+    return ret;
+}
+
+std::string Visitor::visit(Classe *classe){
+    if(classe->getParentID().empty())
+        return "Class(" + classe->getTypeID() + ", Object, " + classe->getBody()->accept(this) + ")";
+    else
+        return "Class(" + classe->getTypeID() + ", " + classe->getParentID() + ", " + classe->getBody()->accept(this) + ")";
+}
 
 std::string Visitor::visit(Classes *classes){
     if(classes->nextClass() == nullptr)
         return classes->getClass()->accept(this);
     else
-        return classes->getClass()->accept(this) + ", " + classes->nextClass()->accept(this);
+        return classes->nextClass()->accept(this) + ", " + classes->getClass()->accept(this);
 }
 
 std::string Visitor::visit(Programm *programm){return "[" + programm->getClasses()->accept(this) + "]";}
 
-std::string Visitor::visit(Dual *dual){return "SHOULD NOT HAPPEND";}
+std::string Visitor::visit(Dual *dual){return "SHOULD NOT HAPPEND: DUAL";}
 
-std::string Visitor::visit(Unary *unary){return "SHOULD NOT HAPPEND";}
+std::string Visitor::visit(Unary *unary){return "SHOULD NOT HAPPEND: UNARY";}
 
 std::string Visitor::visit(If *anIf){
     if(anIf->getElse() == nullptr){
@@ -109,7 +198,7 @@ std::string Visitor::visit(New *aNew){return "New(" + aNew->getTypeID() + ")";}
 
 std::string Visitor::visit(ObjID *objID){return objID->getID();}
 
-std::string Visitor::visit(Literal *literal){return "NOT SUPPOSED TO HAPPEN LITERAL";}
+std::string Visitor::visit(Literal *literal){return "NOT SUPPOSED TO HAPPEN: LITERAL";}
 
 std::string Visitor::visit(IntLit *intLit){return std::to_string(intLit->getValue());}
 

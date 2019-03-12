@@ -178,11 +178,14 @@ struct Classe : ASTnode
   public:
     Classe(string, Body*);
     Classe(string, string, Body*);
+    std::string getTypeID();
+    std::string getParentID();
+    Body* getBody();
     std::string accept(Visitor*);
 
   private:
     string typeID;
-    string childID;
+    string parentID;
     Body* body;
 };
 struct Classes;
