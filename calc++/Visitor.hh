@@ -2,8 +2,6 @@
 #ifndef VISITOR_H
 #define VISITOR_H
 
-//inclure visit.cpp pour le compilateur.
-
 struct ASTnode;
 struct Expr;
 struct Type;

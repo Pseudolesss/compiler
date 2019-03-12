@@ -26,6 +26,7 @@ struct Expr : ASTnode
 {
   public:
     string getDataType();
+    std::string accept(Visitor*);
   protected:
     string dataType;
 };
@@ -36,6 +37,7 @@ struct Type : ASTnode
     Type();
     Type(string);
     string getID();
+    std::string accept(Visitor*);
 
   private:
     string typeID;
@@ -50,6 +52,7 @@ struct Field : ASTnode
     string getID();
     Type* getType();
     Expr* getExpr();
+    std::string accept(Visitor*);
 
   private:
     string objID;
@@ -63,6 +66,7 @@ struct Formal : ASTnode
     Formal(string, Type*);
     string getID();
     Type* getType();
+    std::string accept(Visitor*);
 
   private:
     string objID;
@@ -76,6 +80,7 @@ struct Formalx : ASTnode
     Formalx(Formal*, Formalx*);
     Formal* getFormal();
     Formalx* getFormalx();
+    std::string accept(Visitor*);
 
   private:
     Formal* formal;
@@ -89,6 +94,7 @@ struct Formals : ASTnode
     Formals(Formal*, Formalx*);
     Formal* getFormal();
     Formalx* getFormalx();
+    std::string accept(Visitor*);
 
   private:
     Formal* formal;
@@ -102,6 +108,7 @@ struct Exprx : ASTnode
     Exprx(Expr*, Exprx*);
     Expr* getExpr();
     Exprx* getExprx();
+    std::string accept(Visitor*);
 
   private:
     Expr* expr;
@@ -114,6 +121,7 @@ struct Block : Expr
     Block(Expr*, Exprx*);
     Expr* getExpr();
     Exprx* getExprx();
+    std::string accept(Visitor*);
 
   private:
     Expr* expr;
@@ -128,6 +136,7 @@ struct Method : ASTnode
     Formals* getFormals();
     Type* getType();
     Block* getBlock();
+    std::string accept(Visitor*);
 
   private:
     string objID;
@@ -145,6 +154,7 @@ struct FieldMethod : ASTnode
     Field* getField();
     Method* getMethod();
     FieldMethod* getFieldMethod();
+    std::string accept(Visitor*);
 
   private:
     Field* field;
@@ -157,6 +167,7 @@ struct Body : ASTnode
   public:
     Body(FieldMethod*);
     FieldMethod* getFieldMethod();
+    std::string accept(Visitor*);
 
   private:
     FieldMethod* fieldMethod;
@@ -167,6 +178,7 @@ struct Classe : ASTnode
   public:
     Classe(string, Body*);
     Classe(string, string, Body*);
+    std::string accept(Visitor*);
 
   private:
     string typeID;
@@ -181,6 +193,7 @@ struct Classes : ASTnode
     Classes(Classe*);
     Classe* getClass();
     Classes* nextClass();
+    std::string accept(Visitor*);
 
   private:
     Classe* a_class;
@@ -194,6 +207,7 @@ struct Programm : ASTnode
     Programm(Classe*);
     Classes* getClasses();
     Classe* getClasse();
+    std::string accept(Visitor*);
 
   private:
     Classes* classes;
@@ -206,6 +220,7 @@ struct Dual : Expr
     Dual(Expr*, Expr*);
     Expr* getLeft();
     Expr* getRight();
+    std::string accept(Visitor*);
 
   private:
     Expr* left;
@@ -217,6 +232,7 @@ struct Unary : Expr
   public:
     Unary(Expr*);
     Expr* getExpr();
+    std::string accept(Visitor*);
 
   private:
     Expr* expr;
@@ -230,6 +246,7 @@ struct If : Expr
     Expr* getIf();
     Expr* getThen();
     Expr* getElse();
+    std::string accept(Visitor*);
 
   private:
     Expr* _if;
@@ -243,6 +260,7 @@ struct While : Expr
     While(Expr*, Expr*);
     Expr* getWhile();
     Expr* getDo();
+    std::string accept(Visitor*);
 
   private:
     Expr* _while;
@@ -258,6 +276,7 @@ struct Let : Expr
     Type* getType();
     Expr* getAssign();
     Expr* getIn();
+    std::string accept(Visitor*);
 
   private:
     string ObjID;
@@ -272,6 +291,7 @@ struct Assign : Expr
     Assign(string, Expr*);
     string getObjID();
     Expr* getExpr();
+    std::string accept(Visitor*);
 
   private:
     string ObjID;
@@ -282,72 +302,84 @@ struct Not : Unary
 { 
   public:
   Not(Expr*);
+  std::string accept(Visitor*);
 };
 
 struct And : Dual
 {
   public:
     And(Expr*,Expr*);
+    std::string accept(Visitor*);
 };
 
 struct Equal : Dual
 {
   public:
   Equal(Expr*,Expr*);
+  std::string accept(Visitor*);
 };
 
 struct Lower : Dual
 {
   public:
   Lower(Expr*,Expr*);
+  std::string accept(Visitor*);
 };
 
 struct LowerEqual : Dual
 {
   public:
   LowerEqual(Expr*,Expr*);
+  std::string accept(Visitor*);
 };
 
 struct Plus : Dual
 {
   public:
   Plus(Expr*,Expr*);
+  std::string accept(Visitor*);
 };
 
 struct Minus : Dual
 {
   public:
   Minus(Expr*,Expr*);
+  std::string accept(Visitor*);
 };
 
 struct Times : Dual
 {
   public:
   Times(Expr*,Expr*);
+  std::string accept(Visitor*);
 };
 
 struct Div : Dual
 {
   public:
   Div(Expr*,Expr*);
+  std::string accept(Visitor*);
 };
 
 struct Pow : Dual
 {
   public:
   Pow(Expr*,Expr*);
+  std::string accept(Visitor*);
 };
 
 struct Minus1 : Unary
 {
   public:
   Minus1(Expr*);
+  std::string accept(Visitor*);
 };
 
 struct IsNull : Unary
 {
   public:
   IsNull(Expr*);
+  std::string accept(Visitor*);
 };
 struct Exprxx;
 struct Exprxx
@@ -357,6 +389,7 @@ struct Exprxx
     Exprxx(Expr*,Exprxx*);
     Expr* getExpr();
     Exprxx* getExprxx();
+    std::string accept(Visitor*);
     private:
     Expr* expr;
     Exprxx* exprxx;
@@ -369,6 +402,7 @@ struct Args
     Args(Expr*, Exprxx*);
     Expr* getExpr();
     Exprxx* getExprxx();
+    std::string accept(Visitor*);
 
   private:
     Expr* expr;
@@ -381,6 +415,7 @@ struct Function : Expr
     Function(string, Args*);
     string getID();
     Args* getArgs();
+    std::string accept(Visitor*);
 
   private:
     string ID;
@@ -393,6 +428,7 @@ struct Dot : Expr
     Dot(Expr*, string, Args*);
     Expr* getExpr();
     Args* getArgs();
+    std::string accept(Visitor*);
 
   private:
     Expr* expr;
@@ -405,6 +441,7 @@ struct New : Expr
   public:
     New(string);
     string getTypeID();
+    std::string accept(Visitor*);
 
   private:
     string typeID;
@@ -415,6 +452,7 @@ struct ObjID : Expr
   public:
     ObjID(string);
     string getID();
+    std::string accept(Visitor*);
 
   private:
     string ObjId;
@@ -429,6 +467,7 @@ struct IntLit : Literal
   public:
     IntLit(int);
     int getValue();
+    std::string accept(Visitor*);
 
   private:
     int value;
@@ -439,6 +478,7 @@ struct StrLit : Literal
   public:
     StrLit(string);
     string getValue();
+    std::string accept(Visitor*);
 
   private:
     string value;
@@ -449,6 +489,7 @@ struct BoolLit : Literal
   public:
     BoolLit(bool);
     bool getValue();
+    std::string accept(Visitor*);
 
   private:
     bool value;
@@ -466,6 +507,7 @@ struct Parenthese : Unary
 {
   public:
   Parenthese(Expr*);
+  std::string accept(Visitor*);
 };
 
 #endif
