@@ -1,4 +1,0 @@
-flex  -oscanner.cc scanner.ll
-g++  -c -oscanner.o scanner.cc
-Makefile:19: recipe for target 'scanner.o' failed
-rm scanner.cc

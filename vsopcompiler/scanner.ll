@@ -113,50 +113,12 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 
 #define FLEX_VERSION (YY_FLEX_MAJOR_VERSION * 100 + YY_FLEX_MINOR_VERSION)
 
-// Old versions of Flex (2.5.35) generate an incomplete documentation comment.
-//
-//  In file included from src/scan-code-c.c:3:
-//  src/scan-code.c:2198:21: error: empty paragraph passed to '@param' command
-//        [-Werror,-Wdocumentation]
-//   * @param line_number
-//     ~~~~~~~~~~~~~~~~~^
-//  1 error generated.
-#if FLEX_VERSION < 206 && defined __clang__
-# pragma clang diagnostic ignored "-Wdocumentation"
-#endif
-
-// Old versions of Flex (2.5.35) use 'register'.  Warnings introduced in
-// GCC 7 and Clang 6.
-#if FLEX_VERSION < 206
-# if defined __clang__ && 6 <= __clang_major__
-#  pragma clang diagnostic ignored "-Wdeprecated-register"
-# elif defined __GNUC__ && 7 <= __GNUC__
-#  pragma GCC diagnostic ignored "-Wregister"
-# endif
-#endif
-
-#if FLEX_VERSION < 206
-# if defined __clang__
-#  pragma clang diagnostic ignored "-Wconversion"
-#  pragma clang diagnostic ignored "-Wdocumentation"
-#  pragma clang diagnostic ignored "-Wshorten-64-to-32"
-#  pragma clang diagnostic ignored "-Wsign-conversion"
-# elif defined __GNUC__
-#  pragma GCC diagnostic ignored "-Wconversion"
-#  pragma GCC diagnostic ignored "-Wsign-conversion"
-# endif
-#endif
 %}
 
 
 
 %option noyywrap nounput noinput batch debug
 %option stack 
-%{
-  // A number symbol corresponding to the value in S.
-  yy::parser::symbol_type
-  make_NUMBER (const std::string &s, const yy::parser::location_type& loc);
-%}
 
 
 
@@ -219,12 +181,12 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 "<="            { if(drv.setting == 0) printToken("lower-equal"); if(drv.setting == 1)  return yy::parser::make_LOWER_EQUAL(loc); }
 "<-"            { if(drv.setting == 0) printToken("assign"); if(drv.setting == 1)  return yy::parser::make_ASSIGN(loc); }
 
-{digit}+            { if(drv.setting == 0) printToken("INTEGER_LITERAL", to_string(stoi(yytext))); if(drv.setting == 1)  return yy::parser::make_INTEGER_LITERAL( stoi(yytext), loc); }
-"0b"{bin-digit}+    { string buff = yytext; buff = to_string(stoi(buff.erase(0, 2), nullptr, 2)); printToken("INTEGER_LITERAL", buff); if(drv.setting == 1)  return yy::parser::make_INTEGER_LITERAL(stoi(buff), loc); }
-"0x"{hex-digit}+    { string buff = to_string(stoi(yytext, nullptr, 0)); printToken("INTEGER_LITERAL", buff); if(drv.setting == 1)  return yy::parser::make_INTEGER_LITERAL(stoi(buff), loc); }
+{digit}+            { if(drv.setting == 0) printToken("integer-literal", to_string(stoi(yytext))); if(drv.setting == 1)  return yy::parser::make_INTEGER_LITERAL( stoi(yytext), loc); }
+"0b"{bin-digit}+    { string buff = yytext; buff = to_string(stoi(buff.erase(0, 2), nullptr, 2)); if(drv.setting == 0) printToken("integer-literal", buff); if(drv.setting == 1)  return yy::parser::make_INTEGER_LITERAL(stoi(buff), loc); }
+"0x"{hex-digit}+    { string buff = to_string(stoi(yytext, nullptr, 0)); if(drv.setting == 0) printToken("integer-literal", buff); if(drv.setting == 1)  return yy::parser::make_INTEGER_LITERAL(stoi(buff), loc); }
 
-{TYPE_IDENTIFIER}   { if(drv.setting == 0) printToken("TYPE_IDENTIFIER", yytext); if(drv.setting == 1)  return yy::parser::make_TYPE_IDENTIFIER(yytext, loc); }
-{OBJECT_IDENTIFIER} { if(drv.setting == 0) printToken("OBJECT_IDENTIFIER", yytext); if(drv.setting == 1)  return yy::parser::make_OBJECT_IDENTIFIER(yytext, loc); }
+{TYPE_IDENTIFIER}   { if(drv.setting == 0) printToken("type-identifier", yytext); if(drv.setting == 1)  return yy::parser::make_TYPE_IDENTIFIER(yytext, loc); }
+{OBJECT_IDENTIFIER} { if(drv.setting == 0) printToken("object-identifier", yytext); if(drv.setting == 1)  return yy::parser::make_OBJECT_IDENTIFIER(yytext, loc); }
 
 {comment-line}          {column += yyleng; BEGIN(l_comment);}
 <l_comment>[^\n\r]*\n   {column += yyleng; line++; column = 1; BEGIN(INITIAL);}

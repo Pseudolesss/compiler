@@ -66,8 +66,6 @@
 %right POW
 %left DOT
 
-//%printer { yyo << $$; } <*>;
-
 %type <Programm*> program
 %type <Classes*> classes
 %type <Classe*> class
@@ -172,7 +170,7 @@ args:
 ;
 exprxx:
 	/*epsilon*/ {$$ = new Exprxx();}
-	| COLON expr exprxx {$$ = new Exprxx($2,$3);}
+	| COMMA expr exprxx {$$ = new Exprxx($2,$3);}
 ;
 literal:
 	INTEGER_LITERAL {$$ = new IntLit($1);}

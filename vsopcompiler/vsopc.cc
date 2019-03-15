@@ -4,25 +4,28 @@
 int
 main (int argc, char *argv[])
 {
-  int res = 0;
   driver drv;
-  for (int i = 1; i < argc; ++i) {
-    if (argv[i] == std::string("-parse")) {
-      drv.setting = 1;
-      continue;
-    }
-    if (argv[i] == std::string("-lex")) {
-      drv.setting = 0;
-      continue;
-    }
-    if (argv[i] == std::string("-p"))
-      drv.trace_parsing = true;
-    else if (argv[i] == std::string("-s"))
-      drv.trace_scanning = true;
-    else if (true)
-        int res = drv.parse(argv[i]);
-        if(drv.setting == 1)
-        std::cout << drv.root->accept(new Visitor()) << '\n';
+
+  if(argc != 3){
+      std::cerr << "Wrong number of arguments" << std::endl;
+      return 1;
   }
-  return res;
+
+  if(argv[1] == std::string("-lex")){
+      drv.setting = 0;
+      drv.parse(argv[2]);
+      return 0;
+  }
+  else if(argv[1] == std::string("-parse")){
+      drv.setting = 1;
+      int ret = drv.parse(argv[2]);
+      if(ret == 0){
+        std::cout << drv.root->accept(new Visitor()) << '\n';
+      }
+      return ret;
+  }
+  else{
+      std::cerr << "Non valid option argument" << std::endl;
+      return 1;
+  }
 }

@@ -29,7 +29,8 @@ run: $(BASE)
 	@echo "Type arithmetic expressions.  Quit with ctrl-d."
 	./$< -
 install-tools: 
-	echo "Soit plus doux que la derniere fois pls Cyril my love"
+	bison --version
+	flex --version
 
 html: parser.html
 %.html: %.xml

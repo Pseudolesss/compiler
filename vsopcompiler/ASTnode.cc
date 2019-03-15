@@ -158,6 +158,7 @@ std::string Args::accept(Visitor* v) { return v->visit(this); }
 
 
 Function::Function(string name,Args* a) : args(a), ID(name) {dataType = string("Function");}
+std::string Function::getID() {return ID;}
 Args* Function::getArgs(){return args;}
 std::string Function::accept(Visitor* v) { return v->visit(this); }
 

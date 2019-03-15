@@ -1,8 +1,8 @@
 #include <string>
 #include <iostream>
 #include <ostream>
+#include <vector>
 #include "ASTnode.hh"
-#include <boost/tokenizer.hpp>
 
 
 std::string Visitor::visit(ASTnode* asTnode){return "NOT SUPPOSED TO HAPPEN ASTNODE";}
@@ -50,10 +50,11 @@ std::string Visitor::visit(Exprxx *exprxx){
 }
 
 std::string Visitor::visit(Block *block){
-    std::string ret = "[" +  block->getExpr()->accept(this) + block->getExprx()->accept(this)+ "]";
-    if(ret.find(',') == std::string::npos)
-        return ret.substr(1,ret.size()-2);
-    return ret;
+
+    if(block->getExprx()->getExpr() == nullptr)
+        return  block->getExpr()->accept(this) + block->getExprx()->accept(this);
+    else
+        return "[" +  block->getExpr()->accept(this) + block->getExprx()->accept(this)+ "]";
 }
 
 std::string Visitor::visit(Method *method){return "Method(" + method->getID()+ ", " + method->getFormals()->accept(this) + ", " + method->getType()->accept(this) + ", " + method->getBlock()->accept(this) + ")" ;}
@@ -62,20 +63,25 @@ std::string Visitor::visit(FieldMethod *fieldMethod){
     if(fieldMethod->getFieldMethod() == nullptr)
         return "";
     if(fieldMethod->getMethod() == nullptr)
-        return fieldMethod->getFieldMethod()->accept(this) + "$" + fieldMethod->getField()->accept(this);
+        return fieldMethod->getFieldMethod()->accept(this) + fieldMethod->getField()->accept(this) + "$";
     else
-        return fieldMethod->getFieldMethod()->accept(this) + "$" + fieldMethod->getMethod()->accept(this);
+        return fieldMethod->getFieldMethod()->accept(this) + fieldMethod->getMethod()->accept(this) + "$";
 }
 
 std::string Visitor::visit(Body *body){
 
     std::vector<std::string> m;
     std::vector<std::string> f;
+    std::vector<std::string> tokens;
 
     std::string text =  body->getFieldMethod()->accept(this);
 
-    boost::char_separator<char> sep("$");
-    boost::tokenizer<boost::char_separator<char>> tokens(text, sep);
+    while(!text.empty()){
+        tokens.push_back(text.substr(0, text.find('$')  ));
+        text = text.erase(0, text.find('$') + 1);
+
+    }
+
     for (const auto& t : tokens) {
         if(t[0] == 'M')
             m.push_back(t);
@@ -171,8 +177,8 @@ std::string Visitor::visit(If *anIf){
 std::string Visitor::visit(While *aWhile){return "While(" + aWhile->getWhile()->accept(this) + ", " + aWhile->getDo()->accept(this) + ")";}
 
 std::string Visitor::visit(Let *let){
-    if(let->getIn() == nullptr){
-        return "Let(" + let->getObjID() + ", " + let->getType()->accept(this) + ", " + let->getAssign()->accept(this) + ")";
+    if(let->getAssign() == nullptr){
+        return "Let(" + let->getObjID() + ", " + let->getType()->accept(this) + ", " + let->getIn()->accept(this) + ")";
     }
     return "Let(" + let->getObjID() + ", " + let->getType()->accept(this)+ ", " + let->getIn()->accept(this) + ", " + let->getAssign()->accept(this) + ")";
 }
@@ -212,9 +218,9 @@ std::string Visitor::visit(Args *args){
     }
 }
 
-std::string Visitor::visit(Function *function){return "Call,self,[" +function->getArgs()->accept(this) + "]";}
+std::string Visitor::visit(Function *function){return "Call(self, " + function->getID() +  ", [" +function->getArgs()->accept(this) + "])";}
 
-std::string Visitor::visit(Dot *dot){return "Call(" + dot->getExpr()->accept(this) + "," + dot->getID() + ",[" + dot->getArgs()->accept(this) + "]";}
+std::string Visitor::visit(Dot *dot){return "Call(" + dot->getExpr()->accept(this) + "," + dot->getID() + ",[" + dot->getArgs()->accept(this) + "])";}
 
 std::string Visitor::visit(New *aNew){return "New(" + aNew->getTypeID() + ")";}
 
