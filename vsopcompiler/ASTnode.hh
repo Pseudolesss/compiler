@@ -17,9 +17,15 @@ struct ASTnode
     ASTnode(bool);
     virtual std::string accept(Visitor*);
     bool isEmpty();
+    std::string getType();
+    std::string getValue();
+    void setType(std::string);
+    void setValue(std::string);
 
   private:
     bool isempty;
+    std::string type;
+    std::string value;
 };
 
 struct Expr : ASTnode

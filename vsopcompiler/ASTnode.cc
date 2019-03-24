@@ -3,9 +3,13 @@
 using namespace std;
 
 
-ASTnode::ASTnode(){isempty = false;}
+ASTnode::ASTnode(){isempty = false; type = "unset"; value = "unset"}
 ASTnode::ASTnode(bool b) : isempty(b){};
 bool ASTnode::isEmpty(){return isempty;}
+std::string getType() {return type;}
+std::string getValue() {return value;}
+void setType(std::string t) {type = t;}
+void setValue(std::string v) {value = v;}
 std::string ASTnode::accept(Visitor* v) { return v->visit(this); }
 
 

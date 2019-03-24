@@ -2,6 +2,8 @@
 #ifndef VISITOR_H
 #define VISITOR_H
 
+#include "SymbolTable.hh"
+
 struct ASTnode;
 struct Expr;
 struct Type;
@@ -55,6 +57,9 @@ struct Parenthese;
 class Visitor
 {
 public:
+
+    SymbolTable st;
+
     std::string visit(ASTnode* );
     std::string visit(Expr *);//
     std::string visit(Type *);//
