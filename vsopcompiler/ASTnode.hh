@@ -18,14 +18,17 @@ struct ASTnode
     virtual std::string accept(Visitor*);
     bool isEmpty();
     std::string getType();
-    std::string getValue();
+    std::string getValueInh();
+    std::string getValueSyn();
     void setType(std::string);
-    void setValue(std::string);
+    void setValueInh(std::string);
+    void setValueSyn(std::string);
 
   private:
     bool isempty;
     std::string type;
-    std::string value;
+    std::string valueInh;
+    std::string valueSyn;
 };
 
 struct Expr : ASTnode
