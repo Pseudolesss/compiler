@@ -60,52 +60,52 @@ public:
 
     SymbolTable st;
 
-    std::string visit(ASTnode* );
-    std::string visit(Expr *);//
-    std::string visit(Type *);//
-    std::string visit(Field *);//
-    std::string visit(Formal *);//
-    std::string visit(Formalx *);//
-    std::string visit(Formals *);//
-    std::string visit(Exprx *);//
-    std::string visit(Exprxx *);
-    std::string visit(Block *);//
-    std::string visit(Method *);//
-    std::string visit(FieldMethod *);//
-    std::string visit(Body *);
-    std::string visit(Classe *);
-    std::string visit(Classes *);
-    std::string visit(Programm *);
-    std::string visit(Dual *);
-    std::string visit(Unary *);
-    std::string visit(If *);
-    std::string visit(While *);
-    std::string visit(Let *);
-    std::string visit(Assign *);
-    std::string visit(Not *);
-    std::string visit(And *);
-    std::string visit(Equal *);
-    std::string visit(Lower *);
-    std::string visit(LowerEqual *);
-    std::string visit(Plus *);
-    std::string visit(Minus *);
-    std::string visit(Times *);
-    std::string visit(Div *);
-    std::string visit(Pow *);
-    std::string visit(Minus1 *);
-    std::string visit(IsNull *);
-    std::string visit(Args *);
-    std::string visit(Function *);
-    std::string visit(Dot *);
-    std::string visit(New *);
-    std::string visit(ObjID *);
-    std::string visit(Literal *);
-    std::string visit(IntLit *);
-    std::string visit(StrLit *);
-    std::string visit(BoolLit *);
-    std::string visit(Lpar *);
-    std::string visit(Rpar *);
-    std::string visit(Parenthese *);
+    virtual std::string visit(ASTnode* );
+    virtual std::string visit(Expr *);//
+    virtual std::string visit(Type *);//
+    virtual std::string visit(Field *);//
+    virtual std::string visit(Formal *);//
+    virtual std::string visit(Formalx *);//
+    virtual std::string visit(Formals *);//
+    virtual std::string visit(Exprx *);//
+    virtual std::string visit(Exprxx *);
+    virtual std::string visit(Block *);//
+    virtual std::string visit(Method *);//
+    virtual std::string visit(FieldMethod *);//
+    virtual std::string visit(Body *);
+    virtual std::string visit(Classe *);
+    virtual std::string visit(Classes *);
+    virtual std::string visit(Programm *);
+    virtual std::string visit(Dual *);
+    virtual std::string visit(Unary *);
+    virtual std::string visit(If *);
+    virtual std::string visit(While *);
+    virtual std::string visit(Let *);
+    virtual std::string visit(Assign *);
+    virtual std::string visit(Not *);
+    virtual std::string visit(And *);
+    virtual std::string visit(Equal *);
+    virtual std::string visit(Lower *);
+    virtual std::string visit(LowerEqual *);
+    virtual std::string visit(Plus *);
+    virtual std::string visit(Minus *);
+    virtual std::string visit(Times *);
+    virtual std::string visit(Div *);
+    virtual std::string visit(Pow *);
+    virtual std::string visit(Minus1 *);
+    virtual std::string visit(IsNull *);
+    virtual std::string visit(Args *);
+    virtual std::string visit(Function *);
+    virtual std::string visit(Dot *);
+    virtual std::string visit(New *);
+    virtual std::string visit(ObjID *);
+    virtual std::string visit(Literal *);
+    virtual std::string visit(IntLit *);
+    virtual std::string visit(StrLit *);
+    virtual std::string visit(BoolLit *);
+    virtual std::string visit(Lpar *);
+    virtual std::string visit(Rpar *);
+    virtual std::string visit(Parenthese *);
 };
 
 
