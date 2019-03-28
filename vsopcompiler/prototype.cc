@@ -7,20 +7,19 @@
 std::unordered_map<std::string,ClassPrototype> prototype; 
 
 std::string print_set(std::set<std::string> myset){
-    std::string out = "";
+    std::string out = "{";
     for (std::string elem : myset) {
         out += elem + ",";
     }   
-    return out;
+    return out + "}\ns";
 };
 std::string print_map(std::unordered_map<std::string,std::string> const &m)
 {
-    std::string out = " ";
+    std::string out = "{ ";
     for (auto it = m.cbegin(); it != m.cend(); ++it) {
-        out +=  " { " + (*it).first + " : " + (*it).second + " }\n ";
+        out +=   (*it).first + " : " + (*it).second + " , ";
     }
-    out += "\n";
-    return out;
+    return out + "}\n";
 };
 
 std::string ClassPrototype::toString(){

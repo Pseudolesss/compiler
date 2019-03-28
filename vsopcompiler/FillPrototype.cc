@@ -6,82 +6,40 @@
 #include "prototype.hh"
 #include "FillPrototype.hh"
 
-    std::string FillPrototype::visit(ASTnode *asTnode) { return "TODO"; }
-
-    std::string FillPrototype::visit(Expr *expr) { return "TODO"; }
-
-    std::string FillPrototype::visit(Type *type) { return "TODO"; }
-
     std::string FillPrototype::visit(Field *field)
     {
-        if (field->getExpr() == nullptr)
-        {
-            return "TODO";
+        if(::prototype[classID].field.find(field->getID()) == ::prototype[classID].field.end())
+            ::prototype[classID].field[field->getID()] = field->getType()->getID();
+        else{
+            //semantic error: redefinition of a a field.
         }
-        return "TODO";
+        return "done";
     }
 
-    std::string FillPrototype::visit(Formal *formal) { return "TODO"; }
-
-    std::string FillPrototype::visit(Formalx *formalx)
-    {
-        if (formalx->getFormal() == nullptr)
-            return "TODO";
-        else
-            return "TODO";
-    }
-
-    std::string FillPrototype::visit(Formals *formals)
-    {
-        if (formals->getFormal() == nullptr)
-            return "TODO";
-        else
-            return "TODO";
-    }
-
-    std::string FillPrototype::visit(Exprx *exprx)
-    {
-        if (exprx->getExprx() == nullptr)
-            return "TODO";
-        return "TODO";
-    }
-
-    std::string FillPrototype::visit(Exprxx *exprxx)
-    {
-        if (exprxx->getExpr() == nullptr)
-        {
-            return "TODO";
+    std::string FillPrototype::visit(Method *method) { 
+        if(::prototype[classID].method.find(method->getID()) == ::prototype[classID].method.end())
+            ::prototype[classID].method[method->getID()] = method->getType()->getID();
+        else{
+            //semantic error: redefinition of a method.
         }
-        else
-        {
-            return "TODO";
-        }
+        return "done"; 
     }
-
-    std::string FillPrototype::visit(Block *block)
-    {
-
-        if (block->getExprx()->getExpr() == nullptr)
-            return "TODO";
-        else
-            return "TODO";
-    }
-
-    std::string FillPrototype::visit(Method *method) { return "TODO"; }
 
     std::string FillPrototype::visit(FieldMethod *fieldMethod)
     {
-        if (fieldMethod->getFieldMethod() == nullptr)
-            return "TODO";
-        if (fieldMethod->getMethod() == nullptr)
-            return "TODO";
-        else
-            return "TODO";
+        if (fieldMethod->getField() != nullptr)
+           fieldMethod->getField()->accept(this);
+        if (fieldMethod->getMethod() != nullptr)
+            fieldMethod->getMethod()->accept(this);
+        if (fieldMethod->getFieldMethod() != nullptr)
+            fieldMethod->getFieldMethod()->accept(this);
+        return "done";
     }
 
     std::string FillPrototype::visit(Body *body)
     {
-        return "TODO";
+        body->getFieldMethod()->accept(this);
+        return "done";
     }
 
     std::string FillPrototype::visit(Classe *classe)
@@ -93,111 +51,101 @@
         else{
             //throw semantic exception, redefinition of a classes.
         }
-        classeID = classe->getTypeID();
+        classID = classe->getTypeID();
         classe->getBody()->accept(this);
-        return "done";
-       
+        return "done";      
     }
-
+    
     std::string FillPrototype::visit(Classes *classes)
     {
         classes->getClass()->accept(this);
         if (classes->nextClass() != nullptr)
             classes->nextClass()->accept(this);
-        return "done";
-  
+        return "done"; 
     }
 
-    std::string FillPrototype::visit(Programm *programm) { 
-        if( programm->getClasse() != nullptr){
+   std::string FillPrototype::visit(Programm *programm) { 
+        if( programm->getClasse() != nullptr)
             programm->getClasse()->accept(this);
-        }
-        else{
+        if( programm->getClasses() != nullptr)
             programm->getClasses()->accept(this);
-        }
         return"done";
     }
 
-    std::string FillPrototype::visit(Dual *dual) { return "TODO"; }
+    std::string FillPrototype::visit(ASTnode *asTnode) { std::cerr<< "fillprototype in astnode"; return "should never happend";}
 
-    std::string FillPrototype::visit(Unary *unary) { return "TODO"; }
+    std::string FillPrototype::visit(Expr *expr) {std::cerr<< "fillprototype in expr"; return "should never happend"; }
 
-    std::string FillPrototype::visit(If *anIf)
-    {
-        if (anIf->getElse() == nullptr)
-        {
-            return "TODO";
-        }
-        return "TODO";
-    }
+    std::string FillPrototype::visit(Type *type) { std::cerr<< "fillprototype in type"; return "should never happend"; }
 
-    std::string FillPrototype::visit(While *aWhile) { return "TODO"; }
+    std::string FillPrototype::visit(Formal *formal) {std::cerr<<"fillprototype in formal" ; return "should never happend";}
 
-    std::string FillPrototype::visit(Let *let)
-    {
-        if (let->getAssign() == nullptr)
-        {
-            return "TODO";
-        }
-        return "TODO";
-    }
+    std::string FillPrototype::visit(Formalx *formalx){std::cerr<<"fillprototype in formalx" ; return "should never happend";}
 
-    std::string FillPrototype::visit(Assign *assign) { return "TODO"; }
+    std::string FillPrototype::visit(Formals *formals){std::cerr<<"fillprototype in formals" ; return "should never happend";}
 
-    std::string FillPrototype::visit(Not *aNot) { return "TODO"; }
+    std::string FillPrototype::visit(Exprx *exprx){std::cerr<<"fillprototype in exprx" ; return "should never happend";}
 
-    std::string FillPrototype::visit(And *anAnd) { return "TODO"; }
+    std::string FillPrototype::visit(Exprxx *exprxx){std::cerr<<"fillprototype in exprxx" ; return "should never happend";}
 
-    std::string FillPrototype::visit(Equal *equal) { return "TODO"; }
+    std::string FillPrototype::visit(Block *block){std::cerr<<"fillprototype in block" ; return "should never happend";}
 
-    std::string FillPrototype::visit(Lower *lower) { return "TODO"; }
+    std::string FillPrototype::visit(Dual *dual) {std::cerr<<"fillprototype in dual" ; return "should never happend";  }
 
-    std::string FillPrototype::visit(LowerEqual *lowerEqual) { return "TODO"; }
+    std::string FillPrototype::visit(Unary *unary) {std::cerr<<"fillprototype in iunary" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(Plus *plus) { return "TODO"; }
+    std::string FillPrototype::visit(If *anIf){std::cerr<<"fillprototype in if" ; return "should never happend";}
 
-    std::string FillPrototype::visit(Minus *minus) { return "TODO"; }
+    std::string FillPrototype::visit(While *aWhile) { std::cerr << "fillprototype in while" ; return "should never happend";}
 
-    std::string FillPrototype::visit(Times *times) { return "TODO"; }
+    std::string FillPrototype::visit(Let *let) {std::cerr<< "fillprototype in let" ; return "should never happend";}
+    
+    std::string FillPrototype::visit(Assign *assign) { std::cerr<< "fillprototype in assign" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(Div *div) { return "TODO"; }
+    std::string FillPrototype::visit(Not *aNot) { std::cerr<< "fillprototype in not" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(Pow *pow) { return "TODO"; }
+    std::string FillPrototype::visit(And *anAnd) { std::cerr<< "fillprototype in and" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(Minus1 *minus1) { return "TODO"; }
+    std::string FillPrototype::visit(Equal *equal) {std::cerr<< "fillprototype in equal" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(IsNull *isNull) { return "TODO"; }
+    std::string FillPrototype::visit(Lower *lower) { std::cerr<< "fillprototype in lower" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(Args *args)
-    {
-        if (args->getExpr() != nullptr)
-        {
-            return "TODO";
-        }
-        else
-        {
-            return "TODO";
-        }
-    }
+    std::string FillPrototype::visit(LowerEqual *lowerEqual) { std::cerr<< "fillprototype in lower equal" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(Function *function) { return "TODO"; }
+    std::string FillPrototype::visit(Plus *plus) { std::cerr<< "fillprototype in plus" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(Dot *dot) { return "TODO"; }
+    std::string FillPrototype::visit(Minus *minus) {std::cerr<< "fillprototype in minus" ; return "should never happend";}
 
-    std::string FillPrototype::visit(New *aNew) { return "TODO"; }
+    std::string FillPrototype::visit(Times *times) { std::cerr<< "fillprototype in time" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(ObjID *objID) { return "TODO"; }
+    std::string FillPrototype::visit(Div *div) { std::cerr<< "fillprototype in div" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(Literal *literal) { return "TODO"; }
+    std::string FillPrototype::visit(Pow *pow) {  std::cerr<< "fillprototype in pow" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(IntLit *intLit) { return "TODO"; }
+    std::string FillPrototype::visit(Minus1 *minus1) {  std::cerr<< "fillprototype in minus1" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(StrLit *strLit) { return "TODO"; }
+    std::string FillPrototype::visit(IsNull *isNull) {  std::cerr<< "fillprototype in is null" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(BoolLit *boolLit) { return "TODO"; }
+    std::string FillPrototype::visit(Args *args){std::cerr<< "fillprototype in args" ; return "should never happend";}
 
-    std::string FillPrototype::visit(Lpar *lpar) { return "TODO"; }
+    std::string FillPrototype::visit(Function *function) { std::cerr<< "fillprototype in function" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(Rpar *rpar) { return "TODO"; }
+    std::string FillPrototype::visit(Dot *dot) { std::cerr<< "fillprototype in dot" ; return "should never happend"; }
 
-    std::string FillPrototype::visit(Parenthese *parenthese) { return "TODO"; }
+    std::string FillPrototype::visit(New *aNew) { std::cerr<< " fillprototype in new" ; return "should never happend"; }
+
+    std::string FillPrototype::visit(ObjID *objID) { std::cerr<< " fillprototype in objid" ; return "should never happend"; }
+
+    std::string FillPrototype::visit(Literal *literal) { std::cerr<< " fillprototype in literal" ; return "should never happend"; }
+
+    std::string FillPrototype::visit(IntLit *intLit) { std::cerr<< " fillprototype in int literal" ; return "should never happend"; }
+
+    std::string FillPrototype::visit(StrLit *strLit) { std::cerr<< " fillprototype in str literal" ; return "should never happend"; }
+
+    std::string FillPrototype::visit(BoolLit *boolLit) { std::cerr<< " fillprototype in bool literal" ; return "should never happend"; }
+
+    std::string FillPrototype::visit(Lpar *lpar) { std::cerr<< " fillprototype in (" ; return "should never happend"; }
+
+    std::string FillPrototype::visit(Rpar *rpar) { std::cerr<< " fillprototype in )" ; return "should never happend"; }
+
+    std::string FillPrototype::visit(Parenthese *parenthese) { std::cerr<< " fillprototype in ()" ; return "should never happend"; }

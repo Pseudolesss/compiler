@@ -55,7 +55,6 @@ struct Type : ASTnode
 struct Field : ASTnode
 {
   public:
-    Field();
     Field(string, Type*);
     Field(string, Type*, Expr*);
     string getID();

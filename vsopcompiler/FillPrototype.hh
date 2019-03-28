@@ -55,7 +55,7 @@ public:
   std::string visit(Parenthese *);
 
 private:
-  std::string classeID;
+  std::string classID;
 };
 
 #endif
