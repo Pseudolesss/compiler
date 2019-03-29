@@ -11,7 +11,6 @@ using namespace std;
 struct ASTnode
 {
   public:
-    ASTnode();
     ASTnode(yy::location);
     virtual std::string accept(Visitor*);
     std::string getType();
@@ -32,7 +31,8 @@ struct ASTnode
 struct Expr : ASTnode
 {
   public:
-    string getDataType();
+    Expr(yy::location l);
+    std::string getDataType();
     std::string accept(Visitor*);
   protected:
     string dataType;
@@ -41,8 +41,8 @@ struct Expr : ASTnode
 struct Type : ASTnode
 {
   public:
-    Type();
-    Type(string);
+    Type(yy::location);
+    Type(string,yy::location);
     string getID();
     std::string accept(Visitor*);
 
@@ -53,8 +53,8 @@ struct Type : ASTnode
 struct Field : ASTnode
 {
   public:
-    Field(string, Type*);
-    Field(string, Type*, Expr*);
+    Field(string, Type*,yy::location);
+    Field(string, Type*, Expr*,yy::location);
     string getID();
     Type* getType();
     Expr* getExpr();
@@ -69,7 +69,7 @@ struct Field : ASTnode
 struct Formal : ASTnode
 {
   public:
-    Formal(string, Type*);
+    Formal(string, Type*,yy::location);
     string getID();
     Type* getType();
     std::string accept(Visitor*);
@@ -82,8 +82,8 @@ struct Formalx;
 struct Formalx : ASTnode
 {
   public:
-    Formalx();
-    Formalx(Formal*, Formalx*);
+    Formalx(yy::location);
+    Formalx(Formal*, Formalx*,yy::location);
     Formal* getFormal();
     Formalx* getFormalx();
     std::string accept(Visitor*);
@@ -96,8 +96,8 @@ struct Formalx : ASTnode
 struct Formals : ASTnode
 {
   public:
-    Formals();
-    Formals(Formal*, Formalx*);
+    Formals(yy::location);
+    Formals(Formal*, Formalx*,yy::location);
     Formal* getFormal();
     Formalx* getFormalx();
     std::string accept(Visitor*);
@@ -110,8 +110,8 @@ struct Exprx;
 struct Exprx : ASTnode
 {
   public:
-    Exprx();
-    Exprx(Expr*, Exprx*);
+    Exprx(yy::location);
+    Exprx(Expr*, Exprx*,yy::location);
     Expr* getExpr();
     Exprx* getExprx();
     std::string accept(Visitor*);
@@ -124,7 +124,7 @@ struct Exprx : ASTnode
 struct Block : Expr
 {
   public:
-    Block(Expr*, Exprx*);
+    Block(Expr*, Exprx*,yy::location);
     Expr* getExpr();
     Exprx* getExprx();
     std::string accept(Visitor*);
@@ -137,7 +137,7 @@ struct Block : Expr
 struct Method : ASTnode
 {
   public:
-    Method(string, Formals*, Type*, Block*);
+    Method(string, Formals*, Type*, Block*,yy::location);
     string getID();
     Formals* getFormals();
     Type* getType();
@@ -154,9 +154,9 @@ struct FieldMethod;
 struct FieldMethod : ASTnode
 {
   public:
-    FieldMethod(FieldMethod*, Field*);
-    FieldMethod(FieldMethod*, Method*);
-    FieldMethod();
+    FieldMethod(FieldMethod*, Field*,yy::location);
+    FieldMethod(FieldMethod*, Method*,yy::location);
+    FieldMethod(yy::location);
     Field* getField();
     Method* getMethod();
     FieldMethod* getFieldMethod();
@@ -171,7 +171,7 @@ struct FieldMethod : ASTnode
 struct Body : ASTnode
 {
   public:
-    Body(FieldMethod*);
+    Body(FieldMethod*,yy::location);
     FieldMethod* getFieldMethod();
     std::string accept(Visitor*);
 
@@ -182,8 +182,8 @@ struct Body : ASTnode
 struct Classe : ASTnode
 {
   public:
-    Classe(string, Body*);
-    Classe(string, string, Body*);
+    Classe(string, Body*,yy::location);
+    Classe(string, string, Body*,yy::location);
     std::string getTypeID();
     std::string getParentID();
     Body* getBody();
@@ -198,8 +198,8 @@ struct Classes;
 struct Classes : ASTnode
 {
   public:
-    Classes(Classes*, Classe*);
-    Classes(Classe*);
+    Classes(Classes*, Classe*,yy::location);
+    Classes(Classe*,yy::location);
     Classe* getClass();
     Classes* nextClass();
     std::string accept(Visitor*);
@@ -226,7 +226,7 @@ struct Programm : ASTnode
 struct Dual : Expr
 {
   public:
-    Dual(Expr*, Expr*);
+    Dual(Expr*, Expr*,yy::location);
     Expr* getLeft();
     Expr* getRight();
     std::string accept(Visitor*);
@@ -239,7 +239,7 @@ struct Dual : Expr
 struct Unary : Expr
 {
   public:
-    Unary(Expr*);
+    Unary(Expr*,yy::location);
     Expr* getExpr();
     std::string accept(Visitor*);
 
@@ -250,8 +250,8 @@ struct Unary : Expr
 struct If : Expr
 {
   public:
-    If(Expr*, Expr*, Expr*);
-    If(Expr*, Expr*);
+    If(Expr*, Expr*, Expr*,yy::location);
+    If(Expr*, Expr*,yy::location);
     Expr* getIf();
     Expr* getThen();
     Expr* getElse();
@@ -266,7 +266,7 @@ struct If : Expr
 struct While : Expr
 {
   public:
-    While(Expr*, Expr*);
+    While(Expr*, Expr*,yy::location);
     Expr* getWhile();
     Expr* getDo();
     std::string accept(Visitor*);
@@ -279,8 +279,8 @@ struct While : Expr
 struct Let : Expr
 {
   public:
-    Let(string, Type*, Expr*);
-    Let(string, Type*, Expr*, Expr*);
+    Let(string, Type*, Expr*,yy::location);
+    Let(string, Type*, Expr*, Expr*,yy::location);
     string getObjID();
     Type* getType();
     Expr* getAssign();
@@ -297,7 +297,7 @@ struct Let : Expr
 struct Assign : Expr
 {
   public:
-    Assign(string, Expr*);
+    Assign(string, Expr*,yy::location);
     string getObjID();
     Expr* getExpr();
     std::string accept(Visitor*);
@@ -310,92 +310,92 @@ struct Assign : Expr
 struct Not : Unary
 { 
   public:
-  Not(Expr*);
+  Not(Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
 struct And : Dual
 {
   public:
-    And(Expr*,Expr*);
+    And(Expr*,Expr*,yy::location);
     std::string accept(Visitor*);
 };
 
 struct Equal : Dual
 {
   public:
-  Equal(Expr*,Expr*);
+  Equal(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
 struct Lower : Dual
 {
   public:
-  Lower(Expr*,Expr*);
+  Lower(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
 struct LowerEqual : Dual
 {
   public:
-  LowerEqual(Expr*,Expr*);
+  LowerEqual(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
 struct Plus : Dual
 {
   public:
-  Plus(Expr*,Expr*);
+  Plus(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
 struct Minus : Dual
 {
   public:
-  Minus(Expr*,Expr*);
+  Minus(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
 struct Times : Dual
 {
   public:
-  Times(Expr*,Expr*);
+  Times(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
 struct Div : Dual
 {
   public:
-  Div(Expr*,Expr*);
+  Div(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
 struct Pow : Dual
 {
   public:
-  Pow(Expr*,Expr*);
+  Pow(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
 struct Minus1 : Unary
 {
   public:
-  Minus1(Expr*);
+  Minus1(Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
 struct IsNull : Unary
 {
   public:
-  IsNull(Expr*);
+  IsNull(Expr*,yy::location);
   std::string accept(Visitor*);
 };
 struct Exprxx;
-struct Exprxx
+struct Exprxx : ASTnode
 {
     public:
-    Exprxx();
-    Exprxx(Expr*,Exprxx*);
+    Exprxx(yy::location);
+    Exprxx(Expr*,Exprxx*,yy::location);
     Expr* getExpr();
     Exprxx* getExprxx();
     std::string accept(Visitor*);
@@ -404,11 +404,11 @@ struct Exprxx
     Exprxx* exprxx;
 };
 
-struct Args
+struct Args : ASTnode
 {
   public:
-    Args();
-    Args(Expr*, Exprxx*);
+    Args(yy::location);
+    Args(Expr*, Exprxx*,yy::location);
     Expr* getExpr();
     Exprxx* getExprxx();
     std::string accept(Visitor*);
@@ -421,7 +421,7 @@ struct Args
 struct Function : Expr
 {
   public:
-    Function(string, Args*);
+    Function(string, Args*,yy::location);
     string getID();
     Args* getArgs();
     std::string accept(Visitor*);
@@ -434,7 +434,7 @@ struct Function : Expr
 struct Dot : Expr
 {
   public:
-    Dot(Expr*, string, Args*);
+    Dot(Expr*, string, Args*,yy::location);
     Expr* getExpr();
     Args* getArgs();
     string getID();
@@ -449,7 +449,7 @@ struct Dot : Expr
 struct New : Expr
 {
   public:
-    New(string);
+    New(string,yy::location);
     string getTypeID();
     std::string accept(Visitor*);
 
@@ -460,7 +460,7 @@ struct New : Expr
 struct ObjID : Expr
 {
   public:
-    ObjID(string);
+    ObjID(string,yy::location);
     string getID();
     std::string accept(Visitor*);
 
@@ -470,12 +470,14 @@ struct ObjID : Expr
 
 struct Literal : Expr
 {
+  public:
+    Literal(yy::location);
 };
 
 struct IntLit : Literal
 {
   public:
-    IntLit(int);
+    IntLit(int,yy::location);
     int getValue();
     std::string accept(Visitor*);
 
@@ -486,7 +488,7 @@ struct IntLit : Literal
 struct StrLit : Literal
 {
   public:
-    StrLit(string);
+    StrLit(string,yy::location);
     string getValue();
     std::string accept(Visitor*);
 
@@ -497,7 +499,7 @@ struct StrLit : Literal
 struct BoolLit : Literal
 {
   public:
-    BoolLit(bool);
+    BoolLit(bool,yy::location);
     bool getValue();
     std::string accept(Visitor*);
 
@@ -516,7 +518,7 @@ struct Rpar : Expr
 struct Parenthese : Unary
 {
   public:
-  Parenthese(Expr*);
+  Parenthese(Expr*,yy::location);
   std::string accept(Visitor*);
 };
 
