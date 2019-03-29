@@ -21,7 +21,6 @@ main (int argc, char *argv[])
       drv.setting = 1;
       int ret = drv.parse(argv[2]);
       if(ret == 0){
-        std::cout << "visitor" << drv.root->accept(new Visitor()) << '\n';
         drv.root->accept(new FillPrototype());
         for(auto elem : prototype){
           std::cout<< elem.first<< ":" << elem.second.toString() << std::endl;

@@ -5,18 +5,15 @@
 #include <list>
 #include <string>
 #include "Visitor.hh"
-
+#include "location.hh"
 using namespace std;
-
-//faut pas oublier d'inclure visitor.cpp à cause du template !
 
 struct ASTnode
 {
   public:
     ASTnode();
-    ASTnode(bool);
+    ASTnode(yy::location);
     virtual std::string accept(Visitor*);
-    bool isEmpty();
     std::string getType();
     std::string getValueInh();
     std::string getValueSyn();
@@ -25,10 +22,11 @@ struct ASTnode
     void setValueSyn(std::string);
 
   private:
-    bool isempty;
     std::string type;
     std::string valueInh;
     std::string valueSyn;
+    int first_line,last_line;
+    int first_column,last_column;
 };
 
 struct Expr : ASTnode
@@ -214,8 +212,8 @@ struct Classes : ASTnode
 struct Programm : ASTnode
 {
   public:
-    Programm(Classes*);
-    Programm(Classe*);
+    Programm(Classes*,yy::location);
+    Programm(Classe*,yy::location);
     Classes* getClasses();
     Classe* getClasse();
     std::string accept(Visitor*);
