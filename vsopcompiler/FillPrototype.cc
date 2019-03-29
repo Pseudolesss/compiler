@@ -50,6 +50,7 @@
         if(::prototype.find(classe->getTypeID()) == ::prototype.end()){
             ::prototype[classe->getTypeID()] = ClassPrototype();
             ::prototype[classe->getTypeID()].parent.insert(classe->getParentID());
+            ::prototype[classe->getTypeID()].direct_parent = classe->getParentID();
         }    
         else{
             //throw semantic exception, redefinition of a classes.

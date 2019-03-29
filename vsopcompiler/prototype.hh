@@ -20,7 +20,9 @@ class ClassPrototype {
         std::unordered_map<std::string,MethodPrototype> method;
         // parent class id
         std::set<std::string> parent;
+        std::string direct_parent;
         std::string toString();
+    
 };
 // class id | class prototype
 extern std::unordered_map<std::string,ClassPrototype> prototype; 
