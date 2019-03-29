@@ -56,6 +56,7 @@ public:
 
 private:
   std::string classID;
+  std::string methodID;
 };
 
 #endif

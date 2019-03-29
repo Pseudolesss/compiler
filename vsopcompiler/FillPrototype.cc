@@ -17,8 +17,11 @@
     }
 
     std::string FillPrototype::visit(Method *method) { 
-        if(::prototype[classID].method.find(method->getID()) == ::prototype[classID].method.end())
-            ::prototype[classID].method[method->getID()] = method->getType()->getID();
+        if(::prototype[classID].method.find(method->getID()) == ::prototype[classID].method.end()){
+            ::prototype[classID].method[method->getID()].return_type = method->getType()->getID();
+            methodID = method->getID();
+            method->getFormals()->accept(this);
+        }
         else{
             //semantic error: redefinition of a method.
         }
@@ -65,11 +68,32 @@
     }
 
    std::string FillPrototype::visit(Programm *programm) { 
+       ::prototype["Object"] = ClassPrototype();
         if( programm->getClasse() != nullptr)
             programm->getClasse()->accept(this);
         if( programm->getClasses() != nullptr)
             programm->getClasses()->accept(this);
         return"done";
+    }
+    std::string FillPrototype::visit(Formals *formals){
+        if(formals->getFormal() != nullptr){
+            formals->getFormal()->accept(this);
+            formals->getFormalx()->accept(this);            
+        }
+        return "done";
+    }
+
+    std::string FillPrototype::visit(Formal *formal) {
+        ::prototype[classID].method[methodID].arguments.push_back(formal->getType()->getID());
+        return "done";
+    }
+
+    std::string FillPrototype::visit(Formalx *formalx){
+        if(formalx->getFormal() != nullptr){
+            formalx->getFormal()->accept(this);
+            formalx->getFormalx()->accept(this);             
+        } 
+        return "done";    
     }
 
     std::string FillPrototype::visit(ASTnode *asTnode) { std::cerr<< "fillprototype in astnode"; return "should never happend";}
@@ -77,12 +101,6 @@
     std::string FillPrototype::visit(Expr *expr) {std::cerr<< "fillprototype in expr"; return "should never happend"; }
 
     std::string FillPrototype::visit(Type *type) { std::cerr<< "fillprototype in type"; return "should never happend"; }
-
-    std::string FillPrototype::visit(Formal *formal) {std::cerr<<"fillprototype in formal" ; return "should never happend";}
-
-    std::string FillPrototype::visit(Formalx *formalx){std::cerr<<"fillprototype in formalx" ; return "should never happend";}
-
-    std::string FillPrototype::visit(Formals *formals){std::cerr<<"fillprototype in formals" ; return "should never happend";}
 
     std::string FillPrototype::visit(Exprx *exprx){std::cerr<<"fillprototype in exprx" ; return "should never happend";}
 
