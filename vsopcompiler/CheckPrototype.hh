@@ -13,5 +13,5 @@ check semantic error on prototype, check:
 
 bool check(std::string);
 bool check_main(std::string);
-bool check_inheritence(std::string);
-bool _check_parent(std::set<std::string>&, std::string );
+bool check_parent(std::string);
+bool _check_parent(std::set<std::string>&, std::string,std::string );

@@ -23,13 +23,14 @@ main (int argc, char *argv[])
       int ret = drv.parse(argv[2]);
       if(ret == 0){
         drv.root->accept(new FillPrototype());
-        check_main(drv.file);
-        drv.root->accept(new Visitor());
+        check(drv.file);
+        //drv.root->accept(new Visitor());
         for(auto elem : prototype){
           std::cout<< elem.first<< ":" << elem.second.toString() << std::endl;
         }
       }
       ::errors.print();
+      std::cout<<"end of error printing" << std::endl;
       return ret;
   }
   else{

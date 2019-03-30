@@ -13,6 +13,8 @@ class MethodPrototype{
         std::string return_type;
         std::string toString() const;
         yy::location location;
+        yy::location args_loc;
+        yy::location return_loc; 
        
 };
 class FieldPrototype{
@@ -33,6 +35,8 @@ class ClassPrototype {
         yy::location location;
     
 };
+
+std::string locToStr(yy::location);
 // class id | class prototype
 extern std::unordered_map<std::string,ClassPrototype> prototype; 
 extern ErrorHandler errors;

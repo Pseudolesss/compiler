@@ -53,3 +53,8 @@ std::string ClassPrototype::toString(){
     out += "\t Parent: " + print_set(parent);
     return out;
 }
+
+std::string locToStr(yy::location l){
+    return std::to_string(l.begin.line) + "." 
+            + std::to_string(l.begin.column);
+}
