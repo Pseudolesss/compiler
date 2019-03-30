@@ -18,8 +18,8 @@ all: $(BASE)
 
 %.o: %.cc
 	$(CXX) $(CXXFLAGS) -c -o$@ $<
-
-$(BASE): $(BASE).o driver.o parser.o scanner.o ASTnode.o Visitor.o  ErrorHandler.o SymbolTable.o prototype.o FillPrototype.o
+s
+$(BASE): $(BASE).o driver.o parser.o scanner.o ASTnode.o Visitor.o  ErrorHandler.o SymbolTable.o prototype.o FillPrototype.o CheckPrototype.o
 	$(CXX) -o $@ $^
 
 $(BASE).o: parser.hh

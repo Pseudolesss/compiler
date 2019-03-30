@@ -6,7 +6,6 @@ ASTnode::ASTnode(yy::location l) : location(l)
     type = "";
     valueInh = "";
     valueSyn = "";
-    //std::cout<<first_lsine<<","<<first_column<<":"<<last_line<<","<<last_column<<std::endl;
 }
 yy::location ASTnode::getLocation(){return location;}
 std::string ASTnode::getType() { return type; }
@@ -109,8 +108,8 @@ Classe *Classes::getClass() { return a_class; }
 Classes *Classes::nextClass() { return next_class; }
 std::string Classes::accept(Visitor *v) { return v->visit(this); }
 
-Programm::Programm(Classes *cs, yy::location l) : ASTnode(l),classes(cs) { std::cout<<"in programm"<<std::endl;classe = nullptr; }
-Programm::Programm(Classe *c, yy::location l) : ASTnode(l), classe(c) { std::cout<<"in programm"<<std::endl;classes = nullptr; }
+Programm::Programm(Classes *cs, yy::location l) : ASTnode(l),classes(cs) { classe = nullptr; }
+Programm::Programm(Classe *c, yy::location l) : ASTnode(l), classe(c) { classes = nullptr; }
 Classes *Programm::getClasses() { return classes; }
 Classe *Programm::getClasse() { return classe; }
 std::string Programm::accept(Visitor *v) { return v->visit(this); }

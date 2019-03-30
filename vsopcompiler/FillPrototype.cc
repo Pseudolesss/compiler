@@ -17,12 +17,12 @@
         if(::prototype[classID].field.find(field->getID()) == ::prototype[classID].field.end()){
             FieldPrototype f = FieldPrototype();
             f.type = field->getType()->getID();
-            f.node = field;
+            f.location = field->getLocation();
             ::prototype[classID].field[field->getID()] = f;            
         }
         else{
             //semantic error: redefinition of a a field.
-            yy::location l = ::prototype[classID].field[field->getID()].node->getLocation();
+            yy::location l = ::prototype[classID].field[field->getID()].location;
             ::errors.add(field->getLocation(),
                 "redefinition of field " + field->getID() 
                 + "already defined at: " + locToStr(l));
@@ -34,14 +34,14 @@
         if(::prototype[classID].method.find(method->getID()) == ::prototype[classID].method.end()){
             MethodPrototype m = MethodPrototype();
             m.return_type = method->getType()->getID();
-            m.node = method;            
+            m.location = method->getLocation();            
             ::prototype[classID].method[method->getID()] = m;
             methodID = method->getID();
             method->getFormals()->accept(this);
         }
         else{
             //redefinition of a method.
-            yy::location l = ::prototype[classID].method[method->getID()].node->getLocation();
+            yy::location l = ::prototype[classID].method[method->getID()].location;
             ::errors.add(method->getLocation(),
                 "redefinition of method " + method->getID() 
                 + " already defined at: " + locToStr(l));
@@ -75,7 +75,7 @@
         }    
         else{
             //redefinition of a classe
-            yy::location l = ::prototype[classe->getTypeID()].node->getLocation();
+            yy::location l = ::prototype[classe->getTypeID()].location;
             errors.add(classe->getLocation(), 
                 "redefinition of classe " + classe->getTypeID()
                  + " already define at " + locToStr(l));

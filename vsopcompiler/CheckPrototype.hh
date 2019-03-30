@@ -11,6 +11,7 @@ check semantic error on prototype, check:
 */
 #include "prototype.hh"
 
-bool check_main();
-bool check_inheritence();
+bool check(std::string);
+bool check_main(std::string);
+bool check_inheritence(std::string);
 bool _check_parent(std::set<std::string>&, std::string );

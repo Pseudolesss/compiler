@@ -1,6 +1,7 @@
 #include <iostream>
 #include "driver.hh"
 #include "FillPrototype.hh"
+#include "CheckPrototype.hh"
 #include "prototype.hh"
 int
 main (int argc, char *argv[])
@@ -22,6 +23,7 @@ main (int argc, char *argv[])
       int ret = drv.parse(argv[2]);
       if(ret == 0){
         drv.root->accept(new FillPrototype());
+        check_main(drv.file);
         drv.root->accept(new Visitor());
         for(auto elem : prototype){
           std::cout<< elem.first<< ":" << elem.second.toString() << std::endl;

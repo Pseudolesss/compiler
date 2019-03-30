@@ -12,13 +12,13 @@ class MethodPrototype{
         std::list<std::string> arguments;
         std::string return_type;
         std::string toString() const;
-        ASTnode* node;
+        yy::location location;
        
 };
 class FieldPrototype{
     public:
         std::string type;
-        ASTnode* node;
+        yy::location location;
 };
 class ClassPrototype {
     public:
@@ -30,7 +30,7 @@ class ClassPrototype {
         std::set<std::string> parent;
         std::string direct_parent;
         std::string toString();
-        ASTnode* node;
+        yy::location location;
     
 };
 // class id | class prototype

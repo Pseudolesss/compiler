@@ -14,27 +14,45 @@ check semantic error on prototype, check:
 #include "CheckPrototype.hh"
 #include "prototype.hh"
 #include <set>
+
+bool check(std::string file){
+    return check_main(file) && check_inheritence(file);
+}
 //return true if no error, false otherwise
-bool check_main(){
+bool check_main(std::string filename){
     if ( ::prototype.find("Main") ==  ::prototype.end()){
+        errors.add(yy::location(&filename,1,1), "no Main Class defined");
         return false;
     }
     if(::prototype["Main"].method.find("main") == ::prototype["Main"].method.end()){
         // no main function in Main class.
-        MethodPrototype main = ::prototype["Main"].method["main"];
-        if(main.return_type != "int32"){
-            // invalid return type of main method in main classe.
-            return false;
-        }
-        if(!main.arguments.empty){
-            // argument in main method.
-            return false;
-        }
+        yy::location l = prototype["Main"].location;
+        l.begin.filename = &filename;
+        errors.add(l,"no main method define in Main Classe");
+        return false;
     }
-    return true;
+    else{
+        MethodPrototype main = ::prototype["Main"].method["main"];
+        //invalid return type of main in Main
+        bool out = true;
+        if(main.return_type != "int32"){
+            yy::location l = main.location;
+            l.begin.filename = &filename;
+            errors.add(l,"invalid return type of method main in Main, should be int32");
+            out = false;
+        }
+        // main must not have argument.
+        if(!main.arguments.empty()){
+            yy::location l = main.location;
+            l.begin.filename = &filename;
+            errors.add(l,"main method of classe Main cannot have arguments");
+            out = false;
+        }
+        return out;
+    } 
 }
 //TODO: add parent field, method to child. Check method/field override, cyclic inheritence. check no field named self.
-bool check_parent(){
+bool check_parent(std::string file){
     bool out = true;
     //iterate over all classe in prototype 
     std::set<std::string> classes = std::set<std::string>();
