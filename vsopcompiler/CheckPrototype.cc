@@ -17,7 +17,6 @@ check semantic error on prototype, check:
 //return true if no error, false otherwise
 bool check_main(){
     if ( ::prototype.find("Main") ==  ::prototype.end()){
-        // no Main classe.
         return false;
     }
     if(::prototype["Main"].method.find("main") == ::prototype["Main"].method.end()){

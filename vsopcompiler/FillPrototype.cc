@@ -5,25 +5,46 @@
 #include "ASTnode.hh"
 #include "prototype.hh"
 #include "FillPrototype.hh"
+#include "ErrorHandler.hh"
+
+    std::string locToStr(yy::location l){
+        return std::to_string(l.begin.line) + "." 
+                + std::to_string(l.begin.column);
+    }
 
     std::string FillPrototype::visit(Field *field)
     {
-        if(::prototype[classID].field.find(field->getID()) == ::prototype[classID].field.end())
-            ::prototype[classID].field[field->getID()] = field->getType()->getID();
+        if(::prototype[classID].field.find(field->getID()) == ::prototype[classID].field.end()){
+            FieldPrototype f = FieldPrototype();
+            f.type = field->getType()->getID();
+            f.node = field;
+            ::prototype[classID].field[field->getID()] = f;            
+        }
         else{
             //semantic error: redefinition of a a field.
+            yy::location l = ::prototype[classID].field[field->getID()].node->getLocation();
+            ::errors.add(field->getLocation(),
+                "redefinition of field " + field->getID() 
+                + "already defined at: " + locToStr(l));
         }
         return "done";
     }
 
     std::string FillPrototype::visit(Method *method) { 
         if(::prototype[classID].method.find(method->getID()) == ::prototype[classID].method.end()){
-            ::prototype[classID].method[method->getID()].return_type = method->getType()->getID();
+            MethodPrototype m = MethodPrototype();
+            m.return_type = method->getType()->getID();
+            m.node = method;            
+            ::prototype[classID].method[method->getID()] = m;
             methodID = method->getID();
             method->getFormals()->accept(this);
         }
         else{
-            //semantic error: redefinition of a method.
+            //redefinition of a method.
+            yy::location l = ::prototype[classID].method[method->getID()].node->getLocation();
+            ::errors.add(method->getLocation(),
+                "redefinition of method " + method->getID() 
+                + " already defined at: " + locToStr(l));
         }
         return "done"; 
     }
@@ -53,7 +74,11 @@
             ::prototype[classe->getTypeID()].direct_parent = classe->getParentID();
         }    
         else{
-            //throw semantic exception, redefinition of a classes.
+            //redefinition of a classe
+            yy::location l = ::prototype[classe->getTypeID()].node->getLocation();
+            errors.add(classe->getLocation(), 
+                "redefinition of classe " + classe->getTypeID()
+                 + " already define at " + locToStr(l));
         }
         classID = classe->getTypeID();
         classe->getBody()->accept(this);

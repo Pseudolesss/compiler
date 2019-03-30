@@ -22,10 +22,12 @@ main (int argc, char *argv[])
       int ret = drv.parse(argv[2]);
       if(ret == 0){
         drv.root->accept(new FillPrototype());
+        drv.root->accept(new Visitor());
         for(auto elem : prototype){
           std::cout<< elem.first<< ":" << elem.second.toString() << std::endl;
         }
       }
+      ::errors.print();
       return ret;
   }
   else{

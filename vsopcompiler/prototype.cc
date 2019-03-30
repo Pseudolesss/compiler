@@ -24,11 +24,11 @@ std::string MethodPrototype::toString() const{
 };
 
 
-std::string print_map(std::unordered_map<std::string,std::string> const &m)
+std::string print_map(std::unordered_map<std::string,FieldPrototype> const &m)
 {
     std::string out = "{";
     for (auto it = m.cbegin(); it != m.cend(); ++it) {
-        out +=   (*it).first + " : " + (*it).second + " , ";
+        out +=   (*it).first + " : " + (*it).second.type + " , ";
     }
     return out + "}\n";
 };

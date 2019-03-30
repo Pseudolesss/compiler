@@ -19,13 +19,13 @@ struct ASTnode
     void setType(std::string);
     void setValueInh(std::string);
     void setValueSyn(std::string);
+    yy::location getLocation();
 
   private:
     std::string type;
     std::string valueInh;
     std::string valueSyn;
-    int first_line,last_line;
-    int first_column,last_column;
+    yy::location location;
 };
 
 struct Expr : ASTnode

@@ -1,20 +1,21 @@
 #include "ASTnode.hh"
 
 using namespace std;
-ASTnode::ASTnode(yy::location l) : first_line(l.begin.line),last_line(l.end.line), first_column(l.begin.column), last_column(l.end.column)
+ASTnode::ASTnode(yy::location l) : location(l)
 {
     type = "";
     valueInh = "";
     valueSyn = "";
-    //std::cout<<first_line<<","<<first_column<<":"<<last_line<<","<<last_column<<std::endl;
+    //std::cout<<first_lsine<<","<<first_column<<":"<<last_line<<","<<last_column<<std::endl;
 }
+yy::location ASTnode::getLocation(){return location;}
 std::string ASTnode::getType() { return type; }
 std::string ASTnode::getValueInh() { return valueInh; }
 std::string ASTnode::getValueSyn() { return valueSyn; }
+std::string ASTnode::accept(Visitor *v) { return v->visit(this); }
 void ASTnode::setType(std::string t) { type = t; }
 void ASTnode::setValueInh(std::string v) { valueInh = v; }
 void ASTnode::setValueSyn(std::string v) { valueSyn = v; }
-std::string ASTnode::accept(Visitor *v) { return v->visit(this); }
 
 Expr::Expr(yy::location l) : ASTnode(l){}
 string Expr::getDataType() { return dataType; }

@@ -8,4 +8,28 @@ class Main extends IO {
             else { print("The factorial of ").printInt32(n).print(" is "); 
         printInt32(factorial(n)).print("\n"); 0 } 
     }
+    main() : int32 { 
+        print("Enter an integer greater-than or equal to 0: "); 
+        let n : int32 <- inputInt32() in 
+            if n < 0 then 
+                { print("Error: number must be greater-than or equal to 0.\n"); -1 } 
+            else { print("The factorial of ").printInt32(n).print(" is "); 
+        printInt32(factorial(n)).print("\n"); 0 } 
+    }
+    main() : int32 { 
+        print("Enter an integer greater-than or equal to 0: "); 
+        let n : int32 <- inputInt32() in 
+            if n < 0 then 
+                { print("Error: number must be greater-than or equal to 0.\n"); -1 } 
+            else { print("The factorial of ").printInt32(n).print(" is "); 
+        printInt32(factorial(n)).print("\n"); 0 } 
+    }
+    main() : int32 { 
+        print("Enter an integer greater-than or equal to 0: "); 
+        let n : int32 <- inputInt32() in 
+            if n < 0 then 
+                { print("Error: number must be greater-than or equal to 0.\n"); -1 } 
+            else { print("The factorial of ").printInt32(n).print(" is "); 
+        printInt32(factorial(n)).print("\n"); 0 } 
+    }
 }

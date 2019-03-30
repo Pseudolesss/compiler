@@ -1,4 +1,5 @@
 #include "ErrorHandler.hh"
+#include "prototype.hh"
 #include <iostream>
 #include <utility> 
 //return true if left < right
@@ -24,4 +25,7 @@ void ErrorHandler::print(){
     for (auto const& pair: errors) {
         std::cerr << pair.first << pair.second << std::endl;
     }
-}
+};
+
+ErrorHandler errors = ErrorHandler();
+
