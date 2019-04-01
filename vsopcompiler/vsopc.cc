@@ -3,6 +3,9 @@
 #include "FillPrototype.hh"
 #include "CheckPrototype.hh"
 #include "prototype.hh"
+
+#include "SymbolTable.hh"
+
 int
 main (int argc, char *argv[])
 {
@@ -29,6 +32,19 @@ main (int argc, char *argv[])
           std::cout<< elem.first<< ":" << elem.second.toString() << std::endl;
         }
       }
+
+      //to test the symbol table
+      SymbolTable s = SymbolTable();
+      s.add_element("one", "string");
+      std::cout << s.lookup("one") << '\n';
+      s.new_scope();
+      s.add_element("two", "int64");
+      std::cout << s.lookup("one") << '\n';
+      s.exit_scope();
+      std::cout << s.lookup("two") << '\n';
+ 
+
+
       ::errors.print();
       std::cout<<"end of error printing" << std::endl;
       return ret;
