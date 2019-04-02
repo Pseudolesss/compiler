@@ -5,6 +5,9 @@
 #include <string>
 #include <unordered_map>
 
+SymbolTable vtable = SymbolTable();
+SymbolTable ftable = SymbolTable();
+
 SymbolTable::SymbolTable(){
 	new_scope();
 }
@@ -12,19 +15,25 @@ SymbolTable::SymbolTable(){
 SymbolTable::~SymbolTable(){}
 
 void SymbolTable::add_element(std::string element_id, std::string element_type){
-	symboltable.top()[element_id] = element_type;
+
+	bool already_defined = false;
+	for (std::list<std::unordered_map<std::string,std::string>>::iterator it=symboltable.begin(); it != symboltable.end(); ++it){
+    	if ((*it).find(element_id) != (*it).end()){
+    		//The location must be the position of the variable, here we use main to test
+			yy::location l = prototype["Main"].location;
+			errors.add(l,"the variable " + element_id + " is already defined");
+			already_defined = true;
+        }
+    }
+    if(!already_defined)
+		symboltable.front()[element_id] = element_type;
 }
 
 std::string SymbolTable::lookup(std::string element_id){
 
-	std::stack<std::unordered_map<std::string,std::string>> _symboltable = symboltable;
-
-	while(!_symboltable.empty()){
-		if (_symboltable.top().find(element_id) != _symboltable.top().end()){
-        	return _symboltable.top()[element_id];
-    	}
-    	else{
-    		_symboltable.pop();
+	for (std::list<std::unordered_map<std::string,std::string>>::iterator it=symboltable.begin(); it != symboltable.end(); ++it){
+    	if ((*it).find(element_id) != (*it).end()){
+        	return (*it)[element_id];
     	}
 	}
 	//The location must be the position of the variable, here we use main to test
@@ -35,10 +44,10 @@ std::string SymbolTable::lookup(std::string element_id){
 
 void SymbolTable::new_scope(){
 	std::unordered_map<std::string,std::string> hashtable ;
-	symboltable.push(hashtable);
+	symboltable.push_front(hashtable);
 }
 
 void SymbolTable::exit_scope(){
-	symboltable.pop();
+	symboltable.pop_front();
 }
 

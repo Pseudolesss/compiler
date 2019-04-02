@@ -1,7 +1,7 @@
 #ifndef SYMBOLTABLE_H
 #define SYMBOLTABLE_H
 
-#include <stack>
+#include <list>
 #include <string>
 #include <unordered_map>
 
@@ -27,7 +27,7 @@ public:
 private:
 
 	//The symbol table (a stack of hashtable, one for each scope)
-	std::stack<std::unordered_map<std::string,std::string>> symboltable;
+	std::list<std::unordered_map<std::string,std::string>> symboltable;
 	
 };
 

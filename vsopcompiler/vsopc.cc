@@ -39,9 +39,12 @@ main (int argc, char *argv[])
       std::cout << s.lookup("one") << '\n';
       s.new_scope();
       s.add_element("two", "int64");
-      std::cout << s.lookup("one") << '\n';
+      std::cout << s.lookup("two") << '\n';
       s.exit_scope();
       std::cout << s.lookup("two") << '\n';
+      s.add_element("one", "int64");
+      s.new_scope();
+      std::cout << s.lookup("one") << '\n';
  
 
 
