@@ -31,6 +31,8 @@ private:
 	
 };
 
+extern SymbolTable vtable ;
+
 
 
 #endif

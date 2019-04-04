@@ -59,4 +59,7 @@ private:
   std::string methodID;
 };
 
+extern std::string self_classID;
+
+
 #endif

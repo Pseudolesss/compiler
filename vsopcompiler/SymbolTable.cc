@@ -6,7 +6,6 @@
 #include <unordered_map>
 
 SymbolTable vtable = SymbolTable();
-SymbolTable ftable = SymbolTable();
 
 SymbolTable::SymbolTable(){
 	new_scope();
