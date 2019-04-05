@@ -21,17 +21,15 @@ all: $(BASE)
 	
 $(BASE): $(BASE).o driver.o parser.o scanner.o ASTnode.o CheckPrinter.o  ParserPrinter.o ErrorHandler.o SymbolTable.o prototype.o FillPrototype.o CheckPrototype.o SymbolTable.o CheckTypeScope.o
 	$(CXX) -o $@ $^
+	echo $(shell pwd)
 
 $(BASE).o: parser.hh
 parser.o: parser.hh
 scanner.o: parser.hh
 
-run: $(BASE)
-	@echo "Type arithmetic expressions.  Quit with ctrl-d."
-	./$< -
-install-tools: 
-	bison --version
-	flex --version
+install-tools: 	
+	sudo cp IO.vsop /home
+
 
 html: parser.html
 %.html: %.xml

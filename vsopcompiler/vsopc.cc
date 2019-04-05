@@ -1,4 +1,5 @@
 #include <iostream>
+#include <unistd.h>
 #include "driver.hh"
 #include "FillPrototype.hh"
 #include "CheckPrototype.hh"
@@ -25,7 +26,7 @@ main (int argc, char *argv[])
   }
   else if(argv[1] == std::string("-check")){
       drv.setting = 1;
-      drv.parse("IO.vsop");
+      drv.parse("/home/IO.vsop");
       drv.root->accept(new FillPrototype());
       //Something to deallocate all the tree.
       
