@@ -13,6 +13,7 @@ struct ASTnode
   public:
     ASTnode(yy::location);
     virtual std::string accept(Visitor*);
+    std::string getType();
     std::string getValueInh();
     std::string getValueSyn();
     void setType(std::string);
@@ -33,6 +34,7 @@ struct Expr : ASTnode
     Expr(yy::location l);
     std::string getDataType();
     std::string accept(Visitor*);
+    void setType(std::string);
   protected:
     string dataType;
 };

@@ -1,10 +1,10 @@
-#ifndef CHECKTYPESCOPE
-#define CHECKTYPESCOPE
+#ifndef CHECK_PRINTER
+#define CHECK_PRINTER
 
 #include "Visitor.hh"
 #include <string>
 
-class CheckTypeScope : public Visitor
+class CheckPrinter : public Visitor
 {
 public:
   std::string visit(ASTnode *);
@@ -53,15 +53,6 @@ public:
   std::string visit(Lpar *);
   std::string visit(Rpar *);
   std::string visit(Parenthese *);
-
-private:
-  std::string classID;
-  std::string methodID;
-  SymbolTable st;
-
 };
-
-extern std::string self_classID;
-
 
 #endif

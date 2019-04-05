@@ -3,8 +3,9 @@
 #include "FillPrototype.hh"
 #include "CheckPrototype.hh"
 #include "CheckTypeScope.hh"
+#include "CheckPrinter.hh"
 #include "prototype.hh"
-
+#include "ParserPrinter.hh"
 #include "SymbolTable.hh"
 
 int
@@ -22,7 +23,7 @@ main (int argc, char *argv[])
       drv.parse(argv[2]);
       return 0;
   }
-  else if(argv[1] == std::string("-parse")){
+  else if(argv[1] == std::string("-check")){
       drv.setting = 1;
       drv.parse("IO.vsop");
       drv.root->accept(new FillPrototype());
@@ -32,33 +33,35 @@ main (int argc, char *argv[])
       if(ret == 0){
         drv.root->accept(new FillPrototype());
         check(drv.file);
-        //drv.root->accept(new Visitor());
+        drv.root->accept(new CheckTypeScope());
+        std::cout << drv.root->accept(new CheckPrinter()) << std::endl;
+        ::errors.print();
+        /*std::cout<<"end of error printing" << std::endl;
         for(auto elem : prototype){
-          std::cout<< elem.first<< ":" << elem.second.toString() << std::endl;
-        }
+            std::cout<< elem.first<< ":" << elem.second.toString() << std::endl;
+          }
+        //to test the symbol table
+        // SymbolTable s = SymbolTable();
+        // s.add_element("one", "string");
+        // std::cout << s.lookup("one") << '\n';
+        // s.new_scope();
+        // s.add_element("two", "int64");
+        // std::cout << s.lookup("two") << '\n';
+        // s.exit_scope();
+        // std::cout << s.lookup("two") << '\n';
+        // s.add_element("one", "int64");
+        // s.new_scope();
+        // std::cout << s.lookup("one") << '\n';*/
+        return ret;        
       }
 
-      //to test the symbol table
-      // SymbolTable s = SymbolTable();
-      // s.add_element("one", "string");
-      // std::cout << s.lookup("one") << '\n';
-      // s.new_scope();
-      // s.add_element("two", "int64");
-      // std::cout << s.lookup("two") << '\n';
-      // s.exit_scope();
-      // std::cout << s.lookup("two") << '\n';
-      // s.add_element("one", "int64");
-      // s.new_scope();
-      // std::cout << s.lookup("one") << '\n';
-
-      drv.root->accept(new CheckTypeScope());
- 
-
-
-      ::errors.print();
-      std::cout<<"end of error printing" << std::endl;
+    }  
+    else if (argv[1] == std::string("-parse")){
+      drv.setting = 1;
+      int ret = drv.parse(argv[2]);
+      std::cout << drv.root->accept(new ParserPrinter()) << std::endl;
       return ret;
-  }
+    }    
   else{
       std::cerr << "Non valid option argument" << std::endl;
       return 1;

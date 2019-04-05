@@ -16,6 +16,7 @@ void ASTnode::setValueInh(std::string v) { valueInh = v; }
 void ASTnode::setValueSyn(std::string v) { valueSyn = v; }
 
 Expr::Expr(yy::location l) : ASTnode(l){}
+void Expr::setType(std::string type){dataType = type;}
 string Expr::getDataType() { return dataType; }
 std::string Expr::accept(Visitor *v) { return v->visit(this); }
 
