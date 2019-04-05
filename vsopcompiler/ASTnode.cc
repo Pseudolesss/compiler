@@ -8,7 +8,6 @@ ASTnode::ASTnode(yy::location l) : location(l)
     valueSyn = "";
 }
 yy::location ASTnode::getLocation(){return location;}
-std::string ASTnode::getType() { return type; }
 std::string ASTnode::getValueInh() { return valueInh; }
 std::string ASTnode::getValueSyn() { return valueSyn; }
 std::string ASTnode::accept(Visitor *v) { return v->visit(this); }

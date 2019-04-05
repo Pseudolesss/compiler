@@ -54,7 +54,7 @@ std::string Visitor::visit(Block *block){
     if(block->getExprx()->getExpr() == nullptr)
         return  block->getExpr()->accept(this) + block->getExprx()->accept(this);
     else
-        return "[" +  block->getExpr()->accept(this) + block->getExprx()->accept(this)+ "]";
+        return "[" +  block->getExpr()->accept(this) + block->getExprx()->accept(this)+ "]" + " : " + block->getDataType();
 }
 
 std::string Visitor::visit(Method *method){return "Method(" + method->getID()+ ", " + method->getFormals()->accept(this) + ", " + method->getType()->accept(this) + ", " + method->getBlock()->accept(this) + ")" ;}
@@ -144,7 +144,7 @@ std::string Visitor::visit(Body *body){
         }
 
 
-    return ret;
+    return ret ;
 }
 
 std::string Visitor::visit(Classe *classe){
@@ -169,45 +169,45 @@ std::string Visitor::visit(Unary *unary){return "SHOULD NOT HAPPEND: UNARY";}
 
 std::string Visitor::visit(If *anIf){
     if(anIf->getElse() == nullptr){
-        return "If(" + anIf->getIf()->accept(this) + ", " + anIf->getThen()->accept(this) + ")";
+        return "If(" + anIf->getIf()->accept(this) + ", " + anIf->getThen()->accept(this) + ")" + " : " + anIf->getDataType();
     }
     return "If(" + anIf->getIf()->accept(this) + ", " + anIf->getThen()->accept(this) + ", " + anIf->getElse()->accept(this) + ")";
 }
 
-std::string Visitor::visit(While *aWhile){return "While(" + aWhile->getWhile()->accept(this) + ", " + aWhile->getDo()->accept(this) + ")";}
+std::string Visitor::visit(While *aWhile){return "While(" + aWhile->getWhile()->accept(this) + ", " + aWhile->getDo()->accept(this) + ")" + " : " + aWhile->getDataType();}
 
 std::string Visitor::visit(Let *let){
     if(let->getAssign() == nullptr){
         return "Let(" + let->getObjID() + ", " + let->getType()->accept(this) + ", " + let->getIn()->accept(this) + ")";
     }
-    return "Let(" + let->getObjID() + ", " + let->getType()->accept(this)+ ", " + let->getIn()->accept(this) + ", " + let->getAssign()->accept(this) + ")";
+    return "Let(" + let->getObjID() + ", " + let->getType()->accept(this)+ ", " + let->getIn()->accept(this) + ", " + let->getAssign()->accept(this) + ")" +  " : " + let->getDataType();
 }
 
-std::string Visitor::visit(Assign *assign){return "Assign(" + assign->getObjID() + ", " + assign->getExpr()->accept(this) + ")";}
+std::string Visitor::visit(Assign *assign){return "Assign(" + assign->getObjID() + ", " + assign->getExpr()->accept(this) + ")" +  " : " + assign->getDataType();}
 
-std::string Visitor::visit(Not *aNot){return "UnOp(not, " + aNot->getExpr()->accept(this) + ")";}
+std::string Visitor::visit(Not *aNot){return "UnOp(not, " + aNot->getExpr()->accept(this) + ")" + " : " + aNot->getDataType();}
 
-std::string Visitor::visit(And *anAnd){return "BinOp(and, " + anAnd->getLeft()->accept(this) + ", " + anAnd->getRight()->accept(this) + ")";}
+std::string Visitor::visit(And *anAnd){return "BinOp(and, " + anAnd->getLeft()->accept(this) + ", " + anAnd->getRight()->accept(this) + ")" + + " : " + anAnd->getDataType();}
 
-std::string Visitor::visit(Equal *equal){return "BinOp(=, " + equal->getLeft()->accept(this) + ", " + equal->getRight()->accept(this) + ")";}
+std::string Visitor::visit(Equal *equal){return "BinOp(=, " + equal->getLeft()->accept(this) + ", " + equal->getRight()->accept(this) + ")" + + " : " + equal->getDataType();}
 
-std::string Visitor::visit(Lower *lower){return "BinOp(<, " + lower->getLeft()->accept(this) + ", " + lower->getRight()->accept(this) + ")";}
+std::string Visitor::visit(Lower *lower){return "BinOp(<, " + lower->getLeft()->accept(this) + ", " + lower->getRight()->accept(this) + ")" + " : " + lower->getDataType();}
 
-std::string Visitor::visit(LowerEqual *lowerEqual){return "BinOp(<=, " + lowerEqual->getLeft()->accept(this) + ", " + lowerEqual->getRight()->accept(this) + ")";}
+std::string Visitor::visit(LowerEqual *lowerEqual){return "BinOp(<=, " + lowerEqual->getLeft()->accept(this) + ", " + lowerEqual->getRight()->accept(this) + ")" + " : " + lowerEqual->getDataType();;}
 
-std::string Visitor::visit(Plus *plus){return "BinOp(+, " + plus->getLeft()->accept(this) + ", " + plus->getRight()->accept(this) + ")";}
+std::string Visitor::visit(Plus *plus){return "BinOp(+, " + plus->getLeft()->accept(this) + ", " + plus->getRight()->accept(this) + ")" + + " : " + plus->getDataType();;}
 
-std::string Visitor::visit(Minus *minus){return "BinOp(-, " + minus->getLeft()->accept(this) + ", " + minus->getRight()->accept(this) + ")";}
+std::string Visitor::visit(Minus *minus){return "BinOp(-, " + minus->getLeft()->accept(this) + ", " + minus->getRight()->accept(this) + ")" + + " : " + minus->getDataType();;}
 
-std::string Visitor::visit(Times *times){return "BinOp(*, " + times->getLeft()->accept(this) + ", " + times->getRight()->accept(this) + ")";}
+std::string Visitor::visit(Times *times){return "BinOp(*, " + times->getLeft()->accept(this) + ", " + times->getRight()->accept(this) + ")" + + " : " + times->getDataType();;}
 
-std::string Visitor::visit(Div *div){return "BinOp(/, " + div->getLeft()->accept(this) + ", " + div->getRight()->accept(this) + ")";}
+std::string Visitor::visit(Div *div){return "BinOp(/, " + div->getLeft()->accept(this) + ", " + div->getRight()->accept(this) + ")"+ " : " + div->getDataType();;}
 
-std::string Visitor::visit(Pow *pow){return "BinOp(^, " + pow->getLeft()->accept(this) + ", " + pow->getRight()->accept(this) + ")";}
+std::string Visitor::visit(Pow *pow){return "BinOp(^, " + pow->getLeft()->accept(this) + ", " + pow->getRight()->accept(this) + ")" + " : " + pow->getDataType();}
 
-std::string Visitor::visit(Minus1 *minus1){return "UnOp(-, " + minus1->getExpr()->accept(this) + ")";}
+std::string Visitor::visit(Minus1 *minus1){return "UnOp(-, " + minus1->getExpr()->accept(this) + ")" + " : " + minus1->getDataType();}
 
-std::string Visitor::visit(IsNull *isNull){return "UnOp(isnull, " + isNull->getExpr()->accept(this) + ")";}
+std::string Visitor::visit(IsNull *isNull){return "UnOp(isnull, " + isNull->getExpr()->accept(this) + ")" + " : " + isNull->getDataType();}
 
 std::string Visitor::visit(Args *args){
     if(args->getExpr() != nullptr){
@@ -218,27 +218,27 @@ std::string Visitor::visit(Args *args){
     }
 }
 
-std::string Visitor::visit(Function *function){return "Call(self, " + function->getID() +  ", [" +function->getArgs()->accept(this) + "])";}
+std::string Visitor::visit(Function *function){return "Call(self, " + function->getID() +  ", [" +function->getArgs()->accept(this) + "])" + " : " + function->getDataType();}
 
-std::string Visitor::visit(Dot *dot){return "Call(" + dot->getExpr()->accept(this) + "," + dot->getID() + ",[" + dot->getArgs()->accept(this) + "])";}
+std::string Visitor::visit(Dot *dot){return "Call(" + dot->getExpr()->accept(this) + "," + dot->getID() + ",[" + dot->getArgs()->accept(this) + "])" + " : " + dot->getDataType();}
 
-std::string Visitor::visit(New *aNew){return "New(" + aNew->getTypeID() + ")";}
+std::string Visitor::visit(New *aNew){return "New(" + aNew->getTypeID() + ")" + " : " + aNew->getDataType();}
 
-std::string Visitor::visit(ObjID *objID){return objID->getID();}
+std::string Visitor::visit(ObjID *objID){return objID->getID() + " : " + objID->getDataType();}
 
 std::string Visitor::visit(Literal *literal){return "NOT SUPPOSED TO HAPPEN: LITERAL";}
 
-std::string Visitor::visit(IntLit *intLit){return std::to_string(intLit->getValue());}
+std::string Visitor::visit(IntLit *intLit){return std::to_string(intLit->getValue()) + " : " + intLit->getDataType();}
 
-std::string Visitor::visit(StrLit *strLit){return strLit->getValue();}
+std::string Visitor::visit(StrLit *strLit){return strLit->getValue() + " : " + strLit->getDataType();;}
 
-std::string Visitor::visit(BoolLit *boolLit){return  boolLit->getValue() ? "true" : "false";}
+std::string Visitor::visit(BoolLit *boolLit){return  std::string(boolLit->getValue() ? "true" : "false") + " : " + boolLit->getDataType();}
 
-std::string Visitor::visit(Lpar *lpar){return "(";}
+std::string Visitor::visit(Lpar *lpar){return "("; + " : " + lpar->getDataType();}
 
-std::string Visitor::visit(Rpar *rpar){return ")";}
+std::string Visitor::visit(Rpar *rpar){return std::string(")") + " : " + rpar->getDataType();}
 
-std::string Visitor::visit(Parenthese *parenthese){return parenthese->getExpr()->accept(this);}
+std::string Visitor::visit(Parenthese *parenthese){return parenthese->getExpr()->accept(this) + " : " + parenthese->getDataType();}
 
 
 
