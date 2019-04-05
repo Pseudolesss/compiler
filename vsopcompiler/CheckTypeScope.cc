@@ -418,8 +418,8 @@ std::string CheckTypeScope::visit(Dot *dot)
     //cout<<"enter in dot : "<< l << "\n";
 
     if(::prototype.find(expr_0_type) == ::prototype.end()){
-        // errors.add(l, "Dispatch : The type of the expr_0 is not a class");
-        // return "int32";
+        errors.add(l, "Dispatch : The type of the expr_0 is not a class");
+        return "int32";
 
         //The method caled is not defined in the input code, 
         //it comes from an imported class, so we cannot check thzt the class P has a method <id> and the arguments
