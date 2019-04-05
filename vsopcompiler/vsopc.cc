@@ -2,6 +2,7 @@
 #include "driver.hh"
 #include "FillPrototype.hh"
 #include "CheckPrototype.hh"
+#include "CheckTypeScope.hh"
 #include "prototype.hh"
 
 #include "SymbolTable.hh"
@@ -34,17 +35,19 @@ main (int argc, char *argv[])
       }
 
       //to test the symbol table
-      SymbolTable s = SymbolTable();
-      s.add_element("one", "string");
-      std::cout << s.lookup("one") << '\n';
-      s.new_scope();
-      s.add_element("two", "int64");
-      std::cout << s.lookup("two") << '\n';
-      s.exit_scope();
-      std::cout << s.lookup("two") << '\n';
-      s.add_element("one", "int64");
-      s.new_scope();
-      std::cout << s.lookup("one") << '\n';
+      // SymbolTable s = SymbolTable();
+      // s.add_element("one", "string");
+      // std::cout << s.lookup("one") << '\n';
+      // s.new_scope();
+      // s.add_element("two", "int64");
+      // std::cout << s.lookup("two") << '\n';
+      // s.exit_scope();
+      // std::cout << s.lookup("two") << '\n';
+      // s.add_element("one", "int64");
+      // s.new_scope();
+      // std::cout << s.lookup("one") << '\n';
+
+      drv.root->accept(new CheckTypeScope());
  
 
 

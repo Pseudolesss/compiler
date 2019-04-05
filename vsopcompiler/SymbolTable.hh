@@ -1,6 +1,7 @@
 #ifndef SYMBOLTABLE_H
 #define SYMBOLTABLE_H
 
+#include "location.hh"
 #include <list>
 #include <string>
 #include <unordered_map>
@@ -13,10 +14,10 @@ public:
 	~SymbolTable();
 
 	//Add a binding between a name and some information
-	void add_element(std::string, std::string);
+	void add_element(std::string, std::string, yy::location);
 
 	//Lookup a name and retrieve its information
-	std::string lookup(std::string);
+	std::string lookup(std::string, yy::location);
 
 	//Enter a new scope
 	void new_scope();
