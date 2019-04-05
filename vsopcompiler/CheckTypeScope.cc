@@ -14,7 +14,11 @@ std::string CheckTypeScope::visit(ASTnode* asTnode){return "NOT SUPPOSED TO HAPP
 
 std::string CheckTypeScope::visit(Expr * expr){return "NOT SUPPOSED TO HAPPEN EXPRESSION";}
 
-std::string CheckTypeScope::visit(Type *type){return type->getID();}
+std::string CheckTypeScope::visit(Type *type)
+{
+    type->setType(type->getID());
+    return type->getID();
+}
 
 std::string CheckTypeScope::visit(Field *field)
 {
@@ -81,6 +85,8 @@ std::string CheckTypeScope::visit(Block *block)
         exprx = exprx->getExprx();
     }
     ::vtable.exit_scope();
+
+    block->setType(current_type);
     return current_type;
 }
 
@@ -158,7 +164,9 @@ std::string CheckTypeScope::visit(If *anIf){
 
     if(if_type != "bool"){
         errors.add(l,"The condition of the If is not boolean ");
-        return "int32";
+        std::string current_type = "int32";
+        anIf->setType(current_type);
+        return current_type;
     }
 
     if(::prototype.find(then_type) != ::prototype.end() && ::prototype.find(else_type) != ::prototype.end()){
@@ -166,22 +174,32 @@ std::string CheckTypeScope::visit(If *anIf){
         std::set<std::string> else_parents = ::prototype[else_type].parent;
         for (std::set<std::string>::iterator it=then_parents.begin(); it!=then_parents.end(); ++it){
             if(else_parents.find(*it) != else_parents.end()){
-                return *it;
+                std::string current_type = *it;
+                anIf->setType(current_type);
+                return current_type;
             }
         }
-        return "Object";
+        std::string current_type = "Object";
+        anIf->setType(current_type);
+        return current_type;
     }
 
     if(then_type == "unit" || else_type == "unit"){
-        return "unit";
+        std::string current_type = "unit";
+        anIf->setType(current_type);
+        return current_type;
     }
 
     if((then_type == else_type && else_type == "int32") || (then_type ==  else_type && else_type =="string")){
-        return then_type;
+        std::string current_type = then_type;
+        anIf->setType(current_type);
+        return current_type;
     }
 
     errors.add(l,"IfElse : the branches types doesn't match ");
-    return "int32";  
+    std::string current_type = "int32";
+    anIf->setType(current_type);
+    return current_type;  
 }
 
 std::string CheckTypeScope::visit(While *aWhile)
@@ -190,7 +208,9 @@ std::string CheckTypeScope::visit(While *aWhile)
         yy::location l = aWhile->getLocation();
         errors.add(l,"The condition of the while is not boolean ");
     }
-    return aWhile->getDo()->accept(this);
+    std::string current_type = aWhile->getDo()->accept(this);
+    aWhile->setType(current_type);
+    return current_type;
 }
 
 std::string CheckTypeScope::visit(Let *let)
@@ -200,13 +220,17 @@ std::string CheckTypeScope::visit(Let *let)
     if( let->getType()->accept(this) != init_type){  //Note : what appens if the init expression in null ?
         yy::location l = let->getLocation();
         errors.add(l,"Let : The type of the initializer must conform to the declared type <type> ");
-        return "int32";
+        std::string current_type = "int32";
+        let->setType(current_type);
+        return current_type;
     }
     ::vtable.new_scope();
     ::vtable.add_element(let->getObjID(),let->getType()->accept(this),let->getLocation());
     std::string returnvalue = let->getAssign()->accept(this);
     ::vtable.exit_scope();
-    return returnvalue;
+    std::string current_type = returnvalue;
+    let->setType(current_type);
+    return current_type;
 }
 
 std::string CheckTypeScope::visit(Assign *assign)
@@ -214,19 +238,25 @@ std::string CheckTypeScope::visit(Assign *assign)
     yy::location l = assign->getLocation();
     std::string expr_type = assign->getExpr()->accept(this);
     if(::vtable.lookup(assign->getObjID(),l) == expr_type){
-        return expr_type;
+        std::string current_type = expr_type;
+        assign->setType(current_type);
+        return current_type;
     }
     else{
         yy::location l = assign->getLocation();
         errors.add(l,"in assigment, the type of the the expression doesn't conform to the type of the identifier ");
-        return ::vtable.lookup(assign->getObjID(),l);
+        std::string current_type = ::vtable.lookup(assign->getObjID(),l);
+        assign->setType(current_type);
+        return current_type;
     }
 
 }
 
 std::string CheckTypeScope::visit(Not *aNot)
 {
-    return aNot->getExpr()->accept(this);
+    std::string current_type = aNot->getExpr()->accept(this);
+    aNot->setType(current_type);
+    return current_type;
 }
 
 std::string CheckTypeScope::visit(And *anAnd)
@@ -234,12 +264,16 @@ std::string CheckTypeScope::visit(And *anAnd)
     std::string ltype = anAnd->getLeft()->accept(this);
     std::string rtype = anAnd->getRight()->accept(this);
     if (ltype == rtype){
-        return "bool";
+        std::string current_type = "bool";
+        anAnd->setType(current_type);
+        return current_type;
     }
     else{
         yy::location l = anAnd->getLocation();
         errors.add(l,"the two arguments have different types : "+ ltype + " and " + rtype);
-        return "bool";
+        std::string current_type = "bool";
+        anAnd->setType(current_type);
+        return current_type;
     }
 }
 
@@ -248,12 +282,16 @@ std::string CheckTypeScope::visit(Equal *equal)
     std::string ltype = equal->getLeft()->accept(this);
     std::string rtype = equal->getRight()->accept(this);
     if (ltype == rtype){
-        return "bool";
+        std::string current_type = "bool";
+        equal->setType(current_type);
+        return current_type;
     }
     else{
         yy::location l = equal->getLocation();
         errors.add(l,"the two arguments have different types : "+ ltype + " and " + rtype);
-        return "bool";
+        std::string current_type = "bool";
+        equal->setType(current_type);
+        return current_type;
     }
 }
 
@@ -262,12 +300,16 @@ std::string CheckTypeScope::visit(Lower *lower)
     std::string ltype = lower->getLeft()->accept(this);
     std::string rtype = lower->getRight()->accept(this);
     if (ltype == rtype){
-        return "bool";
+        std::string current_type = "bool";
+        lower->setType(current_type);
+        return current_type;
     }
     else{
         yy::location l = lower->getLocation();
         errors.add(l,"the two arguments have different types : "+ ltype + " and " + rtype);
-        return "bool";
+        std::string current_type = "bool";
+        lower->setType(current_type);
+        return current_type;
     }
 }
 
@@ -276,12 +318,16 @@ std::string CheckTypeScope::visit(LowerEqual *lowerEqual)
     std::string ltype = lowerEqual->getLeft()->accept(this);
     std::string rtype = lowerEqual->getRight()->accept(this);
     if (ltype == rtype){
-        return "bool";
+        std::string current_type = "bool";
+        lowerEqual->setType(current_type);
+        return current_type;
     }
     else{
         yy::location l = lowerEqual->getLocation();
         errors.add(l,"the two arguments have different types : "+ ltype + " and " + rtype);
-        return "bool";
+        std::string current_type = "bool";
+        lowerEqual->setType(current_type);
+        return current_type;
     }
 }
 
@@ -290,12 +336,16 @@ std::string CheckTypeScope::visit(Plus *plus)
     std::string ltype = plus->getLeft()->accept(this);
     std::string rtype = plus->getRight()->accept(this);
     if (ltype == rtype){
-        return ltype;
+        std::string current_type = ltype;
+        plus->setType(current_type);
+        return current_type;
     }
     else{
         yy::location l = plus->getLocation();
         errors.add(l,"the two arguments have different types : "+ ltype + " and " + rtype);
-        return "int32";
+        std::string current_type = ltype;
+        plus->setType(current_type);
+        return current_type;
     }
 }
 
@@ -304,12 +354,16 @@ std::string CheckTypeScope::visit(Minus *minus)
     std::string ltype = minus->getLeft()->accept(this);
     std::string rtype = minus->getRight()->accept(this);
     if (ltype == rtype){
-        return ltype;
+        std::string current_type = ltype;
+        minus->setType(current_type);
+        return current_type;
     }
     else{
         yy::location l = minus->getLocation();
         errors.add(l,"the two arguments have different types : "+ ltype + " and " + rtype);
-        return "int32";
+        std::string current_type = ltype;
+        minus->setType(current_type);
+        return current_type;
     }
 }
 
@@ -318,12 +372,16 @@ std::string CheckTypeScope::visit(Times *times)
     std::string ltype = times->getLeft()->accept(this);
     std::string rtype = times->getRight()->accept(this);
     if (ltype == rtype){
-        return ltype;
+        std::string current_type = ltype;
+        times->setType(current_type);
+        return current_type;
     }
     else{
         yy::location l = times->getLocation();
         errors.add(l,"the two arguments have different types : "+ ltype + " and " + rtype);
-        return "int32";
+        std::string current_type = ltype;
+        times->setType(current_type);
+        return current_type;
     }
 }
 
@@ -332,12 +390,16 @@ std::string CheckTypeScope::visit(Div *div)
     std::string ltype = div->getLeft()->accept(this);
     std::string rtype = div->getRight()->accept(this);
     if (ltype == rtype){
-        return ltype;
+        std::string current_type = ltype;
+        div->setType(current_type);
+        return current_type;
     }
     else{
         yy::location l = div->getLocation();
         errors.add(l,"the two arguments have different types : "+ ltype + " and " + rtype);
-        return "int32";
+        std::string current_type = ltype;
+        div->setType(current_type);
+        return current_type;
     }
 }
 
@@ -346,22 +408,29 @@ std::string CheckTypeScope::visit(Pow *pow)
     std::string ltype = pow->getLeft()->accept(this);
     std::string rtype = pow->getRight()->accept(this);
     if (ltype == rtype){
-        return ltype;
+        std::string current_type = ltype;
+        pow->setType(current_type);
+        return current_type;
     }
     else{
         yy::location l = pow->getLocation();
         errors.add(l,"the two arguments have different types : "+ ltype + " and " + rtype);
-        return "int32";
+        std::string current_type = ltype;
+        pow->setType(current_type);
+        return current_type;
     }
 }
 
 std::string CheckTypeScope::visit(Minus1 *minus1)
 {
-    return minus1->getExpr()->accept(this);
+    std::string current_type = minus1->getExpr()->accept(this);
+    minus1->setType(current_type);
+    return current_type;
 }
 
 std::string CheckTypeScope::visit(IsNull *isNull)
 {
+    isNull->setType("bool");
     return "bool";
 }
 
@@ -380,7 +449,9 @@ std::string CheckTypeScope::visit(Function *function)
 
     if(::prototype[::self_classID].method.find(id) == ::prototype[::self_classID].method.end()){
         errors.add(l, "Dispatch : The class self has no method " + id );
-        return "int32";
+        std::string current_type = "int32";
+        function->setType(current_type);
+        return current_type;
     }
 
     std::list<std::string> method_args = ::prototype[::self_classID].method[id].arguments;
@@ -400,11 +471,15 @@ std::string CheckTypeScope::visit(Function *function)
         }
         else{
             errors.add(l, "Dispatch : The arguments types doesn't match  " + id );
-            return "int32";
+            std::string current_type = "int32";
+            function->setType(current_type);
+            return current_type;
         }
     }
 
-    return ::prototype[::self_classID].method[id].return_type;
+    std::string current_type = ::prototype[::self_classID].method[id].return_type;
+    function->setType(current_type);
+    return current_type;
 }
 
 std::string CheckTypeScope::visit(Dot *dot)
@@ -419,7 +494,9 @@ std::string CheckTypeScope::visit(Dot *dot)
 
     if(::prototype.find(expr_0_type) == ::prototype.end()){
         errors.add(l, "Dispatch : The type of the expr_0 is not a class");
-        return "int32";
+        std::string current_type = "int32";
+        dot->setType(current_type);
+        return current_type;
 
         //The method caled is not defined in the input code, 
         //it comes from an imported class, so we cannot check thzt the class P has a method <id> and the arguments
@@ -427,7 +504,9 @@ std::string CheckTypeScope::visit(Dot *dot)
     }
     if(::prototype[expr_0_type].method.find(id) == ::prototype[expr_0_type].method.end()){
         errors.add(l, "Dispatch : The class <expr_0> has no method " + id );
-        return "int32";
+        std::string current_type = "int32";
+        dot->setType(current_type);
+        return current_type;
     }
 
     std::list<std::string> method_args = ::prototype[expr_0_type].method[id].arguments;
@@ -447,28 +526,40 @@ std::string CheckTypeScope::visit(Dot *dot)
         }
         else{
             errors.add(l, "Dispatch : The arguments types doesn't match  " + id );
-            return "int32";
+            std::string current_type = "int32";
+            dot->setType(current_type);
+            return current_type;
         }
     }
 
-    return ::prototype[expr_0_type].method[id].return_type;
+    std::string current_type = ::prototype[expr_0_type].method[id].return_type;
+    dot->setType(current_type);
+    return current_type;
 }
 
 std::string CheckTypeScope::visit(New *aNew)
 {
-    return aNew->getTypeID();
+    std::string current_type = aNew->getTypeID();
+    aNew->setType(current_type);
+    return current_type;
 }
 
 std::string CheckTypeScope::visit(ObjID *objID)
 {
     yy::location l = objID->getLocation();
-    if(objID->getID()=="()")
+    if(objID->getID()=="()"){
+        objID->setType("unit");
         return "unit";
+    }
     std::string type = ::vtable.lookup(objID->getID(),l);
-    if(type == " ")
+    if(type == " "){
+        objID->setType("int32");
         return "int32"; //If error we send int32 by default
-    else
+    }
+    else{
+        objID->setType(type);
         return type;
+    }
 }
 
 std::string CheckTypeScope::visit(Literal *literal)
@@ -479,16 +570,19 @@ std::string CheckTypeScope::visit(Literal *literal)
 
 std::string CheckTypeScope::visit(IntLit *intLit)
 {
+    intLit->setType("int32");
     return "int32";
 }
 
 std::string CheckTypeScope::visit(StrLit *strLit)
 {
+    strLit->setType("string");
     return "string";
 }
 
 std::string CheckTypeScope::visit(BoolLit *boolLit)
 {
+    boolLit->setType("bool");
     return  "bool";
 }
 
@@ -506,7 +600,9 @@ std::string CheckTypeScope::visit(Rpar *rpar)
 
 std::string CheckTypeScope::visit(Parenthese *parenthese)
 {
-    return parenthese->getExpr()->accept(this);
+    std::string current_type = parenthese->getExpr()->accept(this);
+    parenthese->setType(current_type);
+    return current_type;
 }
 
 
