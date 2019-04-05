@@ -24,6 +24,10 @@ main (int argc, char *argv[])
   }
   else if(argv[1] == std::string("-parse")){
       drv.setting = 1;
+      drv.parse("IO.vsop");
+      drv.root->accept(new FillPrototype());
+      //Something to deallocate all the tree.
+      
       int ret = drv.parse(argv[2]);
       if(ret == 0){
         drv.root->accept(new FillPrototype());
