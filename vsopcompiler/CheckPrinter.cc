@@ -5,6 +5,7 @@
 #include "ASTnode.hh"
 #include "CheckPrinter.hh"
 
+std::string _self_classID;
 
 std::string CheckPrinter::visit(ASTnode* asTnode){return "NOT SUPPOSED TO HAPPEN ASTNODE";}
 
@@ -149,6 +150,8 @@ std::string CheckPrinter::visit(Body *body){
 }
 
 std::string CheckPrinter::visit(Classe *classe){
+    ::_self_classID = classe->getTypeID();
+
     if(classe->getParentID().empty())
         return "Class(" + classe->getTypeID() + ", Object, " + classe->getBody()->accept(this) + ")";
     else
@@ -227,7 +230,7 @@ std::string CheckPrinter::visit(Args *args){
     return result;
 }
 
-std::string CheckPrinter::visit(Function *function){return "Call(self, " + function->getID() +  ", [" +function->getArgs()->accept(this) + "])" + " : " + function->getDataType();}
+std::string CheckPrinter::visit(Function *function){return "Call(self : " +::_self_classID + ", " + function->getID() +  ", [" +function->getArgs()->accept(this) + "])" + " : " + function->getDataType();}
 
 std::string CheckPrinter::visit(Dot *dot){return "Call(" + dot->getExpr()->accept(this) + "," + dot->getID() + ",[" + dot->getArgs()->accept(this) + "])" + " : " + dot->getDataType();}
 
