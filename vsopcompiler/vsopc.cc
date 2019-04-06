@@ -26,7 +26,7 @@ main (int argc, char *argv[])
   }
   else if(argv[1] == std::string("-check")){
       drv.setting = 1;
-      drv.parse("/home/IO.vsop");
+      drv.parse("IO.vsop");
       drv.root->accept(new FillPrototype());
       //Something to deallocate all the tree.
       
@@ -53,7 +53,7 @@ main (int argc, char *argv[])
         // s.add_element("one", "int64");
         // s.new_scope();
         // std::cout << s.lookup("one") << '\n';*/
-        return ret;        
+        return !::errors.isempty();        
       }
 
     }  

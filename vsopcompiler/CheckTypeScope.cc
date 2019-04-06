@@ -22,7 +22,7 @@ std::string CheckTypeScope::visit(Type *type)
 
 std::string CheckTypeScope::visit(Field *field)
 {
-    if(::prototype[self_classID].field[field->getID()].type != field->getExpr()->accept(this)){
+    if( field->getExpr() != 0 && ::prototype[self_classID].field[field->getID()].type != field->getExpr()->accept(this)){
         yy::location l = field->getLocation();
         errors.add(l,"Field : The return value type of the expr is not correct  ");
     }
@@ -121,8 +121,10 @@ std::string CheckTypeScope::visit(Body *body){
 }
 
 std::string CheckTypeScope::visit(Classe *classe){
+    ::vtable.new_scope();
     ::self_classID = classe->getTypeID();
     classe->getBody()->accept(this);
+    ::vtable.exit_scope();
     return "done";
 }
 
@@ -159,7 +161,11 @@ std::string CheckTypeScope::visit(Unary *unary)
 std::string CheckTypeScope::visit(If *anIf){
     std::string if_type = anIf->getIf()->accept(this);
     std::string then_type = anIf->getThen()->accept(this);
-    std::string else_type = anIf->getElse()->accept(this);
+    std::string else_type;
+    if(anIf->getElse()!=0)
+        else_type = anIf->getElse()->accept(this);
+    else
+        else_type = "";
     yy::location l = anIf->getLocation();
 
     if(if_type != "bool"){
@@ -169,7 +175,7 @@ std::string CheckTypeScope::visit(If *anIf){
         return current_type;
     }
 
-    if(::prototype.find(then_type) != ::prototype.end() && ::prototype.find(else_type) != ::prototype.end()){
+    if(else_type != "" && ::prototype.find(then_type) != ::prototype.end() && ::prototype.find(else_type) != ::prototype.end()){
         std::set<std::string> then_parents = ::prototype[then_type].parent;
         std::set<std::string> else_parents = ::prototype[else_type].parent;
         for (std::set<std::string>::iterator it=then_parents.begin(); it!=then_parents.end(); ++it){
@@ -190,7 +196,7 @@ std::string CheckTypeScope::visit(If *anIf){
         return current_type;
     }
 
-    if((then_type == else_type && else_type == "int32") || (then_type ==  else_type && else_type =="string")){
+    if( (else_type == "") || (then_type == else_type && else_type == "int32") || (then_type ==  else_type && else_type =="string")){
         std::string current_type = then_type;
         anIf->setType(current_type);
         return current_type;
@@ -200,6 +206,8 @@ std::string CheckTypeScope::visit(If *anIf){
     std::string current_type = "int32";
     anIf->setType(current_type);
     return current_type;  
+
+
 }
 
 std::string CheckTypeScope::visit(While *aWhile)
@@ -208,16 +216,12 @@ std::string CheckTypeScope::visit(While *aWhile)
         yy::location l = aWhile->getLocation();
         errors.add(l,"The condition of the while is not boolean ");
     }
-    std::string current_type = aWhile->getDo()->accept(this);
-    aWhile->setType(current_type);
-    return current_type;
+    return "unit";
 }
 
 std::string CheckTypeScope::visit(Let *let)
 {
-    std::string init_type = let->getIn()->accept(this);
-
-    if( let->getType()->accept(this) != init_type){  //Note : what appens if the init expression in null ?
+    if( let->getAssign() !=0 && let->getType()->accept(this) != let->getAssign()->accept(this)){  //Note : what appens if the init expression in null ?
         yy::location l = let->getLocation();
         errors.add(l,"Let : The type of the initializer must conform to the declared type <type> ");
         std::string current_type = "int32";
@@ -226,7 +230,7 @@ std::string CheckTypeScope::visit(Let *let)
     }
     ::vtable.new_scope();
     ::vtable.add_element(let->getObjID(),let->getType()->accept(this),let->getLocation());
-    std::string returnvalue = let->getAssign()->accept(this);
+    std::string returnvalue = let->getIn()->accept(this);
     ::vtable.exit_scope();
     std::string current_type = returnvalue;
     let->setType(current_type);

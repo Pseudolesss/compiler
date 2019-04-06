@@ -172,16 +172,16 @@ std::string CheckPrinter::visit(If *anIf){
     if(anIf->getElse() == nullptr){
         return "If(" + anIf->getIf()->accept(this) + ", " + anIf->getThen()->accept(this) + ")" + " : " + anIf->getDataType();
     }
-    return "If(" + anIf->getIf()->accept(this) + ", " + anIf->getThen()->accept(this) + ", " + anIf->getElse()->accept(this) + ")";
+    return "If(" + anIf->getIf()->accept(this) + ", " + anIf->getThen()->accept(this) + ", " + anIf->getElse()->accept(this) + ")" + " : " + anIf->getDataType();
 }
 
 std::string CheckPrinter::visit(While *aWhile){return "While(" + aWhile->getWhile()->accept(this) + ", " + aWhile->getDo()->accept(this) + ")" + " : " + aWhile->getDataType();}
 
 std::string CheckPrinter::visit(Let *let){
     if(let->getAssign() == nullptr){
-        return "Let(" + let->getObjID() + ", " + let->getType()->accept(this) + ", " + let->getIn()->accept(this) + ")";
+        return "Let(" + let->getObjID() + ", " + let->getType()->accept(this) + ", " + let->getIn()->accept(this) + ")" + " : " + let->getDataType();
     }
-    return "Let(" + let->getObjID() + ", " + let->getType()->accept(this)+ ", " + let->getIn()->accept(this) + ", " + let->getAssign()->accept(this) + ")" +  " : " + let->getDataType();
+    return "Let(" + let->getObjID() + ", " + let->getType()->accept(this)+ ", " + let->getAssign()->accept(this) + ", " + let->getIn()->accept(this) + ")" +  " : " + let->getDataType();
 }
 
 std::string CheckPrinter::visit(Assign *assign){return "Assign(" + assign->getObjID() + ", " + assign->getExpr()->accept(this) + ")" +  " : " + assign->getDataType();}
@@ -211,12 +211,20 @@ std::string CheckPrinter::visit(Minus1 *minus1){return "UnOp(-, " + minus1->getE
 std::string CheckPrinter::visit(IsNull *isNull){return "UnOp(isnull, " + isNull->getExpr()->accept(this) + ")" + " : " + isNull->getDataType();}
 
 std::string CheckPrinter::visit(Args *args){
-    if(args->getExpr() != nullptr){
-        return args->getExpr()->accept(this);
+    Expr* expr =  args->getExpr();
+    Exprxx* exprxx = args->getExprxx();
+    std::string result = "";
+    while(true){
+        if(expr == nullptr){
+            break;
+        }
+        if(result != "")
+            result += ", ";
+        result += expr->accept(this) ;
+        expr = exprxx->getExpr();
+        exprxx = exprxx->getExprxx();
     }
-    else{
-        return "";
-    }
+    return result;
 }
 
 std::string CheckPrinter::visit(Function *function){return "Call(self, " + function->getID() +  ", [" +function->getArgs()->accept(this) + "])" + " : " + function->getDataType();}
@@ -239,7 +247,7 @@ std::string CheckPrinter::visit(Lpar *lpar){return "("; + " : " + lpar->getDataT
 
 std::string CheckPrinter::visit(Rpar *rpar){return std::string(")") + " : " + rpar->getDataType();}
 
-std::string CheckPrinter::visit(Parenthese *parenthese){return parenthese->getExpr()->accept(this) + " : " + parenthese->getDataType();}
+std::string CheckPrinter::visit(Parenthese *parenthese){return parenthese->getExpr()->accept(this) ;} 
 
 
 

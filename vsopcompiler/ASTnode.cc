@@ -144,7 +144,7 @@ Let::Let(string s, Type *t, Expr *e,yy::location l) : Expr(l), ObjID(s), type(t)
     assign = nullptr;
     dataType = string("Let");
 }
-Let::Let(string s, Type *t, Expr *in, Expr *ass,yy::location l) : Expr(l),ObjID(s), type(t), assign(ass), in(in) { dataType = string("Let"); }
+Let::Let(string s, Type *t, Expr *ass, Expr *in,yy::location l) : Expr(l),ObjID(s), type(t), assign(ass), in(in) { dataType = string("Let"); }
 Type *Let::getType() { return type; }
 string Let::getObjID() { return ObjID; }
 Expr *Let::getAssign() { return assign; }
@@ -187,11 +187,11 @@ Args *Dot::getArgs() { return args; }
 std::string Dot::getID() { return ID; }
 std::string Dot::accept(Visitor *v) { return v->visit(this); }
 
-New::New(string s,yy::location l) : Expr(l),typeID(s) { dataType = string("New"); }
+New::New(string s,yy::location l) : Expr(l),typeID(s) { dataType = s; }
 string New::getTypeID() { return typeID; }
 std::string New::accept(Visitor *v) { return v->visit(this); }
 
-ObjID::ObjID(string s,yy::location l) : Expr(l),ObjId(s) { dataType = string("ObjID"); }
+ObjID::ObjID(string s,yy::location l) : Expr(l),ObjId(s) { dataType = string("Object"); }
 string ObjID::getID() { return ObjId; }
 std::string ObjID::accept(Visitor *v) { return v->visit(this); }
 

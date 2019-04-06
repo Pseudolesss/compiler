@@ -13,6 +13,7 @@ struct ErrorHandler{
     public:
         void print();
         void add(yy::location,std::string);
+        bool isempty();
         ErrorHandler();
     private:
         std::multimap<yy::location,std::string,LocationComparator> errors;

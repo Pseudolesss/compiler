@@ -27,5 +27,9 @@ void ErrorHandler::print(){
     }
 };
 
+bool ErrorHandler::isempty(){
+    return errors.empty();
+}
+
 ErrorHandler errors = ErrorHandler();
 
