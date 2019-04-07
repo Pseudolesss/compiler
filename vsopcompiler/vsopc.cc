@@ -37,6 +37,7 @@ main (int argc, char *argv[])
         drv.root->accept(new CheckTypeScope());
         std::cout << drv.root->accept(new CheckPrinter()) << std::endl;
         ::errors.print();
+        
         /*std::cout<<"end of error printing" << std::endl;
         for(auto elem : prototype){
             std::cout<< elem.first<< ":" << elem.second.toString() << std::endl;
@@ -53,6 +54,9 @@ main (int argc, char *argv[])
         // s.add_element("one", "int64");
         // s.new_scope();
         // std::cout << s.lookup("one") << '\n';*/
+        
+        //cout<<::errors.isempty()<<"\n";
+
         return !::errors.isempty();        
       }
 

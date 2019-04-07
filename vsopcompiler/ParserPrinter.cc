@@ -180,7 +180,7 @@ std::string ParserPrinter::visit(Let *let){
     if(let->getAssign() == nullptr){
         return "Let(" + let->getObjID() + ", " + let->getType()->accept(this) + ", " + let->getIn()->accept(this) + ")";
     }
-    return "Let(" + let->getObjID() + ", " + let->getType()->accept(this)+ ", " + let->getIn()->accept(this) + ", " + let->getAssign()->accept(this) + ")";
+    return "Let(" + let->getObjID() + ", " + let->getType()->accept(this)+ ", " + let->getAssign()->accept(this) + ", " + let->getIn()->accept(this) + ")";
 }
 
 std::string ParserPrinter::visit(Assign *assign){return "Assign(" + assign->getObjID() + ", " + assign->getExpr()->accept(this) + ")";}

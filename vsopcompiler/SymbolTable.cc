@@ -50,3 +50,12 @@ void SymbolTable::exit_scope(){
 	symboltable.pop_front();
 }
 
+std::unordered_map<std::string,std::string> SymbolTable::exit_class_scope(){
+	std::unordered_map<std::string,std::string> map = symboltable.front();
+	symboltable.pop_front();
+	return map;
+}
+
+	// for( auto it = map.begin() ; it != map.end() ; ++it ){
+	// 	list.push_front(it->first,it->second);
+	// }

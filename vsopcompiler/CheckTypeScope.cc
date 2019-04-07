@@ -9,6 +9,8 @@
 
 std::string self_classID;
 
+std::unordered_map<std::string,std::unordered_map<std::string,std::string>> class_variables_table;
+
 
 std::string CheckTypeScope::visit(ASTnode* asTnode){return "NOT SUPPOSED TO HAPPEN ASTNODE";}
 
@@ -26,6 +28,7 @@ std::string CheckTypeScope::visit(Field *field)
         yy::location l = field->getLocation();
         errors.add(l,"Field : The return value type of the expr is not correct  ");
     }
+    ::vtable.add_element(field->getID(),field->getType()->accept(this),field->getLocation());
     return "done";
 }
 
@@ -92,11 +95,24 @@ std::string CheckTypeScope::visit(Block *block)
 
 std::string CheckTypeScope::visit(Method *method)
 {
+    ::vtable.new_scope();
     method->getFormals()->accept(this);
-    if(::prototype[self_classID].method[method->getID()].return_type != method->getBlock()->accept(this)){
+
+    std::string ret_type = ::prototype[self_classID].method[method->getID()].return_type;
+    std::set<std::string> parents;
+    std::string block_ret_type = method->getBlock()->accept(this);
+
+    //IF the block type is a class we search the parents
+    if(::prototype.find(block_ret_type) != ::prototype.end()){
+        parents = ::prototype[block_ret_type].parent;
+    }
+
+    //If the return types are different and the ret_type is not a ancestor of block_ret_type
+    if((ret_type != block_ret_type) && (parents.find(ret_type) == parents.end()) ){
         yy::location l = method->getLocation();
         errors.add(l,"Method : The return value type of the block is not correct  ");
     }
+    vtable.exit_scope();
     return "done";
 }
 
@@ -120,11 +136,28 @@ std::string CheckTypeScope::visit(Body *body){
     return "done";
 }
 
-std::string CheckTypeScope::visit(Classe *classe){
-    ::vtable.new_scope();
+std::string CheckTypeScope::visit(Classe *classe)
+{
+
     ::self_classID = classe->getTypeID();
+    ::vtable.new_scope();
+    //Check parents and add the variables inherited from them
+    std::set<std::string> parents;
+    if(::prototype.find(::self_classID) != ::prototype.end()){
+        parents = ::prototype[::self_classID].parent;
+    }
+
+    for(auto it = parents.begin(); it != parents.end(); ++it){
+        if(class_variables_table.find(*it) != class_variables_table.end()){
+            for(auto it_ = class_variables_table[*it].begin(); it_ != class_variables_table[*it].end(); ++it_ ){
+                vtable.add_element(it_->first,it_->second,classe->getLocation());
+            }
+            
+        }
+    }
+
     classe->getBody()->accept(this);
-    ::vtable.exit_scope();
+    class_variables_table[::self_classID] = ::vtable.exit_class_scope();
     return "done";
 }
 
@@ -166,6 +199,8 @@ std::string CheckTypeScope::visit(If *anIf){
         else_type = anIf->getElse()->accept(this);
     else
         else_type = "";
+
+
     yy::location l = anIf->getLocation();
 
     if(if_type != "bool"){
@@ -176,6 +211,7 @@ std::string CheckTypeScope::visit(If *anIf){
     }
 
     if(else_type != "" && ::prototype.find(then_type) != ::prototype.end() && ::prototype.find(else_type) != ::prototype.end()){
+
         std::set<std::string> then_parents = ::prototype[then_type].parent;
         std::set<std::string> else_parents = ::prototype[else_type].parent;
         for (std::set<std::string>::iterator it=then_parents.begin(); it!=then_parents.end(); ++it){
@@ -216,6 +252,8 @@ std::string CheckTypeScope::visit(While *aWhile)
         yy::location l = aWhile->getLocation();
         errors.add(l,"The condition of the while is not boolean ");
     }
+
+    aWhile->getDo()->accept(this);
     return "unit";
 }
 
@@ -449,15 +487,37 @@ std::string CheckTypeScope::visit(Function *function)
     std::string id = function->getID();
     yy::location l = function->getLocation();
 
+
     //cout<<"enter in function : "<< l << "\n";
 
+    //Case 1 : the method exists not in the self class
     if(::prototype[::self_classID].method.find(id) == ::prototype[::self_classID].method.end()){
+
+        //Case 1.1 : the method exists in IO
+        if(::prototype["IO"].method.find(id) != ::prototype[::self_classID].method.end()){
+            Args* args = function->getArgs();
+            Expr* expr = args->getExpr();
+            std::list<std::string> method_args = ::prototype["IO"].method[id].arguments;
+            if((expr == nullptr && method_args.empty() ) || (expr->accept(this) == method_args.front()) ){
+                std::string current_type = ::prototype["IO"].method[id].return_type;
+                function->setType(current_type);
+                return current_type;
+            }
+            else{
+                errors.add(l, "Dispatch : wrong arguments of a IO method" );
+                std::string current_type = "int32";
+                function->setType(current_type);
+                return current_type;
+            }
+        }
+
         errors.add(l, "Dispatch : The class self has no method " + id );
         std::string current_type = "int32";
         function->setType(current_type);
         return current_type;
     }
 
+    //Case 2 : the method is defined in the self class, we check the args
     std::list<std::string> method_args = ::prototype[::self_classID].method[id].arguments;
 
     Args* args = function->getArgs();
@@ -488,7 +548,6 @@ std::string CheckTypeScope::visit(Function *function)
 
 std::string CheckTypeScope::visit(Dot *dot)
 {
-    
 
     std::string expr_0_type = dot->getExpr()->accept(this); //must be a class type
     std::string id = dot->getID();

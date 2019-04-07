@@ -134,7 +134,7 @@ Expr *If::getIf() { return _if; }
 Expr *If::getThen() { return _then; }
 std::string If::accept(Visitor *v) { return v->visit(this); }
 
-While::While(Expr *w, Expr *d,yy::location l) : Expr(l), _while(w), _do(d) { dataType = string("While"); }
+While::While(Expr *w, Expr *d,yy::location l) : Expr(l), _while(w), _do(d) { dataType = string("unit"); }
 Expr *While::getWhile() { return _while; }
 Expr *While::getDo() { return _do; }
 std::string While::accept(Visitor *v) { return v->visit(this); }

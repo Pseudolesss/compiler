@@ -25,6 +25,9 @@ public:
 	//Exit a scope 
 	void exit_scope();
 
+	//Exit a class scope
+	std::unordered_map<std::string,std::string> exit_class_scope();
+
 private:
 
 	//The symbol table (a stack of hashtable, one for each scope)
