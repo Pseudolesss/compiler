@@ -15,6 +15,8 @@ SymbolTable::~SymbolTable(){}
 
 void SymbolTable::add_element(std::string element_id, std::string element_type, yy::location l){
 
+	//cout<< element_id << " " << element_type << " " << l << "\n";
+
 	bool already_defined = false;
 	//We can have same variables but in different scopes
 
@@ -30,6 +32,7 @@ void SymbolTable::add_element(std::string element_id, std::string element_type, 
 }
 
 std::string SymbolTable::lookup(std::string element_id, yy::location l){
+	
 
 	for (std::list<std::unordered_map<std::string,std::string>>::iterator it=symboltable.begin(); it != symboltable.end(); ++it){
     	if ((*it).find(element_id) != (*it).end()){
@@ -39,6 +42,16 @@ std::string SymbolTable::lookup(std::string element_id, yy::location l){
 	//The location must be the position of the variable, here we use main to test
 	errors.add(l,"the variable " + element_id + " is not defined in this scope");
 	return " ";
+}
+
+bool SymbolTable::check_variable(std::string element_id){
+
+	for (std::list<std::unordered_map<std::string,std::string>>::iterator it=symboltable.begin(); it != symboltable.end(); ++it){
+    	if ((*it).find(element_id) != (*it).end()){
+        	return true;
+    	}
+	}
+	return false;
 }
 
 void SymbolTable::new_scope(){

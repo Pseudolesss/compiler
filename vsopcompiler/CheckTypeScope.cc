@@ -147,10 +147,15 @@ std::string CheckTypeScope::visit(Classe *classe)
         parents = ::prototype[::self_classID].parent;
     }
 
+    //cout<<::self_classID<<"\n";
     for(auto it = parents.begin(); it != parents.end(); ++it){
+        //cout<<*it<<"\n";
         if(class_variables_table.find(*it) != class_variables_table.end()){
             for(auto it_ = class_variables_table[*it].begin(); it_ != class_variables_table[*it].end(); ++it_ ){
-                vtable.add_element(it_->first,it_->second,classe->getLocation());
+                //If the variable to add has not been already added because of another ancestor
+                //If we don't check if chained inheritance the variable will be added two times 
+                if(!::vtable.check_variable(it_->first))
+                    ::vtable.add_element(it_->first,it_->second,classe->getLocation());
             }
             
         }
@@ -259,12 +264,23 @@ std::string CheckTypeScope::visit(While *aWhile)
 
 std::string CheckTypeScope::visit(Let *let)
 {
-    if( let->getAssign() !=0 && let->getType()->accept(this) != let->getAssign()->accept(this)){  //Note : what appens if the init expression in null ?
-        yy::location l = let->getLocation();
-        errors.add(l,"Let : The type of the initializer must conform to the declared type <type> ");
-        std::string current_type = "int32";
-        let->setType(current_type);
-        return current_type;
+    //search parents if the effective type is a class
+    if(let->getAssign() != 0){
+        std::string arg = let->getAssign()->accept(this);
+        std::string type = let->getType()->accept(this);
+
+        //We search parents if the arg type is a class
+        std::set<std::string> arg_parents;
+        if(::prototype.find(arg) != ::prototype.end())
+            arg_parents = ::prototype[arg].parent;
+
+        if( type != arg && (arg_parents.find(type) == arg_parents.end())){  //Note : what appens if the init expression in null ?
+            yy::location l = let->getLocation();
+            errors.add(l,"Let : The type of the initializer must conform to the declared type <type> ");
+            std::string current_type = "int32";
+            let->setType(current_type);
+            return current_type;
+        }
     }
     ::vtable.new_scope();
     ::vtable.add_element(let->getObjID(),let->getType()->accept(this),let->getLocation());
@@ -528,7 +544,14 @@ std::string CheckTypeScope::visit(Function *function)
         if(expr == nullptr){
             break;
         }
-        if(expr->accept(this) == method_args.front()){
+
+        //search parents if the effective type is a class
+        std::string arg = expr->accept(this);
+        std::set<std::string> arg_parents;
+        if(::prototype.find(arg) != ::prototype.end())
+            arg_parents = ::prototype[arg].parent;
+
+        if(method_args.front() == arg || (arg_parents.find(method_args.front()) != arg_parents.end() ) ){
             method_args.pop_front();
             expr = exprxx->getExpr();
             exprxx = exprxx->getExprxx();
@@ -582,7 +605,14 @@ std::string CheckTypeScope::visit(Dot *dot)
         if(expr == nullptr){
             break;
         }
-        if(expr->accept(this) == method_args.front()){
+
+        //search parents if the effective type is a class
+        std::string arg = expr->accept(this);
+        std::set<std::string> arg_parents;
+        if(::prototype.find(arg) != ::prototype.end())
+            arg_parents = ::prototype[arg].parent;
+
+        if(method_args.front() == arg || (arg_parents.find(method_args.front()) != arg_parents.end() ) ){
             method_args.pop_front();
             expr = exprxx->getExpr();
             exprxx = exprxx->getExprxx();
@@ -613,6 +643,10 @@ std::string CheckTypeScope::visit(ObjID *objID)
     if(objID->getID()=="()"){
         objID->setType("unit");
         return "unit";
+    }
+    if(objID->getID() == "self"){
+        objID->setType(::self_classID);
+        return self_classID;
     }
     std::string type = ::vtable.lookup(objID->getID(),l);
     if(type == " "){

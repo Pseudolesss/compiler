@@ -1,26 +1,32 @@
-class GrandParent {
-    answer : int32 <- 42;
-
-    b(a : bool, b : bool) : bool { not (not a and not b) }
+class List {
+    isNil() : bool { true }
+    length() : int32 { 0 }
 }
 
-class Parent extends GrandParent {
-    j : int32 <- 624;
+(* Nil is nothing more than a glorified alias to List *)
+class Nil extends List { }
 
-    evil() : int32 { answer + j } // New method
-    b(a : bool, b : bool) : bool { // Overridden method
-        not (a and b) and not (not a and not b)
+class Cons extends List {
+    head : int32;
+    tail : List;
+
+    init(hd : int32, tl : List) : Cons {
+        head <- hd;
+        tail <- tl;
+        self
     }
+
+    head() : int32 { head }
+    isNil() : bool { false }
+    length() : int32 { 1 + tail.length() }
 }
 
-class Child extends Parent {
-    m() : int32 {
-        if b(true, false) // Should access Parent.b()
-            then answer // Can access parent fields
-            else evil() // Can access parent methods
+class Main extends IO {
+    main() : int32 {
+        let xs : List <- (new Cons).init(0, (new Cons).init(
+                                         1, (new Cons).init(
+                                         2, new Nil))) in
+        print("List has length ").printInt32(xs.length()).print("\n");
+        0
     }
-}
-
-class Main {
-    main() : int32 { (new Child).m() }
 }

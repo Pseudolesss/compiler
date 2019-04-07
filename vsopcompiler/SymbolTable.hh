@@ -28,6 +28,9 @@ public:
 	//Exit a class scope
 	std::unordered_map<std::string,std::string> exit_class_scope();
 
+	//Check if a variable is in the table
+	bool check_variable(std::string element_id);
+
 private:
 
 	//The symbol table (a stack of hashtable, one for each scope)
