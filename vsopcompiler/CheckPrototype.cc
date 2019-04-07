@@ -70,6 +70,14 @@ bool _check_parent(std::set<std::string>& todo,std::string classID,std::string f
 
     bool out = true;
 
+    //check direct parent is defined.
+    if(prototype[classID].direct_parent != ""){
+        if(prototype.find(prototype[classID].direct_parent) == prototype.end()){
+            yy::location l = prototype[classID].location;
+            errors.add(l,"class: " + classID + "extend undefined class " + prototype[classID].direct_parent);
+        }
+    }
+    
     //check there is no field self
     if(::prototype[classID].field.find("self") != ::prototype[classID].field.end()){
         yy::location l = prototype[classID].field["self"].location;
