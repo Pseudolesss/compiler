@@ -65,6 +65,11 @@ bool check_parent(std::string file){
     }
     return out;
 }
+//return true if the class is defined
+bool check_defined(std::string classe){
+    return classe == "bool" || classe == "int32" || classe == "unit" || classe == "string" 
+        || prototype.find(classe) != prototype.end();
+}
 
 bool _check_parent(std::set<std::string>& todo,std::string classID,std::string file){
 
@@ -85,7 +90,32 @@ bool _check_parent(std::set<std::string>& todo,std::string classID,std::string f
         out = false;
     }
 
-     //base case 1.
+    //check all field return type are defined
+    for (auto const& field :  prototype[classID].field){
+        if( ! check_defined(field.second.type)){
+            yy::location l = field.second.location;
+            errors.add(l,"use of undefined class: " + field.second.type + " in the field: " + field.first);
+        }
+    }
+
+    for(auto const& method :  prototype[classID].method){
+        
+        //check all method return type are defined
+        if(!check_defined(method.second.return_type)){
+            yy::location l = method.second.location;
+            errors.add(l,"use of undefined class: " + method.second.return_type + " in the return of method: " + method.first);
+        }
+
+        //check all argument type are defined  
+        for(auto const& arg : method.second.arguments){
+            if(!check_defined(arg)){
+                yy::location l = method.second.location;
+                errors.add(l,"use of undefined class: " + arg + " in the argument list of method: " + method.first);
+            }            
+        }   
+    }
+
+    //base case 1.
     if(::prototype[classID].direct_parent == ""){
         todo.erase(classID);
         return out;
@@ -102,7 +132,7 @@ bool _check_parent(std::set<std::string>& todo,std::string classID,std::string f
     //end of recursion.
 
     //Add parents of parent and check cycle.
-    for (auto const& ancestor :  ::prototype[parentID].parent){
+    for (auto const& ancestor :  prototype[parentID].parent){
         if(::prototype[classID].parent.find(ancestor) != ::prototype[classID].parent.end()){
             //presence of a cycle in inheritence.
             yy::location l = prototype[classID].location;
