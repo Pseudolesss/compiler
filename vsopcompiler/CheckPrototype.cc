@@ -20,7 +20,8 @@ bool check(std::string file){
 //return true if no error, false otherwise
 bool check_main(std::string filename){
     if ( ::prototype.find("Main") ==  ::prototype.end()){
-        errors.add(yy::location(&filename,1,1), "no Main Class defined");
+        std::string file = "test.vsop";
+        errors.add(yy::location(&file,1,1), "no Main Class defined");
         return false;
     }
     if(::prototype["Main"].method.find("main") == ::prototype["Main"].method.end()){
@@ -90,30 +91,32 @@ bool _check_parent(std::set<std::string>& todo,std::string classID,std::string f
         out = false;
     }
 
-    //check all field return type are defined
-    for (auto const& field :  prototype[classID].field){
-        if( ! check_defined(field.second.type)){
-            yy::location l = field.second.location;
-            errors.add(l,"use of undefined class: " + field.second.type + " in the field: " + field.first);
-        }
-    }
+    //these tests are also done in CheckTypeScope
 
-    for(auto const& method :  prototype[classID].method){
+    // //check all field return type are defined
+    // for (auto const& field :  prototype[classID].field){
+    //     if( ! check_defined(field.second.type)){
+    //         yy::location l = field.second.location;
+    //         errors.add(l,"use of undefined class: " + field.second.type + " in the field: " + field.first);
+    //     }
+    // }
+
+    // for(auto const& method :  prototype[classID].method){
         
-        //check all method return type are defined
-        if(!check_defined(method.second.return_type)){
-            yy::location l = method.second.location;
-            errors.add(l,"use of undefined class: " + method.second.return_type + " in the return of method: " + method.first);
-        }
+    //     //check all method return type are defined
+    //     if(!check_defined(method.second.return_type)){
+    //         yy::location l = method.second.location;
+    //         errors.add(l,"use of undefined class: " + method.second.return_type + " in the return of method: " + method.first);
+    //     }
 
-        //check all argument type are defined  
-        for(auto const& arg : method.second.arguments){
-            if(!check_defined(arg)){
-                yy::location l = method.second.location;
-                errors.add(l,"use of undefined class: " + arg + " in the argument list of method: " + method.first);
-            }            
-        }   
-    }
+    //     //check all argument type are defined  
+    //     for(auto const& arg : method.second.arguments){
+    //         if(!check_defined(arg)){
+    //             yy::location l = method.second.location;
+    //             errors.add(l,"use of undefined class: " + arg + " in the argument list of method: " + method.first);
+    //         }            
+    //     }   
+    // }
 
     //base case 1.
     if(::prototype[classID].direct_parent == ""){

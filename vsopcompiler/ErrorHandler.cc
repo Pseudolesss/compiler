@@ -21,9 +21,9 @@ void ErrorHandler::add(yy::location l, std::string e){
     errors.insert(std::make_pair(l,": semantic error: " + e));
 };
 
-void ErrorHandler::print(){
+void ErrorHandler::print(std::string filepath){ 
     for (auto const& pair: errors) {
-        std::cerr << pair.first << pair.second << std::endl;
+        std::cerr << filepath << pair.second << std::endl; //Modified temporarly
     }
 };
 

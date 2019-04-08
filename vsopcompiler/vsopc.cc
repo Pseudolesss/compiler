@@ -36,7 +36,7 @@ main (int argc, char *argv[])
         check(drv.file);
         drv.root->accept(new CheckTypeScope());
         std::cout << drv.root->accept(new CheckPrinter()) << std::endl;
-        ::errors.print();
+        ::errors.print(drv.file);
         
         /*std::cout<<"end of error printing" << std::endl;
         for(auto elem : prototype){

@@ -11,7 +11,7 @@ class LocationComparator{
 
 struct ErrorHandler{
     public:
-        void print();
+        void print(std::string); //temporarly
         void add(yy::location,std::string);
         bool isempty();
         ErrorHandler();

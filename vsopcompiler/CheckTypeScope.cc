@@ -758,7 +758,6 @@ std::string CheckTypeScope::visit(ObjID *objID)
     else{
         //If we are in a field init and the variable is of "depth 2" (class field)
         if(is_field_init == true && ::vtable.depth_variable(objID->getID())<3 ){
-
             errors.add(l, "cannot use a class field in field initializer" );
         }
 
