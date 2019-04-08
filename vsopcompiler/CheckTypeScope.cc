@@ -11,6 +11,8 @@ std::string self_classID;
 
 std::unordered_map<std::string,std::unordered_map<std::string,std::string>> class_variables_table;
 
+bool is_field_init = false;
+
 
 std::string CheckTypeScope::visit(ASTnode* asTnode){return "NOT SUPPOSED TO HAPPEN ASTNODE";}
 
@@ -24,7 +26,36 @@ std::string CheckTypeScope::visit(Type *type)
 
 std::string CheckTypeScope::visit(Field *field)
 {
-    if( field->getExpr() != 0 && ::prototype[self_classID].field[field->getID()].type != field->getExpr()->accept(this)){
+    //cout << ::prototype[self_classID].field[field->getID()].type << field->getExpr()->accept(this) << "\n";
+
+
+    //We search parents if the arg type is a class
+    std::set<std::string> expr_parents;
+    std::string expr_type;
+    if(field->getExpr()){
+        ::is_field_init = true;
+        expr_type = field->getExpr()->accept(this);
+        ::is_field_init = false;
+    }
+    std::string field_type = ::prototype[self_classID].field[field->getID()].type;
+    //cout<<field_type<<"\n";
+
+    if(field_type != "string" && field_type != "unit" && field_type != "bool" && field_type != "int32" && prototype.find(field_type)==prototype.end()){
+        yy::location l = field->getLocation();
+        errors.add(l,"Field : used of an undefined type ");
+    }
+
+    if(field->getExpr() != 0 && ::prototype.find(expr_type) != ::prototype.end()){
+        expr_parents = ::prototype[expr_type].parent;
+
+        //In this case the expr_type is a class an field type an object, no need to do the other check
+        if(field_type == "Object"){
+            ::vtable.add_element(field->getID(),field->getType()->accept(this),field->getLocation());
+            return "done";
+        }
+    }
+
+    if( field->getExpr() != 0 && field_type != expr_type && (expr_parents.find(field_type)==expr_parents.end())){
         yy::location l = field->getLocation();
         errors.add(l,"Field : The return value type of the expr is not correct  ");
     }
@@ -48,11 +79,18 @@ std::string CheckTypeScope::visit(Formals *formals)
 {
     Formal* formal = formals->getFormal();
     Formalx* formalx = formals->getFormalx();
+    std::string type;
 
     while(true){
         if(formal == nullptr){
             break;
         }
+        type = formal->getType()->accept(this);
+        if(type != "string" && type != "unit" && type != "bool" && type != "int32" && prototype.find(type)==prototype.end()){
+            yy::location l = formal->getLocation();
+            errors.add(l,"Formal : used of an undefined type ");
+        }
+
         ::vtable.add_element(formal->getID(),formal->getType()->accept(this),formal->getLocation());
         formal = formalx->getFormal();
         formalx = formalx->getFormalx();
@@ -102,9 +140,16 @@ std::string CheckTypeScope::visit(Method *method)
     std::set<std::string> parents;
     std::string block_ret_type = method->getBlock()->accept(this);
 
+
     //IF the block type is a class we search the parents
     if(::prototype.find(block_ret_type) != ::prototype.end()){
         parents = ::prototype[block_ret_type].parent;
+
+        //In this case the expr_type is a class an field type an object, no need to do the other check
+        if(ret_type == "Object"){
+            vtable.exit_scope();
+            return "done";
+        }
     }
 
     //If the return types are different and the ret_type is not a ancestor of block_ret_type
@@ -205,6 +250,8 @@ std::string CheckTypeScope::visit(If *anIf){
     else
         else_type = "";
 
+    //cout<<if_type << then_type << else_type << "\n";
+
 
     yy::location l = anIf->getLocation();
 
@@ -216,28 +263,54 @@ std::string CheckTypeScope::visit(If *anIf){
     }
 
     if(else_type != "" && ::prototype.find(then_type) != ::prototype.end() && ::prototype.find(else_type) != ::prototype.end()){
-
         std::set<std::string> then_parents = ::prototype[then_type].parent;
         std::set<std::string> else_parents = ::prototype[else_type].parent;
-        for (std::set<std::string>::iterator it=then_parents.begin(); it!=then_parents.end(); ++it){
-            if(else_parents.find(*it) != else_parents.end()){
+
+        //We search the common class between else and then 
+
+        //Case 1.1 the class are same
+        if(else_type == then_type){
+            anIf->setType(then_type);
+            return then_type;
+        }
+
+        //Case 1.2 the then class is one of the else parent
+        if(else_parents.find(then_type) != else_parents.end()){
+            anIf->setType(then_type);
+            return then_type;
+        }
+
+        //Case 1.3 the else class is one of the then parent
+        if(then_parents.find(else_type) != else_parents.end()){
+            anIf->setType(else_type);
+            return else_type;
+        }
+
+        //Case 2: they have common parents
+        int count = 0;
+        for (auto it= then_parents.end();it!=then_parents.begin();--it){
+            if( count && else_parents.find(*it) != else_parents.end()){
+                //cout<<*it<<"\n";
                 std::string current_type = *it;
                 anIf->setType(current_type);
                 return current_type;
             }
+            count++;
         }
+
+        //Case 3: they have no common class
         std::string current_type = "Object";
         anIf->setType(current_type);
         return current_type;
     }
 
-    if(then_type == "unit" || else_type == "unit"){
+    if(then_type == "unit" || else_type == "unit" || else_type == ""){
         std::string current_type = "unit";
         anIf->setType(current_type);
         return current_type;
     }
 
-    if( (else_type == "") || (then_type == else_type && else_type == "int32") || (then_type ==  else_type && else_type =="string")){
+    if( (then_type == else_type && else_type == "int32") || (then_type ==  else_type && else_type =="string")){
         std::string current_type = then_type;
         anIf->setType(current_type);
         return current_type;
@@ -247,8 +320,6 @@ std::string CheckTypeScope::visit(If *anIf){
     std::string current_type = "int32";
     anIf->setType(current_type);
     return current_type;  
-
-
 }
 
 std::string CheckTypeScope::visit(While *aWhile)
@@ -264,11 +335,13 @@ std::string CheckTypeScope::visit(While *aWhile)
 
 std::string CheckTypeScope::visit(Let *let)
 {
+    //Check assign
     //search parents if the effective type is a class
+    std::string type = let->getType()->accept(this);
+
     if(let->getAssign() != 0){
         std::string arg = let->getAssign()->accept(this);
-        std::string type = let->getType()->accept(this);
-
+        
         //We search parents if the arg type is a class
         std::set<std::string> arg_parents;
         if(::prototype.find(arg) != ::prototype.end())
@@ -282,6 +355,15 @@ std::string CheckTypeScope::visit(Let *let)
             return current_type;
         }
     }
+
+    if(type != "string" && type != "unit" && type != "bool" && type != "int32" && prototype.find(let->getType()->accept(this))==prototype.end()){
+        yy::location l = let->getLocation();
+        errors.add(l,"Let : used of an undefined type ");
+        std::string current_type = let->getIn()->accept(this);
+        let->setType(current_type);
+        return current_type;
+    }
+
     ::vtable.new_scope();
     ::vtable.add_element(let->getObjID(),let->getType()->accept(this),let->getLocation());
     std::string returnvalue = let->getIn()->accept(this);
@@ -295,6 +377,7 @@ std::string CheckTypeScope::visit(Assign *assign)
 {
     yy::location l = assign->getLocation();
     std::string expr_type = assign->getExpr()->accept(this);
+
     if(::vtable.lookup(assign->getObjID(),l) == expr_type){
         std::string current_type = expr_type;
         assign->setType(current_type);
@@ -488,6 +571,10 @@ std::string CheckTypeScope::visit(Minus1 *minus1)
 
 std::string CheckTypeScope::visit(IsNull *isNull)
 {
+    if(::prototype.find(isNull->getExpr()->accept(this)) == ::prototype.end()){
+        yy::location l = isNull->getLocation();
+        errors.add(l,"isnull : the type of expr is not Object");
+    }
     isNull->setType("bool");
     return "bool";
 }
@@ -534,6 +621,9 @@ std::string CheckTypeScope::visit(Function *function)
     }
 
     //Case 2 : the method is defined in the self class, we check the args
+    if(is_field_init == true)
+        errors.add(l, "cannot use self in field initializer" );
+
     std::list<std::string> method_args = ::prototype[::self_classID].method[id].arguments;
 
     Args* args = function->getArgs();
@@ -600,7 +690,8 @@ std::string CheckTypeScope::visit(Dot *dot)
     Args* args = dot->getArgs();
     Expr* expr = args->getExpr();
     Exprxx* exprxx = args->getExprxx();
-
+    int n_args = method_args.size();
+    int count = 0;
     while(true){
         if(expr == nullptr){
             break;
@@ -623,6 +714,11 @@ std::string CheckTypeScope::visit(Dot *dot)
             dot->setType(current_type);
             return current_type;
         }
+        count ++;
+    }
+
+    if(count!=n_args){
+        errors.add(l, "the number of arguments does not match " );
     }
 
     std::string current_type = ::prototype[expr_0_type].method[id].return_type;
@@ -645,15 +741,27 @@ std::string CheckTypeScope::visit(ObjID *objID)
         return "unit";
     }
     if(objID->getID() == "self"){
+        if(is_field_init == true)
+            errors.add(l, "cannot use self in field initializer" );
+
         objID->setType(::self_classID);
         return self_classID;
+        
     }
     std::string type = ::vtable.lookup(objID->getID(),l);
+
+
     if(type == " "){
         objID->setType("int32");
         return "int32"; //If error we send int32 by default
     }
     else{
+        //If we are in a field init and the variable is of "depth 2" (class field)
+        if(is_field_init == true && ::vtable.depth_variable(objID->getID())<3 ){
+
+            errors.add(l, "cannot use a class field in field initializer" );
+        }
+
         objID->setType(type);
         return type;
     }

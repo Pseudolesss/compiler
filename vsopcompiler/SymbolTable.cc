@@ -32,7 +32,7 @@ void SymbolTable::add_element(std::string element_id, std::string element_type, 
 }
 
 std::string SymbolTable::lookup(std::string element_id, yy::location l){
-	
+
 
 	for (std::list<std::unordered_map<std::string,std::string>>::iterator it=symboltable.begin(); it != symboltable.end(); ++it){
     	if ((*it).find(element_id) != (*it).end()){
@@ -52,6 +52,17 @@ bool SymbolTable::check_variable(std::string element_id){
     	}
 	}
 	return false;
+}
+
+int SymbolTable::depth_variable(std::string element_id){
+	int count = symboltable.size();
+	for (std::list<std::unordered_map<std::string,std::string>>::iterator it=symboltable.begin(); it != symboltable.end(); ++it){
+    	if ((*it).find(element_id) != (*it).end()){
+        	return count;
+    	}
+    	count--;
+	}
+	return count;
 }
 
 void SymbolTable::new_scope(){

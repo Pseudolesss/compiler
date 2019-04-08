@@ -65,4 +65,6 @@ extern std::string self_classID;
 
 extern std::unordered_map<std::string,std::unordered_map<std::string,std::string>> class_variables_table;
 
+extern bool is_field_init; 
+
 #endif

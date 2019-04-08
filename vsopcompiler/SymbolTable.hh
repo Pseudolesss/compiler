@@ -31,6 +31,8 @@ public:
 	//Check if a variable is in the table
 	bool check_variable(std::string element_id);
 
+	int depth_variable(std::string element_id);
+
 private:
 
 	//The symbol table (a stack of hashtable, one for each scope)
