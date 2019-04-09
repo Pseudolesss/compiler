@@ -210,12 +210,20 @@ std::string ParserPrinter::visit(Minus1 *minus1){return "UnOp(-, " + minus1->get
 std::string ParserPrinter::visit(IsNull *isNull){return "UnOp(isnull, " + isNull->getExpr()->accept(this) + ")";}
 
 std::string ParserPrinter::visit(Args *args){
-    if(args->getExpr() != nullptr){
-        return args->getExpr()->accept(this);
+    Expr* expr =  args->getExpr();
+    Exprxx* exprxx = args->getExprxx();
+    std::string result = "";
+    while(true){
+        if(expr == nullptr){
+            break;
+        }
+        if(result != "")
+            result += ", ";
+        result += expr->accept(this) ;
+        expr = exprxx->getExpr();
+        exprxx = exprxx->getExprxx();
     }
-    else{
-        return "";
-    }
+    return result;
 }
 
 std::string ParserPrinter::visit(Function *function){return "Call(self, " + function->getID() +  ", [" +function->getArgs()->accept(this) + "])";}
