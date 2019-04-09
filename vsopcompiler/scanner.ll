@@ -207,12 +207,12 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 <str_lit>"\\"\n[ \t]*       {temp_column = 1; temp_column += yyleng - 2; temp_line++;}
 <str_lit>"\\"\r\n[ \t]*     {temp_column = 1; temp_column += yyleng - 3; temp_line++;}
 <str_lit>[^\n\0\\]          {str.append(yytext); temp_column += yyleng;}
-<str_lit>\0                 {column = --temp_column; line = temp_line; faultHandler(drv.file, " lexical error\r\n  character '\\000' is illegal in this context."); if(drv.setting == 0) return yy::parser::make_DOT(loc);}
-<str_lit>\n                 {column = --temp_column; line = temp_line; faultHandler(drv.file, " lexical error\r\n  character '\\n' is illegal in this context."); if(drv.setting == 0) return yy::parser::make_DOT(loc);}
-<str_lit>\\                 {column = --temp_column ; line = temp_line; faultHandler(drv.file," lexical error\r\n  character '\\' is illegal in this context."); if(drv.setting == 0) return yy::parser::make_DOT(loc);}
-<str_lit>\\[^\"]            {faultHandler(drv.file, string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); if(drv.setting == 0) return yy::parser::make_DOT(loc);}
-<str_lit>\\x[^\"]{2}        {faultHandler(drv.file, string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); if(drv.setting == 0) return yy::parser::make_DOT(loc);}
-<str_lit><<EOF>>            {faultHandler(drv.file,"non terminated string"); if(drv.setting == 0) return yy::parser::make_DOT(loc);}
+<str_lit>\0                 {column = --temp_column; line = temp_line; faultHandler(drv.file, " lexical error\r\n  character '\\000' is illegal in this context."); if(drv.setting == 0) return yy::parser::make_FAIL(loc);}
+<str_lit>\n                 {column = --temp_column; line = temp_line; faultHandler(drv.file, " lexical error\r\n  character '\\n' is illegal in this context."); if(drv.setting == 0) return yy::parser::make_FAIL(loc);}
+<str_lit>\\                 {column = --temp_column ; line = temp_line; faultHandler(drv.file," lexical error\r\n  character '\\' is illegal in this context."); if(drv.setting == 0) return yy::parser::make_FAIL(loc);}
+<str_lit>\\[^\"]            {faultHandler(drv.file, string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); if(drv.setting == 0) return yy::parser::make_FAIL(loc);}
+<str_lit>\\x[^\"]{2}        {faultHandler(drv.file, string("lexical error\r\n  ") + string(yytext) + string(" is not a valid escape sequence.")); if(drv.setting == 0) return yy::parser::make_FAIL(loc);}
+<str_lit><<EOF>>            {faultHandler(drv.file,"non terminated string"); if(drv.setting == 0) return yy::parser::make_FAIL(loc);}
 
 
 "(*"                        {s.push(pair<int,int> (line, column)); column += 2; yy_push_state(b_comment);}
@@ -222,13 +222,13 @@ whitespaces-operator    [^ \t\n\r\f\{\}\(\)\:;,+\-\*\/\^.=<"<=""<\-"]
 <b_comment>"*"+[^()\n]      column += yyleng;  /* eat up '*'s not followed by '(', ')' or '\n' */
 <b_comment>"("+[^(*\n]      column += yyleng;  /* eat up '('s not followed by '(' or '*'  */
 <b_comment>\n               column = 1; line++;
-<b_comment><<EOF>>          {cerr << "fileName" << ":" << s.top().first << ":" << s.top().second << ": lexical error " << endl;
-                             column += yyleng; if(drv.setting == 0) return yy::parser::make_DOT(loc);}
+<b_comment><<EOF>>          {cerr << drv.file << ":" << s.top().first << ":" << s.top().second << ": lexical error " << endl;
+                             column += yyleng; if(drv.setting == 0) return yy::parser::make_FAIL(loc);}
 <b_comment>"*)"             {s.pop(); column += 2; yy_pop_state();}
 
-<<EOF>>                                return yy::parser::make_END  (loc);
-.                                           {faultHandler(drv.file, " lexical error\r\n  character '" + string(yytext) + "' is illegal in this context."); if(drv.setting == 0) return yy::parser::make_DOT(loc);}
-{INTEGER_LITERAL}{whitespaces-operator}*    {faultHandler(drv.file,(string(yytext) + string(" is not a valid integer literal."))); if(drv.setting == 0) return yy::parser::make_DOT(loc);}
+<<EOF>>                                { if(drv.setting == 0) return yy::parser::make_SUCCEED(loc); return yy::parser::make_END(loc);}
+.                                           {faultHandler(drv.file, " lexical error\r\n  character '" + string(yytext) + "' is illegal in this context."); if(drv.setting == 0) return yy::parser::make_FAIL(loc);}
+{INTEGER_LITERAL}{whitespaces-operator}*    {faultHandler(drv.file,(string(yytext) + string(" is not a valid integer literal."))); if(drv.setting == 0) return yy::parser::make_FAIL(loc);}
 
  
 %%

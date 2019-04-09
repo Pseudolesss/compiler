@@ -21,12 +21,13 @@ main (int argc, char *argv[])
 
   if(argv[1] == std::string("-lex")){
       drv.setting = 0;
-      drv.parse(argv[2]);
-      return 0;
+      drv.file = argv[2];
+      int ret = drv.parse(argv[2]);
+      return ret;
   }
   else if(argv[1] == std::string("-check")){
       drv.setting = 1;
-      drv.parse("IO.vsop");
+      drv.parse(argv[2]);
       drv.root->accept(new FillPrototype());
       //Something to deallocate all the tree.
       

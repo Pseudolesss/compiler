@@ -50,6 +50,9 @@
 %token <int> INTEGER_LITERAL
 %token <std::string> STRING_LITERAL
 
+%token SUCCEED
+%token FAIL
+
 %start  program
 %token END  0  "end of file"
 %nonassoc IN
@@ -87,6 +90,7 @@
 %%
 program:
 	classes {Programm* a = new Programm($1, @$); $$ = a; drv.root = a;}
+	| SUCCEED {goto yyacceptlab ;}
 ;
 classes:
 	classes class  {$$ = new Classes($1,$2,@$);}
