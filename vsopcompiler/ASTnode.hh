@@ -4,9 +4,39 @@
 
 #include <list>
 #include <string>
+#include <vector>
 #include "Visitor.hh"
 #include "location.hh"
+
+#include "llvm/ADT/APFloat.h"
+#include "llvm/ADT/STLExtras.h"
+#include "llvm/IR/BasicBlock.h"
+#include "llvm/IR/Constants.h"
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/Function.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
+#include "llvm/IR/Type.h"
+#include "llvm/IR/Verifier.h"
+
 using namespace std;
+
+static llvm::LLVMContext TheContext;
+static llvm::IRBuilder<> Builder(TheContext);
+static std::unique_ptr<llvm::Module> TheModule;
+static std::map<std::string, llvm::AllocaInst *> NamedValues;
+
+// Because in vsop, every variable have a default initial value TODO Check if this is true for Class types (fields should be initialized by default)
+// @args Variable's type, Variable's value, Variable's name.
+static llvm::AllocaInst* CreateEntryBlockAlloca(llvm::Type* VarType, llvm::Value* VarValue , const std::string &VarName) {
+
+    // TODO If needed, add Block argument to allocate memory where they are declared instead of function entry
+    llvm::IRBuilder<> TmpB(Builder.GetInsertBlock(), Builder.GetInsertBlock()->begin());
+
+    return TmpB.CreateAlloca(VarType, 0, VarValue, VarName.c_str());
+}
+
 
 struct ASTnode
 {
@@ -20,6 +50,7 @@ struct ASTnode
     void setValueInh(std::string);
     void setValueSyn(std::string);
     yy::location getLocation();
+    virtual llvm::Value* codegen();
 
   private:
     std::string type;
@@ -44,7 +75,7 @@ struct Type : ASTnode
   public:
     Type(yy::location);
     Type(string,yy::location);
-    string getID();
+    std::string getID();
     std::string accept(Visitor*);
 
   private:
@@ -129,6 +160,7 @@ struct Block : Expr
     Expr* getExpr();
     Exprx* getExprx();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     Expr* expr;
@@ -144,6 +176,7 @@ struct Method : ASTnode
     Type* getType();
     Block* getBlock();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     string objID;
@@ -257,6 +290,7 @@ struct If : Expr
     Expr* getThen();
     Expr* getElse();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     Expr* _if;
@@ -271,6 +305,7 @@ struct While : Expr
     Expr* getWhile();
     Expr* getDo();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     Expr* _while;
@@ -282,11 +317,12 @@ struct Let : Expr
   public:
     Let(string, Type*, Expr*,yy::location);
     Let(string, Type*, Expr*, Expr*,yy::location);
-    string getObjID();
+    std::string getObjID();
     Type* getType();
     Expr* getAssign();
     Expr* getIn();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     string ObjID;
@@ -302,6 +338,7 @@ struct Assign : Expr
     string getObjID();
     Expr* getExpr();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     string ObjID;
@@ -313,6 +350,7 @@ struct Not : Unary
   public:
   Not(Expr*,yy::location);
   std::string accept(Visitor*);
+  llvm::Value* codegen();
 };
 
 struct And : Dual
@@ -320,6 +358,7 @@ struct And : Dual
   public:
     And(Expr*,Expr*,yy::location);
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 };
 
 struct Equal : Dual
@@ -327,6 +366,7 @@ struct Equal : Dual
   public:
   Equal(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
+  llvm::Value* codegen();
 };
 
 struct Lower : Dual
@@ -334,6 +374,7 @@ struct Lower : Dual
   public:
   Lower(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
+  llvm::Value* codegen();
 };
 
 struct LowerEqual : Dual
@@ -341,6 +382,8 @@ struct LowerEqual : Dual
   public:
   LowerEqual(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
+  llvm::Value* codegen();
+
 };
 
 struct Plus : Dual
@@ -348,6 +391,7 @@ struct Plus : Dual
   public:
   Plus(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
+  llvm::Value* codegen();
 };
 
 struct Minus : Dual
@@ -355,6 +399,7 @@ struct Minus : Dual
   public:
   Minus(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
+  llvm::Value* codegen();
 };
 
 struct Times : Dual
@@ -362,6 +407,7 @@ struct Times : Dual
   public:
   Times(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
+  llvm::Value* codegen();
 };
 
 struct Div : Dual
@@ -369,6 +415,7 @@ struct Div : Dual
   public:
   Div(Expr*,Expr*,yy::location);
   std::string accept(Visitor*);
+  llvm::Value* codegen();
 };
 
 struct Pow : Dual
@@ -383,6 +430,7 @@ struct Minus1 : Unary
   public:
   Minus1(Expr*,yy::location);
   std::string accept(Visitor*);
+  llvm::Value* codegen();
 };
 
 struct IsNull : Unary
@@ -390,6 +438,8 @@ struct IsNull : Unary
   public:
   IsNull(Expr*,yy::location);
   std::string accept(Visitor*);
+  llvm::Value* codegen();
+
 };
 struct Exprxx;
 struct Exprxx : ASTnode
@@ -426,6 +476,7 @@ struct Function : Expr
     string getID();
     Args* getArgs();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     string ID;
@@ -464,6 +515,7 @@ struct ObjID : Expr
     ObjID(string,yy::location);
     string getID();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     string ObjId;
@@ -481,6 +533,7 @@ struct IntLit : Literal
     IntLit(int,yy::location);
     int getValue();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     int value;
@@ -492,6 +545,7 @@ struct StrLit : Literal
     StrLit(string,yy::location);
     string getValue();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     string value;
@@ -503,6 +557,7 @@ struct BoolLit : Literal
     BoolLit(bool,yy::location);
     bool getValue();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     bool value;
