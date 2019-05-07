@@ -15,6 +15,7 @@ std::string FillPrototype::visit(Field *field)
         f.type = field->getType()->getID();
         f.location = field->getLocation();
         ::prototype[classID].field[field->getID()] = f;
+        ::prototype[classID].fieldKeys.push_back(field->getID());
     }
     else
     {
@@ -36,6 +37,7 @@ std::string FillPrototype::visit(Method *method)
         m.args_loc = method->getFormals()->getLocation();
         m.return_loc = method->getType()->getLocation();
         ::prototype[classID].method[method->getID()] = m;
+        ::prototype[classID].methodKeys.push_back(method->getID());
         methodID = method->getID();
         method->getFormals()->accept(this);
     }

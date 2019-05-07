@@ -194,6 +194,85 @@ std::string Classe::getTypeID() { return typeID; }
 std::string Classe::getParentID() { return parentID; }
 Body *Classe::getBody() { return body; }
 std::string Classe::accept(Visitor *v) { return v->visit(this); }
+llvm::Value* Classe::codegen() {
+
+    // Get fields and methods name and type for corresponding class
+    std::unordered_map<std::string,FieldPrototype> fields = ::prototype[getTypeID()].field;
+    std::unordered_map<std::string,MethodPrototype> methods = ::prototype[getTypeID()].method;
+    std::vector<std::string> fieldsKeys = ::prototype[getTypeID()].fieldKeys;
+    std::vector<std::string> methodsKeys = ::prototype[getTypeID()].methodKeys;
+
+
+    std::vector<llvm::Type* > vt;
+
+    // TODO L'iterable renvoie des paires, composer avec ces paires
+    // We first declare the field in the type declaration
+
+        for(std::string key : fieldsKeys){
+
+            FieldPrototype fieldPrototype = fields[key];
+
+            if(fieldPrototype.type == "int32")
+                vt.push_back(llvm::Type::getInt32Ty(TheContext));
+            else if(fieldPrototype.type == "bool")
+                vt.push_back(llvm::Type::getInt1Ty(TheContext));
+            else if(fieldPrototype.type == "string")
+                vt.push_back(llvm::Type::getInt8PtrTy(TheContext));
+            else // Get a class type already declared
+                vt.push_back(ClassesType[fieldPrototype.type]);
+        }
+
+    // Then the function
+    std::vector<llvm::Type*> argsType;
+    llvm::Type* pt = llvm::Type::getDoubleTy(TheContext);
+
+    // TODO L'iterable renvoie des paires, composer avec ces paires
+    for(std::string key  : methodsKeys){
+
+        MethodPrototype methodPrototype = methods[key];
+
+        // First the return type
+        if(methodPrototype.return_type == "int32")
+            pt = llvm::Type::getInt32Ty(TheContext);
+        else if(methodPrototype.return_type == "bool")
+            pt = llvm::Type::getInt1Ty(TheContext);
+        else if(methodPrototype.return_type == "string")
+            pt = llvm::Type::getInt8PtrTy(TheContext);
+        else // Get a class type already declared
+            pt = ClassesType[methodPrototype.return_type];
+
+        // Then the arguments' types
+        for(std::string t : methodPrototype.arguments){
+            if(t == "int32")
+                argsType.push_back(llvm::Type::getInt32Ty(TheContext));
+            else if(t == "bool")
+                argsType.push_back(llvm::Type::getInt1Ty(TheContext));
+            else if(t == "string")
+                argsType.push_back(llvm::Type::getInt8PtrTy(TheContext));
+            else // Get a class type already declared
+                argsType.push_back(ClassesType[t]);
+        }
+
+        vt.push_back(llvm::FunctionType::get(pt, argsType, false )); // Boolean for variable nb of arg
+    }
+
+
+
+    llvm::ArrayRef<llvm::Type*> ar = llvm::makeArrayRef(vt);
+
+    llvm::StructType* st = llvm::StructType::create(TheContext , ar, getTypeID() );
+
+    // Add new type in global table
+    ClassesType[getTypeID()] = st;
+
+    // TODO continu implementation
+    // TODO implementation of get field/method access with the GEP
+
+    return nullptr;
+
+
+
+}
 
 Classes::Classes(Classes *cs, Classe *c,yy::location l) : ASTnode(l),next_class(cs), a_class(c) {}
 Classes::Classes(Classe *c,yy::location l) : a_class(c),ASTnode(l) { next_class = nullptr; }

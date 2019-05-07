@@ -28,6 +28,8 @@ class ClassPrototype {
         std::unordered_map<std::string,FieldPrototype> field;
         // method id | return type
         std::unordered_map<std::string,MethodPrototype> method;
+        // To track relative order of "keys" field/method insertion.
+        std::vector<std::string> fieldKeys, methodKeys;
         // parent class id
         std::set<std::string> parent;
         std::string direct_parent;

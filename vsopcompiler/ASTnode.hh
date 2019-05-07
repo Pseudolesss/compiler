@@ -8,6 +8,8 @@
 #include "Visitor.hh"
 #include "location.hh"
 
+#include "prototype.hh"
+
 #include "llvm/ADT/APFloat.h"
 #include "llvm/ADT/STLExtras.h"
 #include "llvm/IR/BasicBlock.h"
@@ -26,6 +28,7 @@ static llvm::LLVMContext TheContext;
 static llvm::IRBuilder<> Builder(TheContext);
 static std::unique_ptr<llvm::Module> TheModule;
 static std::map<std::string, llvm::AllocaInst *> NamedValues;
+static std::map<std::string, llvm::StructType *> ClassesType;
 
 // Because in vsop, every variable have a default initial value TODO Check if this is true for Class types (fields should be initialized by default)
 // @args Variable's type, Variable's value, Variable's name.
@@ -222,6 +225,7 @@ struct Classe : ASTnode
     std::string getParentID();
     Body* getBody();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     string typeID;
