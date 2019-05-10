@@ -6,8 +6,8 @@ BISON = bison
 CXX = g++
 FLEX = flex
 XSLTPROC = xsltproc
-CXXFLAGS = -std=c++14
-LLVM = `llvm-config --system-libs --cppflags --ldflags --libs core`
+CXXFLAGS = -std=c++14 `llvm-config --cxxflags`
+LDFLAGS = `llvm-config --ldflags --system-libs --libs core`
 
 all: $(BASE)
 
@@ -21,7 +21,7 @@ all: $(BASE)
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 	
 $(BASE): $(BASE).o driver.o parser.o scanner.o ASTnode.o CheckPrinter.o  ParserPrinter.o ErrorHandler.o SymbolTable.o prototype.o FillPrototype.o CheckPrototype.o SymbolTable.o CheckTypeScope.o
-	$(CXX) $(CXXFLAGS) $(LLVM) -o $@ $^
+	$(CXX) $(LDFLAGS) -o $@ $^
 	echo $(shell pwd)
 
 $(BASE).o: parser.hh
