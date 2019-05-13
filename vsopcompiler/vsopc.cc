@@ -83,6 +83,7 @@ main (int argc, char *argv[])
       ::errors.print(drv.file);
 
       drv.root->codegen();
+      TheModule->print(llvm::outs(), nullptr);
 
     }
   else{
