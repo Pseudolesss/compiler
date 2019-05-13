@@ -12,6 +12,7 @@
 int
 main (int argc, char *argv[])
 {
+
   driver drv;
 
   if(argc != 3){
@@ -27,7 +28,7 @@ main (int argc, char *argv[])
   }
   else if(argv[1] == std::string("-check")){
       drv.setting = 1;
-      drv.parse(argv[2]);
+      drv.parse("/home/IO.vsop");
       drv.root->accept(new FillPrototype());
       //Something to deallocate all the tree.
       
@@ -67,7 +68,23 @@ main (int argc, char *argv[])
       int ret = drv.parse(argv[2]);
       std::cout << drv.root->accept(new ParserPrinter()) << std::endl;
       return ret;
-    }    
+    }
+    else if (argv[1] == std::string("-llvm")){
+
+      drv.setting = 1;
+
+      TheModule = llvm::make_unique<llvm::Module>("TODOPutCorrectFileName", TheContext);
+
+
+      drv.root->accept(new FillPrototype());
+      check(drv.file);
+      drv.root->accept(new CheckTypeScope());
+      std::cout << drv.root->accept(new CheckPrinter()) << std::endl;
+      ::errors.print(drv.file);
+
+      drv.root->codegen();
+
+    }
   else{
       std::cerr << "Non valid option argument" << std::endl;
       return 1;

@@ -241,6 +241,7 @@ struct Classes : ASTnode
     Classe* getClass();
     Classes* nextClass();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     Classe* a_class;
@@ -255,6 +256,7 @@ struct Programm : ASTnode
     Classes* getClasses();
     Classe* getClasse();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     Classes* classes;
