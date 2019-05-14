@@ -1,53 +1,97 @@
 //
 // Created by Julien L'hoest on 14/05/19.
 //
+#include "CodeGenerator.hh"
+#include "ASTnode.hh"
 
-llvm::Value* CodeGenerator::codegen(ASTnode* astNode) { return nullptr; }
+struct ASTnode;
+struct Expr;
+struct Type;
+struct Field;
+struct Formal;
+struct Formalx;
+struct Formals;
+struct Exprx;
+struct Exprxx;
+struct Block;
+struct Method;
+struct FieldMethod;
+struct Body;
+struct Classe;
+struct Classes;
+struct Programm;
+struct Dual;
+struct Unary;
+struct If;
+struct While;
+struct Let;
+struct Assign;
+struct Not;
+struct And;
+struct Equal;
+struct Lower;
+struct LowerEqual;
+struct Plus;
+struct Minus;
+struct Times;
+struct Div;
+struct Pow;
+struct Minus1;
+struct IsNull;
+struct Exprxx;
+struct Args;
+struct Function;
+struct Dot;
+struct New;
+struct ObjID;
+struct Literal;
+struct IntLit;
+struct StrLit;
+struct BoolLit;
+struct Lpar;
+struct Rpar;
+struct Parenthese;
+
+llvm::Value* CodeGenerator::accept(ASTnode* astNode) { return nullptr; }
 
 
-llvm::Value* CodeGenerator::codegen(Field* field) {
+llvm::Value* CodeGenerator::accept(Field* field) {
     //TODO implementation
     std::cout << "Field" << '\n';
-
-    getExpr()->codegen();
-
+    field->getExpr()->accept(this);
     return nullptr;
-
-
 }
 
 
-llvm::Value* CodeGenerator::codegen(Programm* programm) {//TODO implementation(actually just for demo purposes)
+llvm::Value* CodeGenerator::accept(Programm* programm) {//TODO implementation(actually just for demo purposes)
 
     std::cout << "Program" << '\n';
-    getClasses()->codegen();
+    programm->getClasses()->accept(this);
     return nullptr;
 
 }
 
 
-llvm::Value* CodeGenerator::codegen(Classes* classes) { //TODO implementation(actually just for demo purposes)
+llvm::Value* CodeGenerator::accept(Classes* classes) { //TODO implementation(actually just for demo purposes)
 
     std::cout << "Classes" << '\n';
-    Classes* classes = this;
     while(classes->getClass() != nullptr) {
-        classes->getClass()->codegen();
+        classes->getClass()->accept(this);
         classes = classes->nextClass();
     }
-
     return nullptr;
 }
 
 
-llvm::Value* CodeGenerator::codegen(Classe* classe) {
+llvm::Value* CodeGenerator::accept(Classe* classe) {
 
     std::cout << "Classe" << '\n';
 
     // Get fields and methods name and type for corresponding class
-    std::unordered_map<std::string,FieldPrototype> fields = ::prototype[getTypeID()].field;
-    std::unordered_map<std::string,MethodPrototype> methods = ::prototype[getTypeID()].method;
-    std::vector<std::string> fieldsKeys = ::prototype[getTypeID()].fieldKeys;
-    std::vector<std::string> methodsKeys = ::prototype[getTypeID()].methodKeys;
+    std::unordered_map<std::string,FieldPrototype> fields = ::prototype[classe->getTypeID()].field;
+    std::unordered_map<std::string,MethodPrototype> methods = ::prototype[classe->getTypeID()].method;
+    std::vector<std::string> fieldsKeys = ::prototype[classe->getTypeID()].fieldKeys;
+    std::vector<std::string> methodsKeys = ::prototype[classe->getTypeID()].methodKeys;
 
 
     std::vector<llvm::Type* > vt;
@@ -107,17 +151,17 @@ llvm::Value* CodeGenerator::codegen(Classe* classe) {
 
     llvm::ArrayRef<llvm::Type*> ar = llvm::makeArrayRef(vt);
 
-    llvm::StructType* st = llvm::StructType::create(TheContext , ar, getTypeID() );
+    llvm::StructType* st = llvm::StructType::create(TheContext , ar, classe->getTypeID() );
 
     // Add new type in global table
-    ClassesType[getTypeID()] = st;
+    ClassesType[classe->getTypeID()] = st;
 
     // TODO continu implementation
     // TODO implementation of get field/method access with the GEP => getElementPointer llvm defined function
 
     //TODO what follow has to be removed, it is just to call the rest of the tree and see what happens
 
-    getBody()->codegen();
+    classe->getBody()->accept(this);
 
     return nullptr;
 
@@ -126,31 +170,31 @@ llvm::Value* CodeGenerator::codegen(Classe* classe) {
 }
 
 
-llvm::Value* CodeGenerator::codegen(Block* block) {
+llvm::Value* CodeGenerator::accept(Block* block) {
 
     std::cout << "Block" << '\n';
 
-    if(getExpr() == nullptr)
+    if(block->getExpr() == nullptr)
         return llvm::Constant::getNullValue(llvm::Type::getVoidTy(TheContext)); // Noop
     //TODO Check the meaning of a no op and if this could be an ok alternative
 
-    getExpr()->codegen();
-    getExprx()->getExpr()->codegen();
+    block->getExpr()->accept(this);
+    block->getExprx()->getExpr()->accept(this);
 
-    Exprx* e = getExprx();
-    Expr* exp = getExpr();
+    Exprx* e = block->getExprx();
+    Expr* exp = block->getExpr();
     while(e->getExpr() != nullptr){
-        exp->codegen();
+        exp->accept(this);
         exp = e->getExpr();
         e = e->getExprx();
     }
 
-    return exp->codegen();
+    return exp->accept(this);
 
 }
 
 
-llvm::Value* CodeGenerator::codegen(FieldMethod* fieldMethod) {
+llvm::Value* CodeGenerator::accept(FieldMethod* fieldMethod) {
 
     //TODO implementation
     std::cout << "FieldMethod" << '\n';
@@ -160,7 +204,7 @@ llvm::Value* CodeGenerator::codegen(FieldMethod* fieldMethod) {
     std::vector<Method*> m;
     std::vector<Field*> f;
 
-    FieldMethod* fm = this;
+    FieldMethod* fm = fieldMethod;
     while(fm->getFieldMethod() != nullptr){
         if(fm->getField() != nullptr)
             f.emplace_back(fm->getField());
@@ -170,12 +214,12 @@ llvm::Value* CodeGenerator::codegen(FieldMethod* fieldMethod) {
     }
 
     while(!f.empty()){
-        f.back()->codegen();
+        f.back()->accept(this);
         f.pop_back();
     }
 
     while(!m.empty()){
-        m.back()->codegen();
+        m.back()->accept(this);
         m.pop_back();
     }
 
@@ -185,17 +229,17 @@ llvm::Value* CodeGenerator::codegen(FieldMethod* fieldMethod) {
 }
 
 
-llvm::Value* CodeGenerator::codegen(Method* method) {
+llvm::Value* CodeGenerator::accept(Method* method) {
 
     std::cout << "Method" << '\n';
 
     llvm::Type* PT;
 
-    if(getType()->getID() == "string"){
+    if(method->getType()->getID() == "string"){
         PT = llvm::Type::getInt8PtrTy(TheContext);
-    }else if(getType()->getID() == "int32"){
+    }else if(method->getType()->getID() == "int32"){
         PT = llvm::Type::getInt32Ty(TheContext);
-    }else if(getType()->getID() == "bool"){
+    }else if(method->getType()->getID() == "bool"){
         PT = llvm::Type::getInt1Ty(TheContext);
     }else {
         //TODO Le cas d'une classe prédéfini
@@ -203,9 +247,9 @@ llvm::Value* CodeGenerator::codegen(Method* method) {
     }
 
     std::vector<Formal* > fs;
-    if(getFormals()->getFormal() != nullptr){
-        fs.push_back(getFormals()->getFormal());
-        Formalx* f = getFormals()->getFormalx();
+    if(method->getFormals()->getFormal() != nullptr){
+        fs.push_back(method->getFormals()->getFormal());
+        Formalx* f = method->getFormals()->getFormalx();
 
         while(f->getFormal() != nullptr){
             fs.push_back(f->getFormal());
@@ -232,7 +276,7 @@ llvm::Value* CodeGenerator::codegen(Method* method) {
 
 
     llvm::FunctionType* FT = llvm::FunctionType::get(PT, ArgumentsType, false); // Boolean to indicate variable nb of arg or not (like printf(string, arg1, arg2, ...) )
-    llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage, getID(), TheModule.get());
+    llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage, method->getID(), TheModule.get());
 
     // Naming declaration arguments (not necessary)
     // F->args and fs have same size
@@ -247,7 +291,7 @@ llvm::Value* CodeGenerator::codegen(Method* method) {
     Builder.SetInsertPoint(BB);
 
     // Return instruction handle by Block codegen()
-    llvm::Value* Block = getBlock()->codegen();
+    llvm::Value* Block = method->getBlock()->accept(this);
 
     // Type has already be checked, it is "safe" enough to just take the function type as condition, Block last expr is ok tho
     //TODO Check if good condition and type for Unit
@@ -263,24 +307,24 @@ llvm::Value* CodeGenerator::codegen(Method* method) {
 }
 
 
-llvm::Value* CodeGenerator::codegen(Body* body) {
+llvm::Value* CodeGenerator::accept(Body* body) {
 
     //TODO implementation
     std::cout << "Body" << '\n';
 
-    getFieldMethod()->codegen();
+    body->getFieldMethod()->accept(this);
 
     return nullptr;
 
 }
 
 
-llvm::Value* CodeGenerator::codegen(If* anIf) {
+llvm::Value* CodeGenerator::accept(If* anIf) {
 
     std::cout << "If" << '\n';
 
     // Value of the conditional (i8)
-    llvm::Value* CondV = getIf()->codegen();
+    llvm::Value* CondV = anIf->getIf()->accept(this);
 
     // Need the function to insert the block in the right place
     llvm::Function* TheFunction = Builder.GetInsertBlock()->getParent();
@@ -297,7 +341,7 @@ llvm::Value* CodeGenerator::codegen(If* anIf) {
     Builder.SetInsertPoint(ThenBB);
 
     // Value of Then
-    llvm::Value* ThenV = getThen()->codegen();
+    llvm::Value* ThenV = anIf->getThen()->accept(this);
 
     // Branch to the merging block
     Builder.CreateBr(MergeBB);
@@ -310,8 +354,8 @@ llvm::Value* CodeGenerator::codegen(If* anIf) {
     Builder.SetInsertPoint(ElseBB);
 
     llvm::Value* ElseV;
-    if(getElse() != nullptr)
-        ElseV = getElse()->codegen();
+    if(anIf->getElse() != nullptr)
+        ElseV = anIf->getElse()->accept(this);
     else //TODO Check if this is correct or not => Interpretation of Unit == NoOP ?
         ElseV = llvm::Constant::getNullValue(llvm::Type::getVoidTy(TheContext)); // Noop
 
@@ -333,7 +377,7 @@ llvm::Value* CodeGenerator::codegen(If* anIf) {
 }
 
 
-llvm::Value* CodeGenerator::codegen(While* aWhile) {
+llvm::Value* CodeGenerator::accept(While* aWhile) {
 
     std::cout << "While" << '\n';
 
@@ -344,7 +388,7 @@ llvm::Value* CodeGenerator::codegen(While* aWhile) {
     llvm::Function* TheFunction = Builder.GetInsertBlock()->getParent();
 
     // Value of the conditional (i8)
-    llvm::Value* CondV = getWhile()->codegen();
+    llvm::Value* CondV = aWhile->getWhile()->accept(this);
 
 //    // Create an alloca for the variable in the current block.
 //    llvm::AllocaInst *Alloca = CreateEntryBlockAlloca(TheFunction, "whilecond");
@@ -370,10 +414,10 @@ llvm::Value* CodeGenerator::codegen(While* aWhile) {
 
     // Emit the body of the loop.  This, like any other expr, can change the
     // current BB.
-    llvm::Value* Body = getDo()->codegen();
+    llvm::Value* Body = aWhile->getDo()->accept(this);
 
     //TODO Oh dear we are in trouble => Is it really a correct flow ? (seems ok)
-    llvm::Value* NextC = getWhile()->codegen();
+    llvm::Value* NextC = aWhile->getWhile()->accept(this);
 
     // Create the "after loop" block and insert it.
     llvm::BasicBlock *AfterBB = llvm::BasicBlock::Create(TheContext, "afterloop", TheFunction);
@@ -396,13 +440,13 @@ llvm::Value* CodeGenerator::codegen(While* aWhile) {
 }
 
 
-llvm::Value* CodeGenerator::codegen(Assign* assign) {
+llvm::Value* CodeGenerator::accept(Assign* assign) {
 
     std::cout << "Assign" << '\n';
 
-    llvm::Value* Val = getExpr()->codegen();
+    llvm::Value* Val = assign->getExpr()->accept(this);
 
-    llvm::Value* Obj = NamedValues[getObjID()];
+    llvm::Value* Obj = NamedValues[assign->getObjID()];
 
     Builder.CreateStore(Val, Obj);
 
@@ -411,7 +455,7 @@ llvm::Value* CodeGenerator::codegen(Assign* assign) {
 }
 
 
-llvm::Value* CodeGenerator::codegen(Let* let) {
+llvm::Value* CodeGenerator::accept(Let* let) {
 
     std::cout << "Let" << '\n';
 
@@ -420,27 +464,27 @@ llvm::Value* CodeGenerator::codegen(Let* let) {
 
     // Default constructor or not
     llvm::Value* Val;
-    if(getAssign() == nullptr){
+    if(let->getAssign() == nullptr){
         // TODO checl if initiator ok by constant
-        if(getType()->getID() == "int32")
-            CreateEntryBlockAlloca(llvm::Type::getInt32Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true)), getObjID());
-        else if(getType()->getID() == "bool")
-            CreateEntryBlockAlloca(llvm::Type::getInt1Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(1, 0)), getObjID());
-        else if(getType()->getID() == "string")
-            CreateEntryBlockAlloca(llvm::Type::getInt32Ty(TheContext), llvm::ConstantDataArray::getString(TheContext, llvm::StringRef("")), getObjID());
+        if(let->getType()->getID() == "int32")
+            CreateEntryBlockAlloca(llvm::Type::getInt32Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true)), let->getObjID());
+        else if(let->getType()->getID() == "bool")
+            CreateEntryBlockAlloca(llvm::Type::getInt1Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(1, 0)), let->getObjID());
+        else if(let->getType()->getID() == "string")
+            CreateEntryBlockAlloca(llvm::Type::getInt32Ty(TheContext), llvm::ConstantDataArray::getString(TheContext, llvm::StringRef("")), let->getObjID());
         else // TODO initiator for class type
-            CreateEntryBlockAlloca(llvm::Type::getInt1Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(1, 0)), getObjID());
+            CreateEntryBlockAlloca(llvm::Type::getInt1Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(1, 0)), let->getObjID());
 
     }
     else{
 
-        llvm::Value* Init = getAssign()->codegen();
-
-        CreateEntryBlockAlloca(Init->getType(), Init, getObjID());
+        llvm::Value* Init = let->getAssign()->accept(this);
+        //TODO
+        CreateEntryBlockAlloca(Init->getType(), Init, let->getObjID());
 
     }
 
-    llvm::Value* LetBody = getIn()->codegen();
+    llvm::Value* LetBody = let->getIn()->accept(this);
 
     // TODO do we need to create a new block to be the new insertion block?
 
@@ -449,74 +493,88 @@ llvm::Value* CodeGenerator::codegen(Let* let) {
 }
 
 
-llvm::Value* CodeGenerator::codegen(Function* function) {
+llvm::Value* CodeGenerator::accept(Function* function) {
 
     std::cout << "Function" << '\n';
 
     std::vector<llvm::Value*> ArgsVal;
-    std::vector<Args*> ArgsVec;
+    std::vector<Expr*> ArgsExpr;
 
     // Look up the name in the global module table.
-    llvm::Function* functionCalled = TheModule->getFunction(getID());
+    llvm::Function* functionCalled = TheModule->getFunction(function->getID());
 
     // Need to isolate the arguments of the function and get their llvm expression
     // Check if the first one is empty
     if(function->getArgs()->getExpr() != nullptr) {
-        ArgsVec.push_back( (Args*) function->getArgs()->getExpr());
-        while (ArgsVec.back()->getExpr() != nullptr)
-            ArgsVec.push_back( (Args*) ArgsVec.back()->getExpr());
+        ArgsExpr.push_back( function->getArgs()->getExpr());
+        struct Exprxx* exprxx = function->getArgs()->getExprxx();
+        while(exprxx != nullptr){
+            ArgsExpr.push_back( exprxx->getExpr());
+            exprxx = exprxx->getExprxx();
+        }
     }
 
-    for (int i = 0, s = ArgsVec.size(); i < s; ++i) {
-        ArgsVal.push_back(ArgsVec[i]->codegen());
+    for (int i = 0, s = ArgsExpr.size(); i < s; ++i) {
+        ArgsVal.push_back(ArgsExpr[i]->accept(this));
     }
 
     return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
 }
 
+//TODO IMPLEMENT POWER
+llvm::Value* CodeGenerator::accept(Pow* pow) { std::cout << "pow" << '\n'; return nullptr;}
 
-llvm::Value* CodeGenerator::codegen(ObjID* objId) { std::cout << "ObjID" << '\n';
+
+//TODO IMPLEMENT DYNAMIC DISPATCH 
+llvm::Value* CodeGenerator::accept(Dot* dot) { std::cout << "dot" << '\n'; return nullptr;}
+
+//TODO IMPLEMENT NEW
+llvm::Value* CodeGenerator::accept(New* anew) {std::cout << "new" << '\n'; return nullptr;}
+
+llvm::Value* CodeGenerator::accept(ObjID* objId) { std::cout << "ObjID" << '\n';
 //TODO The goal is to send back the value only, no need to load in a register CHANGE THAT IF NEEDED
-    return Builder.CreateLoad(NamedValues[getID()], getID()); } // No check done, should not cause error access (still bad habit)
+    return Builder.CreateLoad(NamedValues[objId->getID()], objId->getID()); } // No check done, should not cause error access (still bad habit)
 
 
-llvm::Value* CodeGenerator::codegen(IntLit* intLit) {std::cout << "IntLit" << '\n'; return llvm::ConstantInt::get(TheContext, llvm::APInt(32, intLit->getValue(), true));}
+llvm::Value* CodeGenerator::accept(IntLit* intLit) {std::cout << "IntLit" << '\n'; return llvm::ConstantInt::get(TheContext, llvm::APInt(32, intLit->getValue(), true));}
 
 
-llvm::Value* CodeGenerator::codegen(StrLit* strLit) { std::cout << "StrLit" << '\n'; return llvm::ConstantDataArray::getString(TheContext, llvm::StringRef(strLit->getValue())); }
+llvm::Value* CodeGenerator::accept(StrLit* strLit) { std::cout << "StrLit" << '\n'; return llvm::ConstantDataArray::getString(TheContext, llvm::StringRef(strLit->getValue())); }
 
 
-llvm::Value* CodeGenerator::codegen(BoolLit* boolLit) {std::cout << "BoolLit" << '\n'; return Builder.getInt1(boolLit->getValue()); }
+llvm::Value* CodeGenerator::accept(BoolLit* boolLit) {std::cout << "BoolLit" << '\n'; return Builder.getInt1(boolLit->getValue()); }
 
 
-llvm::Value* CodeGenerator::codegen(And* anAnd) {std::cout << "And" << '\n'; return Builder.CreateAnd(anAnd->getLeft()->codegen(), anAnd->getRight()->codegen(), "andop"); }
+llvm::Value* CodeGenerator::accept(And* anAnd) {std::cout << "And" << '\n'; return Builder.CreateAnd(anAnd->getLeft()->accept(this), anAnd->getRight()->accept(this), "andop"); }
 
 
-llvm::Value* CodeGenerator::codegen(Not* aNot) {std::cout << "Not" << '\n'; return Builder.CreateNot(aNot->getExpr()->codegen(), "notop"); }
+llvm::Value* CodeGenerator::accept(Not* aNot) {std::cout << "Not" << '\n'; return Builder.CreateNot(aNot->getExpr()->accept(this), "notop"); }
 
 
-llvm::Value* CodeGenerator::codegen(Equal* equal) {std::cout << "Equal" << '\n'; return Builder.CreateICmpEQ(equal->getLeft()->codegen(), equal->getRight()->codegen(), "equbool"); }
+llvm::Value* CodeGenerator::accept(Equal* equal) {std::cout << "Equal" << '\n'; return Builder.CreateICmpEQ(equal->getLeft()->accept(this), equal->getRight()->accept(this), "equbool"); }
 
 
-llvm::Value* CodeGenerator::codegen(Lower* lower) {std::cout << "Lower" << '\n'; return Builder.CreateICmpSLT(lower->getLeft()->codegen(), lower->getRight()->codegen(), "lowtha"); }
+llvm::Value* CodeGenerator::accept(Lower* lower) {std::cout << "Lower" << '\n'; return Builder.CreateICmpSLT(lower->getLeft()->accept(this), lower->getRight()->accept(this), "lowtha"); }
 
 
-llvm::Value* CodeGenerator::codegen(LowerEqual* lowerEqual) {std::cout << "LowerEqual" << '\n'; return Builder.CreateICmpSLE(lowerEqual->getLeft()->codegen(), lowerEqual->getRight()->codegen(), "lowequ");}
+llvm::Value* CodeGenerator::accept(LowerEqual* lowerEqual) {std::cout << "LowerEqual" << '\n'; return Builder.CreateICmpSLE(lowerEqual->getLeft()->accept(this), lowerEqual->getRight()->accept(this), "lowequ");}
 
 
-llvm::Value* CodeGenerator::codegen(Plus* plus) {std::cout << "Plus" << '\n'; return Builder.CreateFAdd(plus->getLeft()->codegen(), plus->getRight()->codegen(), "addop");}
+llvm::Value* CodeGenerator::accept(Plus* plus) {std::cout << "Plus" << '\n'; return Builder.CreateFAdd(plus->getLeft()->accept(this), plus->getRight()->accept(this), "addop");}
 
 
-llvm::Value* CodeGenerator::codegen(Minus* minus) {std::cout << "Minus" << '\n'; return Builder.CreateFSub(minus->getLeft()->codegen(), minus->getRight()->codegen(), "subop");}
+llvm::Value* CodeGenerator::accept(Minus* minus) {std::cout << "Minus" << '\n'; return Builder.CreateFSub(minus->getLeft()->accept(this), minus->getRight()->accept(this), "subop");}
 
 
-llvm::Value* CodeGenerator::codegen(Times* times) {std::cout << "Times" << '\n'; return Builder.CreateFMul(times->getLeft()->codegen(), times->getRight()->codegen(), "mulop");}
+llvm::Value* CodeGenerator::accept(Times* times) {std::cout << "Times" << '\n'; return Builder.CreateFMul(times->getLeft()->accept(this), times->getRight()->accept(this), "mulop");}
 
 
-llvm::Value* CodeGenerator::codegen(Div* div) {std::cout << "Div" << '\n'; return Builder.CreateFDiv(div->getLeft()->codegen(), div->getRight()->codegen(), "divop"); }
+llvm::Value* CodeGenerator::accept(Div* div) {std::cout << "Div" << '\n'; return Builder.CreateFDiv(div->getLeft()->accept(this), div->getRight()->accept(this), "divop"); }
 
 
-llvm::Value* CodeGenerator::codegen(Minus1* minus1) {std::cout << "Minus1" << '\n'; return Builder.CreateFSub( llvm::ConstantInt::get(TheContext, llvm::APInt(32,0)), minus1->getExpr()->codegen(), "minusop"); }
+llvm::Value* CodeGenerator::accept(Minus1* minus1) {std::cout << "Minus1" << '\n'; return Builder.CreateFSub( llvm::ConstantInt::get(TheContext, llvm::APInt(32,0)), minus1->getExpr()->accept(this), "minusop"); }
 
 
-llvm::Value* CodeGenerator::codegen(IsNull* isNull) {std::cout << "IsNull" << '\n'; return Builder.CreateIsNull(isNull->getExpr()->codegen(), "isnullbool"); }
+llvm::Value* CodeGenerator::accept(IsNull* isNull) {std::cout << "IsNull" << '\n'; return Builder.CreateIsNull(isNull->getExpr()->accept(this), "isnullbool"); }
+
+llvm::Value* CodeGenerator::accept(Parenthese* parenthese) {std::cout << "()" << '\n'; return parenthese->getExpr()->accept(this);}

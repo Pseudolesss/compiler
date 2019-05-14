@@ -1,19 +1,19 @@
 /*
-
 check semantic error on prototype, check:
     -no Main class with main method: no arg and return int32
-    -class redefined => already done
+    -class redefined 
     -field/method illegaly redefined, implement inheritence.
     -a field cannot be named self
     -an overriden method return type or argument does not match parent return type.
     -cyclic class
     -make inheritence 
-
 */
+
 #include "CheckPrototype.hh"
 #include "prototype.hh"
 #include <set>
 
+//retrun true if there no error, false otherwise.
 bool check(std::string file){
     return check_main(file) && check_parent(file);
 }

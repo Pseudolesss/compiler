@@ -39,55 +39,55 @@ static llvm::AllocaInst* CreateEntryBlockAlloca(llvm::Type* VarType, llvm::Value
 }
 
 
-class CodeGenerator : public Visitor
+class CodeGenerator 
 {
 public:
-    llvm::Value* codegen(ASTnode *);
-    llvm::Value* codegen(Expr *);
-    llvm::Value* codegen(Type *);
-    llvm::Value* codegen(Field *);
-    llvm::Value* codegen(Formal *);
-    llvm::Value* codegen(Formalx *);
-    llvm::Value* codegen(Formals *);
-    llvm::Value* codegen(Exprx *);
-    llvm::Value* codegen(Exprxx *);
-    llvm::Value* codegen(Block *);
-    llvm::Value* codegen(Method *);
-    llvm::Value* codegen(FieldMethod *);
-    llvm::Value* codegen(Body *);
-    llvm::Value* codegen(Classe *);
-    llvm::Value* codegen(Classes *);
-    llvm::Value* codegen(Programm *);
-    llvm::Value* codegen(Dual *);
-    llvm::Value* codegen(Unary *);
-    llvm::Value* codegen(If *);
-    llvm::Value* codegen(While *);
-    llvm::Value* codegen(Let *);
-    llvm::Value* codegen(Assign *);
-    llvm::Value* codegen(Not *);
-    llvm::Value* codegen(And *);
-    llvm::Value* codegen(Equal *);
-    llvm::Value* codegen(Lower *);
-    llvm::Value* codegen(LowerEqual *);
-    llvm::Value* codegen(Plus *);
-    llvm::Value* codegen(Minus *);
-    llvm::Value* codegen(Times *);
-    llvm::Value* codegen(Div *);
-    llvm::Value* codegen(Pow *);
-    llvm::Value* codegen(Minus1 *);
-    llvm::Value* codegen(IsNull *);
-    llvm::Value* codegen(Args *);
-    llvm::Value* codegen(Function *);
-    llvm::Value* codegen(Dot *);
-    llvm::Value* codegen(New *);
-    llvm::Value* codegen(ObjID *);
-    llvm::Value* codegen(Literal *);
-    llvm::Value* codegen(IntLit *);
-    llvm::Value* codegen(StrLit *);
-    llvm::Value* codegen(BoolLit *);
-    llvm::Value* codegen(Lpar *);
-    llvm::Value* codegen(Rpar *);
-    llvm::Value* codegen(Parenthese *);
+    llvm::Value* accept(ASTnode *);
+    llvm::Value* accept(Expr *);
+    llvm::Value* accept(Type *);
+    llvm::Value* accept(Field *);
+    llvm::Value* accept(Formal *);
+    llvm::Value* accept(Formalx *);
+    llvm::Value* accept(Formals *);
+    llvm::Value* accept(Exprx *);
+    llvm::Value* accept(Exprxx *);
+    llvm::Value* accept(Block *);
+    llvm::Value* accept(Method *);
+    llvm::Value* accept(FieldMethod *);
+    llvm::Value* accept(Body *);
+    llvm::Value* accept(Classe *);
+    llvm::Value* accept(Classes *);
+    llvm::Value* accept(Programm *);
+    llvm::Value* accept(Dual *);
+    llvm::Value* accept(Unary *);
+    llvm::Value* accept(If *);
+    llvm::Value* accept(While *);
+    llvm::Value* accept(Let *);
+    llvm::Value* accept(Assign *);
+    llvm::Value* accept(Not *);
+    llvm::Value* accept(And *);
+    llvm::Value* accept(Equal *);
+    llvm::Value* accept(Lower *);
+    llvm::Value* accept(LowerEqual *);
+    llvm::Value* accept(Plus *);
+    llvm::Value* accept(Minus *);
+    llvm::Value* accept(Times *);
+    llvm::Value* accept(Div *);
+    llvm::Value* accept(Pow *);
+    llvm::Value* accept(Minus1 *);
+    llvm::Value* accept(IsNull *);
+    llvm::Value* accept(Args *);
+    llvm::Value* accept(Function *);
+    llvm::Value* accept(Dot *);
+    llvm::Value* accept(New *);
+    llvm::Value* accept(ObjID *);
+    llvm::Value* accept(Literal *);
+    llvm::Value* accept(IntLit *);
+    llvm::Value* accept(StrLit *);
+    llvm::Value* accept(BoolLit *);
+    llvm::Value* accept(Lpar *);
+    llvm::Value* accept(Rpar *);
+    llvm::Value* accept(Parenthese *);
 };
 
 

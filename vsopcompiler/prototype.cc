@@ -12,7 +12,7 @@ std::string const print_set(std::set<std::string> myset){
         out += elem + ",";
     }   
     return out + "}\n";
-};
+}
 
 std::string MethodPrototype::toString() const{
     std::string out = "arguments: {";
@@ -21,7 +21,7 @@ std::string MethodPrototype::toString() const{
     }
     out += "} return type: " + return_type + "\n\t\t" ;
     return out;
-};
+}
 
 
 std::string print_map(std::unordered_map<std::string,FieldPrototype> const &m)
@@ -31,7 +31,7 @@ std::string print_map(std::unordered_map<std::string,FieldPrototype> const &m)
         out +=   (*it).first + " : " + (*it).second.type + " , ";
     }
     return out + "}\n";
-};
+}
 
 std::string print_map(std::unordered_map<std::string,MethodPrototype> const &m)
 {
@@ -40,7 +40,7 @@ std::string print_map(std::unordered_map<std::string,MethodPrototype> const &m)
         out +=   pair.first + " : " + pair.second.toString() + " , ";
     }
     return out + "}\n";
-};
+}
 
 std::string ClassPrototype::toString(){
     std::string out  = "";

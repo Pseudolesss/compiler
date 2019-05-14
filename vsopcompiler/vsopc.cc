@@ -75,7 +75,7 @@ main (int argc, char *argv[])
       drv.setting = 1;
 std::cout << "1" << '\n';
 
-      drv.parse("/home/pseudoless/Dropbox/git/compiler/vsopcompiler/IO.vsop");
+      drv.parse("/home/IO.vsop");
       drv.root->accept(new FillPrototype());
       int ret = drv.parse(argv[2]);
 
@@ -85,7 +85,7 @@ std::cout << "1" << '\n';
       std::cout << drv.root->accept(new CheckPrinter()) << std::endl;
       ::errors.print(drv.file);
 
-      drv.root->codegen(new CodeGenerator());
+      drv.root->accept(new CodeGenerator());
       TheModule->print(llvm::outs(), nullptr);
 
     }
