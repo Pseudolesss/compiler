@@ -8,7 +8,7 @@
 #include "prototype.hh"
 #include "ParserPrinter.hh"
 #include "SymbolTable.hh"
-#include "ASTnode.hh"
+#include "CodeGenerator.hh"
 
 int
 main (int argc, char *argv[])
@@ -85,7 +85,7 @@ std::cout << "1" << '\n';
       std::cout << drv.root->accept(new CheckPrinter()) << std::endl;
       ::errors.print(drv.file);
 
-      drv.root->codegen();
+      drv.root->codegen(new CodeGenerator());
       TheModule->print(llvm::outs(), nullptr);
 
     }
