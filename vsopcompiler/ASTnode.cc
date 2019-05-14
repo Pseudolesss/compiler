@@ -266,7 +266,11 @@ llvm::Value* Classe::codegen() {
     ClassesType[getTypeID()] = st;
 
     // TODO continu implementation
-    // TODO implementation of get field/method access with the GEP
+    // TODO implementation of get field/method access with the GEP => getElementPointer llvm defined function
+
+    //TODO what follow has to be removed, it is just to call the rest of the tree and see what happens
+
+    getBody()->codegen();
 
     return nullptr;
 
@@ -279,12 +283,28 @@ Classes::Classes(Classe *c,yy::location l) : a_class(c),ASTnode(l) { next_class 
 Classe *Classes::getClass() { return a_class; }
 Classes *Classes::nextClass() { return next_class; }
 std::string Classes::accept(Visitor *v) { return v->visit(this); }
+llvm::Value* Classes::codegen() { //TODO implementation(actually just for demo purposes)
+
+    Classes* classes = this;
+    while(classes->getClass() != nullptr) {
+        classes->getClass()->codegen();
+        classes = classes->nextClass();
+    }
+
+    return nullptr;
+}
 
 Programm::Programm(Classes *cs, yy::location l) : ASTnode(l),classes(cs) { classe = nullptr; }
 Programm::Programm(Classe *c, yy::location l) : ASTnode(l), classe(c) { classes = nullptr; }
 Classes *Programm::getClasses() { return classes; }
 Classe *Programm::getClasse() { return classe; }
 std::string Programm::accept(Visitor *v) { return v->visit(this); }
+llvm::Value* Programm::codegen() {//TODO implementation(actually just for demo purposes)
+
+    getClasses()->codegen();
+    return nullptr;
+
+}
 
 Dual::Dual(Expr *left, Expr *right,yy::location l) : Expr(l),left(left), right(right) { dataType = string("Dual"); }
 Expr *Dual::getLeft() { return left; }
