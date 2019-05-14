@@ -31,6 +31,16 @@ string Field::getID() { return objID; }
 Type *Field::getType() { return type; }
 Expr *Field::getExpr() { return expr; }
 std::string Field::accept(Visitor *v) { return v->visit(this); }
+llvm::Value* Field::codegen() {
+    //TODO implementation
+    std::cout << "Field" << '\n';
+
+    getExpr()->codegen();
+
+    return nullptr;
+
+
+}
 
 Formal::Formal(string s, Type *t,yy::location l) : ASTnode(l),objID(s), type(t){};
 string Formal::getID() { return objID; }
@@ -67,16 +77,20 @@ Exprx *Exprx::getExprx() { return exprx; }
 Expr *Exprx::getExpr() { return expr; }
 std::string Exprx::accept(Visitor *v) { return v->visit(this); }
 
-Block::Block(Expr *e, Exprx *ex,yy::location l) : Expr(l),expr(e), exprx(ex) { dataType = string("Block"); };
+Block::Block(Expr *e, Exprx *ex, yy::location l) : Expr(l),expr(e), exprx(ex) { dataType = string("Block"); };
 Expr *Block::getExpr() { return expr; }
 Exprx *Block::getExprx() { return exprx; }
 std::string Block::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Block::codegen() {
 
+    std::cout << "Block" << '\n';
+
     if(getExpr() == nullptr)
         return llvm::Constant::getNullValue(llvm::Type::getVoidTy(TheContext)); // Noop
     //TODO Check the meaning of a no op and if this could be an ok alternative
 
+    getExpr()->codegen();
+    getExprx()->getExpr()->codegen();
 
     Exprx* e = getExprx();
     Expr* exp = getExpr();
@@ -86,7 +100,7 @@ llvm::Value* Block::codegen() {
         e = e->getExprx();
     }
 
-    return e->codegen();
+    return exp->codegen();
 
 }
 
@@ -97,6 +111,8 @@ Type *Method::getType() { return type; }
 Block *Method::getBlock() { return block; }
 std::string Method::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Method::codegen() {
+
+    std::cout << "Method" << '\n';
 
     llvm::Type* PT;
 
@@ -183,10 +199,53 @@ Field *FieldMethod::getField() { return field; }
 Method *FieldMethod::getMethod() { return method; }
 FieldMethod *FieldMethod::getFieldMethod() { return fieldMethod; }
 std::string FieldMethod::accept(Visitor *v) { return v->visit(this); }
+llvm::Value* FieldMethod::codegen() {
+
+    //TODO implementation
+    std::cout << "FieldMethod" << '\n';
+
+    // Fields and methods are returned backwards
+
+    std::vector<Method*> m;
+    std::vector<Field*> f;
+
+    FieldMethod* fm = this;
+    while(fm->getFieldMethod() != nullptr){
+        if(fm->getField() != nullptr)
+            f.emplace_back(fm->getField());
+        else
+            m.emplace_back(fm->getMethod());
+        fm = fm->getFieldMethod();
+    }
+
+    while(!f.empty()){
+        f.back()->codegen();
+        f.pop_back();
+    }
+
+    while(!m.empty()){
+        m.back()->codegen();
+        m.pop_back();
+    }
+
+
+    return nullptr;
+
+}
 
 Body::Body(FieldMethod *fm,yy::location l) : ASTnode(l),fieldMethod(fm) {}
 FieldMethod *Body::getFieldMethod() { return fieldMethod; }
 std::string Body::accept(Visitor *v) { return v->visit(this); }
+llvm::Value* Body::codegen() {
+
+    //TODO implementation
+    std::cout << "Body" << '\n';
+
+    getFieldMethod()->codegen();
+
+    return nullptr;
+
+}
 
 Classe::Classe(string s, Body *b,yy::location l) : ASTnode(l),typeID(s), body(b) {}
 Classe::Classe(string typeID, string parent, Body *b,yy::location l) : ASTnode(l),typeID(typeID), parentID(parent), body(b) {}
@@ -195,6 +254,8 @@ std::string Classe::getParentID() { return parentID; }
 Body *Classe::getBody() { return body; }
 std::string Classe::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Classe::codegen() {
+
+    std::cout << "Classe" << '\n';
 
     // Get fields and methods name and type for corresponding class
     std::unordered_map<std::string,FieldPrototype> fields = ::prototype[getTypeID()].field;
@@ -285,6 +346,7 @@ Classes *Classes::nextClass() { return next_class; }
 std::string Classes::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Classes::codegen() { //TODO implementation(actually just for demo purposes)
 
+    std::cout << "Classes" << '\n';
     Classes* classes = this;
     while(classes->getClass() != nullptr) {
         classes->getClass()->codegen();
@@ -301,6 +363,7 @@ Classe *Programm::getClasse() { return classe; }
 std::string Programm::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Programm::codegen() {//TODO implementation(actually just for demo purposes)
 
+    std::cout << "Program" << '\n';
     getClasses()->codegen();
     return nullptr;
 
@@ -326,6 +389,8 @@ Expr *If::getIf() { return _if; }
 Expr *If::getThen() { return _then; }
 std::string If::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* If::codegen() {
+
+    std::cout << "If" << '\n';
 
     // Value of the conditional (i8)
     llvm::Value* CondV = getIf()->codegen();
@@ -385,6 +450,8 @@ Expr *While::getWhile() { return _while; }
 Expr *While::getDo() { return _do; }
 std::string While::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* While::codegen() {
+
+    std::cout << "While" << '\n';
 
     // TODO Change PHInode* by AllocaInst*
     // TODO Check if still usefull to manipulate allocation (Probably not) use it again for For Loop implementation
@@ -457,6 +524,8 @@ Expr *Let::getIn() { return in; }
 std::string Let::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Let::codegen() {
 
+    std::cout << "Let" << '\n';
+
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "letbody", Builder.GetInsertBlock()->getParent()); // Get the parent (function) of the actual block
     Builder.SetInsertPoint(BB);
 
@@ -496,6 +565,8 @@ std::string Assign::getObjID() { return ObjID; }
 std::string Assign::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Assign::codegen() {
 
+    std::cout << "Assign" << '\n';
+
     llvm::Value* Val = getExpr()->codegen();
 
     llvm::Value* Obj = NamedValues[getObjID()];
@@ -532,11 +603,17 @@ Args *Function::getArgs() { return args; }
 std::string Function::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Function::codegen() {
 
+    std::cout << "Function" << '\n';
+
     std::vector<llvm::Value*> ArgsVal;
     std::vector<Args*> ArgsVec;
 
+    std::cout << "1" << '\n';
+
     // Look up the name in the global module table.
     llvm::Function* functionCalled = TheModule->getFunction(getID());
+
+    std::cout << "2" << '\n';
 
     // Need to isolate the arguments of the function and get their llvm expression
     // Check if the first one is empty
@@ -546,9 +623,13 @@ llvm::Value* Function::codegen() {
             ArgsVec.push_back( (Args*) ArgsVec.back()->getExpr());
     }
 
+    std::cout << "3" << '\n';
+
     for (int i = 0, s = ArgsVec.size(); i < s; ++i) {
         ArgsVal.push_back(ArgsVec[i]->codegen());
     }
+
+    std::cout << "4" << '\n';
 
     return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
 }
@@ -564,74 +645,76 @@ string New::getTypeID() { return typeID; }
 std::string New::accept(Visitor *v) { return v->visit(this); }
 
 ObjID::ObjID(string s,yy::location l) : Expr(l),ObjId(s) { dataType = string("Object"); }
-string ObjID::getID() { return ObjId; }
+std::string ObjID::getID() { return ObjId; }
 std::string ObjID::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* ObjID::codegen() { return Builder.CreateLoad(NamedValues[getID()], getID().c_str()); } // No check done, should not cause error access (still bad habit)
+llvm::Value* ObjID::codegen() { std::cout << "ObjID" << '\n';
+//TODO The goal is to send back the value only, no need to load in a register CHANGE THAT IF NEEDED
+return Builder.CreateLoad(NamedValues[getID()], getID()); } // No check done, should not cause error access (still bad habit)
 
 Literal::Literal(yy::location l) : Expr(l) {}
 
 IntLit::IntLit(int i,yy::location l) : Literal(l),value(i) {}
 int IntLit::getValue() { return value; }
 std::string IntLit::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* IntLit::codegen() {return llvm::ConstantInt::get(TheContext, llvm::APInt(32, getValue(), true));}
+llvm::Value* IntLit::codegen() {std::cout << "IntLit" << '\n'; return llvm::ConstantInt::get(TheContext, llvm::APInt(32, getValue(), true));}
 
 StrLit::StrLit(string s,yy::location l) : Literal(l),value(s) {}
 string StrLit::getValue() { return value; }
 std::string StrLit::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* StrLit::codegen() { return llvm::ConstantDataArray::getString(TheContext, llvm::StringRef(getValue())); }
+llvm::Value* StrLit::codegen() { std::cout << "StrLit" << '\n'; return llvm::ConstantDataArray::getString(TheContext, llvm::StringRef(getValue())); }
 
 BoolLit::BoolLit(bool v,yy::location l) : Literal(l),value(v) {}
 bool BoolLit::getValue() { return value; }
 std::string BoolLit::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* BoolLit::codegen() { return Builder.getInt1(getValue()); }
+llvm::Value* BoolLit::codegen() {std::cout << "BoolLit" << '\n'; return Builder.getInt1(getValue()); }
 
 And::And(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
 std::string And::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* And::codegen() { return Builder.CreateAnd(getLeft()->codegen(), getRight()->codegen(), "andop"); }
+llvm::Value* And::codegen() {std::cout << "And" << '\n'; return Builder.CreateAnd(getLeft()->codegen(), getRight()->codegen(), "andop"); }
 
 Not::Not(Expr *e,yy::location l) : Unary(e,l){};
 std::string Not::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* Not::codegen() { return Builder.CreateNot(getExpr()->codegen(), "notop"); }
+llvm::Value* Not::codegen() {std::cout << "Not" << '\n'; return Builder.CreateNot(getExpr()->codegen(), "notop"); }
 
 Equal::Equal(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
 std::string Equal::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* Equal::codegen() { return Builder.CreateICmpEQ(getLeft()->codegen(), getRight()->codegen(), "equbool"); }
+llvm::Value* Equal::codegen() {std::cout << "Equal" << '\n'; return Builder.CreateICmpEQ(getLeft()->codegen(), getRight()->codegen(), "equbool"); }
 
 Lower::Lower(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
 std::string Lower::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* Lower::codegen() { return Builder.CreateICmpSLT(getLeft()->codegen(), getRight()->codegen(), "lowtha"); }
+llvm::Value* Lower::codegen() {std::cout << "Lower" << '\n'; return Builder.CreateICmpSLT(getLeft()->codegen(), getRight()->codegen(), "lowtha"); }
 
 LowerEqual::LowerEqual(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
 std::string LowerEqual::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* LowerEqual::codegen() { return Builder.CreateICmpSLE(getLeft()->codegen(), getRight()->codegen(), "lowequ");}
+llvm::Value* LowerEqual::codegen() {std::cout << "LowerEqual" << '\n'; return Builder.CreateICmpSLE(getLeft()->codegen(), getRight()->codegen(), "lowequ");}
 
 Plus::Plus(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
 std::string Plus::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* Plus::codegen() {return Builder.CreateFAdd(getLeft()->codegen(), getRight()->codegen(), "addop");}
+llvm::Value* Plus::codegen() {std::cout << "Plus" << '\n'; return Builder.CreateFAdd(getLeft()->codegen(), getRight()->codegen(), "addop");}
 
 Minus::Minus(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
 std::string Minus::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* Minus::codegen() {return Builder.CreateFSub(getLeft()->codegen(), getRight()->codegen(), "subop");}
+llvm::Value* Minus::codegen() {std::cout << "Minus" << '\n'; return Builder.CreateFSub(getLeft()->codegen(), getRight()->codegen(), "subop");}
 
 
 Times::Times(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
 std::string Times::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* Times::codegen() {return Builder.CreateFMul(getLeft()->codegen(), getRight()->codegen(), "mulop");}
+llvm::Value* Times::codegen() {std::cout << "Times" << '\n'; return Builder.CreateFMul(getLeft()->codegen(), getRight()->codegen(), "mulop");}
 
 Div::Div(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
 std::string Div::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* Div::codegen() { return Builder.CreateFDiv(getLeft()->codegen(), getRight()->codegen(), "divop"); }
+llvm::Value* Div::codegen() {std::cout << "Div" << '\n'; return Builder.CreateFDiv(getLeft()->codegen(), getRight()->codegen(), "divop"); }
 
 Pow::Pow(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l ){};
-std::string Pow::accept(Visitor *v) { return v->visit(this); }
+std::string Pow::accept(Visitor *v) {std::cout << "Pow" << '\n'; return v->visit(this); }
 
 Minus1::Minus1(Expr *e,yy::location l) : Unary(e,l ){};
 std::string Minus1::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* Minus1::codegen() { return Builder.CreateFSub( llvm::ConstantInt::get(TheContext, llvm::APInt(32,0)), getExpr()->codegen(), "minusop"); }
+llvm::Value* Minus1::codegen() {std::cout << "Minus1" << '\n'; return Builder.CreateFSub( llvm::ConstantInt::get(TheContext, llvm::APInt(32,0)), getExpr()->codegen(), "minusop"); }
 
 IsNull::IsNull(Expr *e,yy::location l) : Unary(e,l ){};
 std::string IsNull::accept(Visitor *v) { return v->visit(this); }
-llvm::Value* IsNull::codegen() { return Builder.CreateIsNull(getExpr()->codegen(), "isnullbool"); }
+llvm::Value* IsNull::codegen() {std::cout << "IsNull" << '\n'; return Builder.CreateIsNull(getExpr()->codegen(), "isnullbool"); }
 
 Parenthese::Parenthese(Expr *e,yy::location l) : Unary(e,l ){};
 std::string Parenthese::accept(Visitor *v) { return v->visit(this); }

@@ -94,6 +94,7 @@ struct Field : ASTnode
     Type* getType();
     Expr* getExpr();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     string objID;
@@ -198,6 +199,7 @@ struct FieldMethod : ASTnode
     Method* getMethod();
     FieldMethod* getFieldMethod();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     Field* field;
@@ -211,6 +213,7 @@ struct Body : ASTnode
     Body(FieldMethod*,yy::location);
     FieldMethod* getFieldMethod();
     std::string accept(Visitor*);
+    llvm::Value* codegen();
 
   private:
     FieldMethod* fieldMethod;
@@ -519,12 +522,12 @@ struct ObjID : Expr
 {
   public:
     ObjID(string,yy::location);
-    string getID();
+    std::string getID();
     std::string accept(Visitor*);
     llvm::Value* codegen();
 
   private:
-    string ObjId;
+    std::string ObjId;
 };
 
 struct Literal : Expr
