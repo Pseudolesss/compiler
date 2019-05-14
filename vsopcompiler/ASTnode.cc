@@ -21,18 +21,18 @@ void Expr::setType(std::string type){dataType = type;}
 string Expr::getDataType() { return dataType; }
 std::string Expr::accept(Visitor *v) { return v->visit(this); }
 
-Type::Type(string s,yy::location l) : ASTnode(l),typeID(s){};
+Type::Type(string s,yy::location l) : ASTnode(l),typeID(s){}
 std::string Type::getID() { return this->typeID; }
 std::string Type::accept(Visitor *v) { return v->visit(this); }
 
 Field::Field(string object_id, Type *a_type,yy::location l) : ASTnode(l),objID(object_id), type(a_type) { expr = nullptr; }
-Field::Field(string object_id, Type *a_type, Expr *an_expr,yy::location l) : ASTnode(l),objID(object_id), type(a_type), expr(an_expr){};
+Field::Field(string object_id, Type *a_type, Expr *an_expr,yy::location l) : ASTnode(l),objID(object_id), type(a_type), expr(an_expr){}
 string Field::getID() { return objID; }
 Type *Field::getType() { return type; }
 Expr *Field::getExpr() { return expr; }
 std::string Field::accept(Visitor *v) { return v->visit(this); }
 
-Formal::Formal(string s, Type *t,yy::location l) : ASTnode(l),objID(s), type(t){};
+Formal::Formal(string s, Type *t,yy::location l) : ASTnode(l),objID(s), type(t){}
 string Formal::getID() { return objID; }
 Type *Formal::getType() { return type; }
 std::string Formal::accept(Visitor *v) { return v->visit(this); }
@@ -42,7 +42,7 @@ Formalx::Formalx(yy::location l) : ASTnode(l)
     formal = nullptr;
     formalx = nullptr;
 }
-Formalx::Formalx(Formal *f, Formalx *fx,yy::location l) : ASTnode(l),formal(f), formalx(fx){};
+Formalx::Formalx(Formal *f, Formalx *fx,yy::location l) : ASTnode(l),formal(f), formalx(fx){}
 Formal *Formalx::getFormal() { return formal; }
 Formalx *Formalx::getFormalx() { return formalx; }
 std::string Formalx::accept(Visitor *v) { return v->visit(this); }
@@ -52,7 +52,7 @@ Formals::Formals(yy::location l) : ASTnode(l)
     formal = nullptr;
     formalx = nullptr;
 }
-Formals::Formals(Formal *f, Formalx *fx,yy::location l) : ASTnode(l),formal(f), formalx(fx){};
+Formals::Formals(Formal *f, Formalx *fx,yy::location l) : ASTnode(l),formal(f), formalx(fx){}
 Formal *Formals::getFormal() { return formal; }
 Formalx *Formals::getFormalx() { return formalx; }
 std::string Formals::accept(Visitor *v) { return v->visit(this); }
@@ -62,7 +62,7 @@ Exprx::Exprx(yy::location l) : ASTnode(l)
     expr = nullptr;
     exprx = nullptr;
 }
-Exprx::Exprx(Expr *e, Exprx *ex,yy::location l) : ASTnode(l),expr(e), exprx(ex){};
+Exprx::Exprx(Expr *e, Exprx *ex,yy::location l) : ASTnode(l),expr(e), exprx(ex){}
 Exprx *Exprx::getExprx() { return exprx; }
 Expr *Exprx::getExpr() { return expr; }
 std::string Exprx::accept(Visitor *v) { return v->visit(this); }
@@ -90,7 +90,7 @@ llvm::Value* Block::codegen() {
 
 }
 
-Method::Method(string s, Formals *fs, Type *t, Block *b,yy::location l) : ASTnode(l), objID(s), formals(fs), type(t), block(b){};
+Method::Method(string s, Formals *fs, Type *t, Block *b,yy::location l) : ASTnode(l), objID(s), formals(fs), type(t), block(b){}
 string Method::getID() { return objID; }
 Formals *Method::getFormals() { return formals; }
 Type *Method::getType() { return type; }
@@ -565,53 +565,53 @@ bool BoolLit::getValue() { return value; }
 std::string BoolLit::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* BoolLit::codegen() { return Builder.getInt1(getValue()); }
 
-And::And(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
+And::And(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){}
 std::string And::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* And::codegen() { return Builder.CreateAnd(getLeft()->codegen(), getRight()->codegen(), "andop"); }
 
-Not::Not(Expr *e,yy::location l) : Unary(e,l){};
+Not::Not(Expr *e,yy::location l) : Unary(e,l){}
 std::string Not::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Not::codegen() { return Builder.CreateNot(getExpr()->codegen(), "notop"); }
 
-Equal::Equal(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
+Equal::Equal(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){}
 std::string Equal::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Equal::codegen() { return Builder.CreateICmpEQ(getLeft()->codegen(), getRight()->codegen(), "equbool"); }
 
-Lower::Lower(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
+Lower::Lower(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){}
 std::string Lower::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Lower::codegen() { return Builder.CreateICmpSLT(getLeft()->codegen(), getRight()->codegen(), "lowtha"); }
 
-LowerEqual::LowerEqual(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
+LowerEqual::LowerEqual(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){}
 std::string LowerEqual::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* LowerEqual::codegen() { return Builder.CreateICmpSLE(getLeft()->codegen(), getRight()->codegen(), "lowequ");}
 
-Plus::Plus(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
+Plus::Plus(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){}
 std::string Plus::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Plus::codegen() {return Builder.CreateFAdd(getLeft()->codegen(), getRight()->codegen(), "addop");}
 
-Minus::Minus(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
+Minus::Minus(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){}
 std::string Minus::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Minus::codegen() {return Builder.CreateFSub(getLeft()->codegen(), getRight()->codegen(), "subop");}
 
 
-Times::Times(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
+Times::Times(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){}
 std::string Times::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Times::codegen() {return Builder.CreateFMul(getLeft()->codegen(), getRight()->codegen(), "mulop");}
 
-Div::Div(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){};
+Div::Div(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l){}
 std::string Div::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Div::codegen() { return Builder.CreateFDiv(getLeft()->codegen(), getRight()->codegen(), "divop"); }
 
-Pow::Pow(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l ){};
+Pow::Pow(Expr *e1, Expr *e2,yy::location l) : Dual(e1, e2,l ){}
 std::string Pow::accept(Visitor *v) { return v->visit(this); }
 
-Minus1::Minus1(Expr *e,yy::location l) : Unary(e,l ){};
+Minus1::Minus1(Expr *e,yy::location l) : Unary(e,l ){}
 std::string Minus1::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* Minus1::codegen() { return Builder.CreateFSub( llvm::ConstantInt::get(TheContext, llvm::APInt(32,0)), getExpr()->codegen(), "minusop"); }
 
-IsNull::IsNull(Expr *e,yy::location l) : Unary(e,l ){};
+IsNull::IsNull(Expr *e,yy::location l) : Unary(e,l ){}
 std::string IsNull::accept(Visitor *v) { return v->visit(this); }
 llvm::Value* IsNull::codegen() { return Builder.CreateIsNull(getExpr()->codegen(), "isnullbool"); }
 
-Parenthese::Parenthese(Expr *e,yy::location l) : Unary(e,l ){};
+Parenthese::Parenthese(Expr *e,yy::location l) : Unary(e,l ){}
 std::string Parenthese::accept(Visitor *v) { return v->visit(this); }
