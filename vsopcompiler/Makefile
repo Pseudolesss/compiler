@@ -20,7 +20,7 @@ all: $(BASE)
 %.o: %.cc
 	$(CXX) $(CXXFLAGS)  -fexceptions -c -o $@ $< $(LDFLAGS)
 	
-$(BASE): $(BASE).o driver.o parser.o scanner.o ASTnode.o CheckPrinter.o  ParserPrinter.o ErrorHandler.o SymbolTable.o prototype.o FillPrototype.o CheckPrototype.o SymbolTable.o CheckTypeScope.o
+$(BASE): $(BASE).o driver.o parser.o scanner.o ASTnode.o CheckPrinter.o  ParserPrinter.o ErrorHandler.o SymbolTable.o prototype.o FillPrototype.o CheckPrototype.o SymbolTable.o CheckTypeScope.o CodeGenerator.o
 	$(CXX)  -o $@ $^ $(LDFLAGS)
 	echo $(shell pwd)
 
