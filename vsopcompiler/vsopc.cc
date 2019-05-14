@@ -74,7 +74,6 @@ main (int argc, char *argv[])
 
       drv.setting = 1;
 std::cout << "1" << '\n';
-      TheModule = llvm::make_unique<llvm::Module>("TODOPutCorrectFileName", TheContext);
 
       drv.parse("/home/pseudoless/Dropbox/git/compiler/vsopcompiler/IO.vsop");
       drv.root->accept(new FillPrototype());

@@ -26,7 +26,7 @@ using namespace std;
 
 static llvm::LLVMContext TheContext;
 static llvm::IRBuilder<> Builder(TheContext);
-static std::unique_ptr<llvm::Module> TheModule;
+static std::unique_ptr<llvm::Module> TheModule = llvm::make_unique<llvm::Module>("TODOPutCorrectFileName", TheContext);;
 static std::map<std::string, llvm::AllocaInst *> NamedValues;
 static std::map<std::string, llvm::StructType *> ClassesType;
 
