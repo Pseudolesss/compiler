@@ -15,9 +15,9 @@ llvm::Value* CodeGenerator::visit(Field* field) {
 }
 
 
-llvm::Value* CodeGenerator::visit(Programm* programm) {//TODO implementation(actually just for demo purposes)
+llvm::Value* CodeGenerator::visit(Programm* programm) {
 
-    std::cout << "Program" << '\n';
+    fill_class_type();
     programm->getClasses()->accept(this);
     return nullptr;
 
@@ -549,3 +549,31 @@ llvm::Value* CodeGenerator::visit(Literal* literal) {std::cout << "literal" << '
 llvm::Value* CodeGenerator::visit(Lpar* lpar) {std::cout << "lpar" << '\n'; return nullptr;}
 llvm::Value* CodeGenerator::visit(Rpar* rpar) {std::cout << "rpar" << '\n'; return nullptr;}
 
+void CodeGenerator::fill_class_type(){
+    //push primitive type into the ClasseType
+    ClassesType["int32"] = llvm::Type::getInt32Ty(TheContext);
+    ClassesType["bool"] = llvm::Type::getInt1Ty(TheContext);
+    ClassesType["string"] = llvm::Type::getInt8PtrTy(TheContext);    
+    for (std::pair<std::string, ClassPrototype> element : prototype)
+    {
+        if(ClassesType.find(element.first) == ClassesType.end()){
+            fill_class_type_aux(element.first);
+        }
+    }
+}
+
+void CodeGenerator::fill_class_type_aux(string classID){
+
+    unordered_map<std::string,FieldPrototype> fields = prototype[classID].field;
+    std::vector<llvm::Type*> field_type = vector<llvm::Type*>();  //content type of inner field
+
+    for (auto field : fields){
+        //deal before with unknow field
+        if(ClassesType.find(field.second.type) == ClassesType.end()){
+            fill_class_type_aux(field.second.type);
+        }
+        field_type.push_back(ClassesType[field.second.type]);
+        llvm::ArrayRef<llvm::Type*> field_array = llvm::ArrayRef<llvm::Type*>(field_type);
+        ClassesType[classID] = llvm::StructType::create(TheContext,field_array,llvm::StringRef(classID));
+    }
+}

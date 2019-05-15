@@ -56,6 +56,9 @@ public:
     llvm::Value* visit(Lpar *);
     llvm::Value* visit(Rpar *);
     llvm::Value* visit(Parenthese *);
+    private:
+        void fill_class_type();
+        void fill_class_type_aux(std::string);
 };
 
 

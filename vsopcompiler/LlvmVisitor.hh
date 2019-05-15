@@ -71,7 +71,7 @@ static llvm::LLVMContext TheContext;
 static llvm::IRBuilder<> Builder(TheContext);
 static std::unique_ptr<llvm::Module> TheModule = llvm::make_unique<llvm::Module>("TODOPutCorrectFileName", TheContext);
 static std::map<std::string, llvm::AllocaInst *> NamedValues;
-static std::map<std::string, llvm::StructType *> ClassesType;
+static std::map<std::string, llvm::Type *> ClassesType;
 
 // Because in vsop, every variable have a default initial value TODO Check if this is true for Class types (fields should be initialized by default)
 // @args Variable's type, Variable's value, Variable's name.
