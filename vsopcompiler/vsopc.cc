@@ -73,7 +73,7 @@ main (int argc, char *argv[])
     else if (argv[1] == std::string("-llvm")){
 
       drv.setting = 1;
-std::cout << "1" << '\n';
+      std::cout << "1" << '\n';
 
       drv.parse("/home/IO.vsop");
       drv.root->accept(new FillPrototype());

@@ -4,58 +4,10 @@
 #include "CodeGenerator.hh"
 #include "ASTnode.hh"
 
-struct ASTnode;
-struct Expr;
-struct Type;
-struct Field;
-struct Formal;
-struct Formalx;
-struct Formals;
-struct Exprx;
-struct Exprxx;
-struct Block;
-struct Method;
-struct FieldMethod;
-struct Body;
-struct Classe;
-struct Classes;
-struct Programm;
-struct Dual;
-struct Unary;
-struct If;
-struct While;
-struct Let;
-struct Assign;
-struct Not;
-struct And;
-struct Equal;
-struct Lower;
-struct LowerEqual;
-struct Plus;
-struct Minus;
-struct Times;
-struct Div;
-struct Pow;
-struct Minus1;
-struct IsNull;
-struct Exprxx;
-struct Args;
-struct Function;
-struct Dot;
-struct New;
-struct ObjID;
-struct Literal;
-struct IntLit;
-struct StrLit;
-struct BoolLit;
-struct Lpar;
-struct Rpar;
-struct Parenthese;
-
-llvm::Value* CodeGenerator::accept(ASTnode* astNode) { return nullptr; }
+llvm::Value* CodeGenerator::visit(ASTnode* astNode) { return nullptr; }
 
 
-llvm::Value* CodeGenerator::accept(Field* field) {
+llvm::Value* CodeGenerator::visit(Field* field) {
     //TODO implementation
     std::cout << "Field" << '\n';
     field->getExpr()->accept(this);
@@ -63,7 +15,7 @@ llvm::Value* CodeGenerator::accept(Field* field) {
 }
 
 
-llvm::Value* CodeGenerator::accept(Programm* programm) {//TODO implementation(actually just for demo purposes)
+llvm::Value* CodeGenerator::visit(Programm* programm) {//TODO implementation(actually just for demo purposes)
 
     std::cout << "Program" << '\n';
     programm->getClasses()->accept(this);
@@ -72,7 +24,7 @@ llvm::Value* CodeGenerator::accept(Programm* programm) {//TODO implementation(ac
 }
 
 
-llvm::Value* CodeGenerator::accept(Classes* classes) { //TODO implementation(actually just for demo purposes)
+llvm::Value* CodeGenerator::visit(Classes* classes) { //TODO implementation(actually just for demo purposes)
 
     std::cout << "Classes" << '\n';
     while(classes->getClass() != nullptr) {
@@ -83,26 +35,26 @@ llvm::Value* CodeGenerator::accept(Classes* classes) { //TODO implementation(act
 }
 
 
-llvm::Value* CodeGenerator::accept(Classe* classe) {
+llvm::Value* CodeGenerator::visit(Classe* classe) {
 
     std::cout << "Classe" << '\n';
 
     // Get fields and methods name and type for corresponding class
     std::unordered_map<std::string,FieldPrototype> fields = ::prototype[classe->getTypeID()].field;
     std::unordered_map<std::string,MethodPrototype> methods = ::prototype[classe->getTypeID()].method;
-    std::vector<std::string> fieldsKeys = ::prototype[classe->getTypeID()].fieldKeys;
-    std::vector<std::string> methodsKeys = ::prototype[classe->getTypeID()].methodKeys;
+    //std::vector<std::string> fieldsKeys = ::prototype[classe->getTypeID()].fieldKeys;
+    //std::vector<std::string> methodsKeys = ::prototype[classe->getTypeID()].methodKeys;
 
 
     std::vector<llvm::Type* > vt;
 
     // TODO L'iterable renvoie des paires, composer avec ces paires
     // We first declare the field in the type declaration
-
-    for(std::string key : fieldsKeys){
-
-        FieldPrototype fieldPrototype = fields[key];
-
+    for(auto it = fields.begin(); it != fields.end();++it){
+        std::cout<<fields.size()<<endl;
+        std::cout<<"hello in loop"<<endl;
+        FieldPrototype fieldPrototype = it->second;
+        std::cout<<"filed prorotype set"<<endl;
         if(fieldPrototype.type == "int32")
             vt.push_back(llvm::Type::getInt32Ty(TheContext));
         else if(fieldPrototype.type == "bool")
@@ -118,9 +70,10 @@ llvm::Value* CodeGenerator::accept(Classe* classe) {
     llvm::Type* pt = llvm::Type::getDoubleTy(TheContext);
 
     // TODO L'iterable renvoie des paires, composer avec ces paires
-    for(std::string key  : methodsKeys){
+    for(auto it = methods.begin(); it != methods.end();++it){
+        std::cout<<"hello in second loop"<<endl;
 
-        MethodPrototype methodPrototype = methods[key];
+        MethodPrototype methodPrototype = it->second;
 
         // First the return type
         if(methodPrototype.return_type == "int32")
@@ -129,10 +82,12 @@ llvm::Value* CodeGenerator::accept(Classe* classe) {
             pt = llvm::Type::getInt1Ty(TheContext);
         else if(methodPrototype.return_type == "string")
             pt = llvm::Type::getInt8PtrTy(TheContext);
-        else // Get a class type already declared
+        else 
+            cout<<"Get a class type already declared";
             pt = ClassesType[methodPrototype.return_type];
 
         // Then the arguments' types
+        std::cout<<"arguments"<<endl;
         for(std::string t : methodPrototype.arguments){
             if(t == "int32")
                 argsType.push_back(llvm::Type::getInt32Ty(TheContext));
@@ -140,13 +95,15 @@ llvm::Value* CodeGenerator::accept(Classe* classe) {
                 argsType.push_back(llvm::Type::getInt1Ty(TheContext));
             else if(t == "string")
                 argsType.push_back(llvm::Type::getInt8PtrTy(TheContext));
-            else // Get a class type already declared
+            else // 
+                cout<<"Get a class type already declared"<<endl;
                 argsType.push_back(ClassesType[t]);
         }
-
-        vt.push_back(llvm::FunctionType::get(pt, argsType, false )); // Boolean for variable nb of arg
+        cout<<"push back"<<endl;
+        cout<<pt<<endl;
+        //vt.push_back(llvm::FunctionType::get(pt, argsType, false )); // Boolean for variable nb of arg
     }
-
+    std::cout<<"end two loop"<<endl;
 
 
     llvm::ArrayRef<llvm::Type*> ar = llvm::makeArrayRef(vt);
@@ -170,7 +127,7 @@ llvm::Value* CodeGenerator::accept(Classe* classe) {
 }
 
 
-llvm::Value* CodeGenerator::accept(Block* block) {
+llvm::Value* CodeGenerator::visit(Block* block) {
 
     std::cout << "Block" << '\n';
 
@@ -193,8 +150,8 @@ llvm::Value* CodeGenerator::accept(Block* block) {
 
 }
 
-
-llvm::Value* CodeGenerator::accept(FieldMethod* fieldMethod) {
+//implement Field method declaration.
+llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
 
     //TODO implementation
     std::cout << "FieldMethod" << '\n';
@@ -228,8 +185,8 @@ llvm::Value* CodeGenerator::accept(FieldMethod* fieldMethod) {
 
 }
 
-
-llvm::Value* CodeGenerator::accept(Method* method) {
+//implement the prototype of a method
+llvm::Value* CodeGenerator::visit(Method* method) {
 
     std::cout << "Method" << '\n';
 
@@ -307,7 +264,7 @@ llvm::Value* CodeGenerator::accept(Method* method) {
 }
 
 
-llvm::Value* CodeGenerator::accept(Body* body) {
+llvm::Value* CodeGenerator::visit(Body* body) {
 
     //TODO implementation
     std::cout << "Body" << '\n';
@@ -319,7 +276,7 @@ llvm::Value* CodeGenerator::accept(Body* body) {
 }
 
 
-llvm::Value* CodeGenerator::accept(If* anIf) {
+llvm::Value* CodeGenerator::visit(If* anIf) {
 
     std::cout << "If" << '\n';
 
@@ -377,7 +334,7 @@ llvm::Value* CodeGenerator::accept(If* anIf) {
 }
 
 
-llvm::Value* CodeGenerator::accept(While* aWhile) {
+llvm::Value* CodeGenerator::visit(While* aWhile) {
 
     std::cout << "While" << '\n';
 
@@ -440,7 +397,7 @@ llvm::Value* CodeGenerator::accept(While* aWhile) {
 }
 
 
-llvm::Value* CodeGenerator::accept(Assign* assign) {
+llvm::Value* CodeGenerator::visit(Assign* assign) {
 
     std::cout << "Assign" << '\n';
 
@@ -455,7 +412,7 @@ llvm::Value* CodeGenerator::accept(Assign* assign) {
 }
 
 
-llvm::Value* CodeGenerator::accept(Let* let) {
+llvm::Value* CodeGenerator::visit(Let* let) {
 
     std::cout << "Let" << '\n';
 
@@ -492,8 +449,8 @@ llvm::Value* CodeGenerator::accept(Let* let) {
 
 }
 
-
-llvm::Value* CodeGenerator::accept(Function* function) {
+//generate code for call to a function
+llvm::Value* CodeGenerator::visit(Function* function) {
 
     std::cout << "Function" << '\n';
 
@@ -522,59 +479,73 @@ llvm::Value* CodeGenerator::accept(Function* function) {
 }
 
 //TODO IMPLEMENT POWER
-llvm::Value* CodeGenerator::accept(Pow* pow) { std::cout << "pow" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Pow* pow) { std::cout << "pow" << '\n'; return nullptr;}
 
 
 //TODO IMPLEMENT DYNAMIC DISPATCH 
-llvm::Value* CodeGenerator::accept(Dot* dot) { std::cout << "dot" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Dot* dot) { std::cout << "dot" << '\n'; return nullptr;}
 
 //TODO IMPLEMENT NEW
-llvm::Value* CodeGenerator::accept(New* anew) {std::cout << "new" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(New* anew) {std::cout << "new" << '\n'; return nullptr;}
 
-llvm::Value* CodeGenerator::accept(ObjID* objId) { std::cout << "ObjID" << '\n';
+llvm::Value* CodeGenerator::visit(ObjID* objId) { std::cout << "ObjID" << '\n';
 //TODO The goal is to send back the value only, no need to load in a register CHANGE THAT IF NEEDED
     return Builder.CreateLoad(NamedValues[objId->getID()], objId->getID()); } // No check done, should not cause error access (still bad habit)
 
 
-llvm::Value* CodeGenerator::accept(IntLit* intLit) {std::cout << "IntLit" << '\n'; return llvm::ConstantInt::get(TheContext, llvm::APInt(32, intLit->getValue(), true));}
+llvm::Value* CodeGenerator::visit(IntLit* intLit) {std::cout << "IntLit" << '\n'; return llvm::ConstantInt::get(TheContext, llvm::APInt(32, intLit->getValue(), true));}
 
 
-llvm::Value* CodeGenerator::accept(StrLit* strLit) { std::cout << "StrLit" << '\n'; return llvm::ConstantDataArray::getString(TheContext, llvm::StringRef(strLit->getValue())); }
+llvm::Value* CodeGenerator::visit(StrLit* strLit) { std::cout << "StrLit" << '\n'; return llvm::ConstantDataArray::getString(TheContext, llvm::StringRef(strLit->getValue())); }
 
 
-llvm::Value* CodeGenerator::accept(BoolLit* boolLit) {std::cout << "BoolLit" << '\n'; return Builder.getInt1(boolLit->getValue()); }
+llvm::Value* CodeGenerator::visit(BoolLit* boolLit) {std::cout << "BoolLit" << '\n'; return Builder.getInt1(boolLit->getValue()); }
 
 
-llvm::Value* CodeGenerator::accept(And* anAnd) {std::cout << "And" << '\n'; return Builder.CreateAnd(anAnd->getLeft()->accept(this), anAnd->getRight()->accept(this), "andop"); }
+llvm::Value* CodeGenerator::visit(And* anAnd) {std::cout << "And" << '\n'; return Builder.CreateAnd(anAnd->getLeft()->accept(this), anAnd->getRight()->accept(this), "andop"); }
 
 
-llvm::Value* CodeGenerator::accept(Not* aNot) {std::cout << "Not" << '\n'; return Builder.CreateNot(aNot->getExpr()->accept(this), "notop"); }
+llvm::Value* CodeGenerator::visit(Not* aNot) {std::cout << "Not" << '\n'; return Builder.CreateNot(aNot->getExpr()->accept(this), "notop"); }
 
 
-llvm::Value* CodeGenerator::accept(Equal* equal) {std::cout << "Equal" << '\n'; return Builder.CreateICmpEQ(equal->getLeft()->accept(this), equal->getRight()->accept(this), "equbool"); }
+llvm::Value* CodeGenerator::visit(Equal* equal) {std::cout << "Equal" << '\n'; return Builder.CreateICmpEQ(equal->getLeft()->accept(this), equal->getRight()->accept(this), "equbool"); }
 
 
-llvm::Value* CodeGenerator::accept(Lower* lower) {std::cout << "Lower" << '\n'; return Builder.CreateICmpSLT(lower->getLeft()->accept(this), lower->getRight()->accept(this), "lowtha"); }
+llvm::Value* CodeGenerator::visit(Lower* lower) {std::cout << "Lower" << '\n'; return Builder.CreateICmpSLT(lower->getLeft()->accept(this), lower->getRight()->accept(this), "lowtha"); }
 
 
-llvm::Value* CodeGenerator::accept(LowerEqual* lowerEqual) {std::cout << "LowerEqual" << '\n'; return Builder.CreateICmpSLE(lowerEqual->getLeft()->accept(this), lowerEqual->getRight()->accept(this), "lowequ");}
+llvm::Value* CodeGenerator::visit(LowerEqual* lowerEqual) {std::cout << "LowerEqual" << '\n'; return Builder.CreateICmpSLE(lowerEqual->getLeft()->accept(this), lowerEqual->getRight()->accept(this), "lowequ");}
 
 
-llvm::Value* CodeGenerator::accept(Plus* plus) {std::cout << "Plus" << '\n'; return Builder.CreateFAdd(plus->getLeft()->accept(this), plus->getRight()->accept(this), "addop");}
+llvm::Value* CodeGenerator::visit(Plus* plus) {std::cout << "Plus" << '\n'; return Builder.CreateFAdd(plus->getLeft()->accept(this), plus->getRight()->accept(this), "addop");}
 
 
-llvm::Value* CodeGenerator::accept(Minus* minus) {std::cout << "Minus" << '\n'; return Builder.CreateFSub(minus->getLeft()->accept(this), minus->getRight()->accept(this), "subop");}
+llvm::Value* CodeGenerator::visit(Minus* minus) {std::cout << "Minus" << '\n'; return Builder.CreateFSub(minus->getLeft()->accept(this), minus->getRight()->accept(this), "subop");}
 
 
-llvm::Value* CodeGenerator::accept(Times* times) {std::cout << "Times" << '\n'; return Builder.CreateFMul(times->getLeft()->accept(this), times->getRight()->accept(this), "mulop");}
+llvm::Value* CodeGenerator::visit(Times* times) {std::cout << "Times" << '\n'; return Builder.CreateFMul(times->getLeft()->accept(this), times->getRight()->accept(this), "mulop");}
 
 
-llvm::Value* CodeGenerator::accept(Div* div) {std::cout << "Div" << '\n'; return Builder.CreateFDiv(div->getLeft()->accept(this), div->getRight()->accept(this), "divop"); }
+llvm::Value* CodeGenerator::visit(Div* div) {std::cout << "Div" << '\n'; return Builder.CreateFDiv(div->getLeft()->accept(this), div->getRight()->accept(this), "divop"); }
 
 
-llvm::Value* CodeGenerator::accept(Minus1* minus1) {std::cout << "Minus1" << '\n'; return Builder.CreateFSub( llvm::ConstantInt::get(TheContext, llvm::APInt(32,0)), minus1->getExpr()->accept(this), "minusop"); }
+llvm::Value* CodeGenerator::visit(Minus1* minus1) {std::cout << "Minus1" << '\n'; return Builder.CreateFSub( llvm::ConstantInt::get(TheContext, llvm::APInt(32,0)), minus1->getExpr()->accept(this), "minusop"); }
 
 
-llvm::Value* CodeGenerator::accept(IsNull* isNull) {std::cout << "IsNull" << '\n'; return Builder.CreateIsNull(isNull->getExpr()->accept(this), "isnullbool"); }
+llvm::Value* CodeGenerator::visit(IsNull* isNull) {std::cout << "IsNull" << '\n'; return Builder.CreateIsNull(isNull->getExpr()->accept(this), "isnullbool"); }
 
-llvm::Value* CodeGenerator::accept(Parenthese* parenthese) {std::cout << "()" << '\n'; return parenthese->getExpr()->accept(this);}
+llvm::Value* CodeGenerator::visit(Parenthese* parenthese) {std::cout << "()" << '\n'; return parenthese->getExpr()->accept(this);}
+
+llvm::Value* CodeGenerator::visit(Formal* formal) {std::cout << "Formal" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Formalx* formalx) {std::cout << "Formalx" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Formals* formals) {std::cout << "Formals" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Exprx* exprx) {std::cout << "Exprx" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Exprxx* exprxx) {std::cout << "Exprxx" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Expr* expr) {std::cout << "Expr" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Dual* dual) {std::cout << "dual" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Unary* unary) {std::cout << "unary" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Args* args) {std::cout << "args" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Literal* literal) {std::cout << "literal" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Lpar* lpar) {std::cout << "lpar" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Rpar* rpar) {std::cout << "rpar" << '\n'; return nullptr;}
+

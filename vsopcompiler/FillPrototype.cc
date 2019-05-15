@@ -15,7 +15,7 @@ std::string FillPrototype::visit(Field *field)
         f.type = field->getType()->getID();
         f.location = field->getLocation();
         ::prototype[classID].field[field->getID()] = f;
-        ::prototype[classID].fieldKeys.push_back(field->getID());
+        //::prototype[classID].fieldKeys.push_back(field->getID());
     }
     else
     {
@@ -37,7 +37,8 @@ std::string FillPrototype::visit(Method *method)
         m.args_loc = method->getFormals()->getLocation();
         m.return_loc = method->getType()->getLocation();
         ::prototype[classID].method[method->getID()] = m;
-        ::prototype[classID].methodKeys.push_back(method->getID());
+        //If method was override, key order is false !
+        //::prototype[classID].methodKeys.push_back(method->getID());
         methodID = method->getID();
         method->getFormals()->accept(this);
     }
@@ -119,6 +120,7 @@ std::string FillPrototype::visit(Formals *formals)
 std::string FillPrototype::visit(Formal *formal)
 {
     ::prototype[classID].method[methodID].arguments.push_back(formal->getType()->getID());
+    //::prototype[classID].method[methodID].arguments_name.push_back(formal->getID());
     return "done";
 }
 

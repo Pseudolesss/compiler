@@ -9,7 +9,10 @@
 #include "ASTnode.hh"
 class MethodPrototype{
     public:
+        //type of arguments
         std::list<std::string> arguments;
+        //name of arguments of the functions
+        //std::list<std::string> arguments_name;
         std::string return_type;
         std::string toString() const;
         yy::location location;
@@ -29,7 +32,7 @@ class ClassPrototype {
         // method id | return type
         std::unordered_map<std::string,MethodPrototype> method;
         // To track relative order of "keys" field/method insertion.
-        std::vector<std::string> fieldKeys, methodKeys;
+        //std::vector<std::string> fieldKeys, methodKeys; //FALSE IF OVERIDE METHOD
         // parent class id
         std::set<std::string> parent;
         std::string direct_parent;
