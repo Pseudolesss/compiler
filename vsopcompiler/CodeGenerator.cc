@@ -589,7 +589,7 @@ void CodeGenerator::fill_method_proto(){
             for (auto arg : method_pair.second.arguments){
                 args_type.push_back(ClassesType[arg]);
             }
-            std::string method_name = class_pair.first + method_pair.first 
+            std::string method_name = class_pair.first + method_pair.first ;
             llvm::FunctionType *FT = llvm::FunctionType::get(ClassesType[method_pair.second.return_type], args_type, false);
             llvm::Function::Create(FT, llvm::Function::ExternalLinkage, method_name, TheModule.get());
         }
