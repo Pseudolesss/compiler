@@ -563,10 +563,8 @@ void CodeGenerator::fill_class_type(){
 }
 
 void CodeGenerator::fill_class_type_aux(string classID){
-
     unordered_map<std::string,FieldPrototype> fields = prototype[classID].field;
     std::vector<llvm::Type*> field_type = vector<llvm::Type*>();  //content type of inner field
-
     for (auto field : fields){
         //deal before with unknow field
         if(ClassesType.find(field.second.type) == ClassesType.end()){
@@ -575,5 +573,24 @@ void CodeGenerator::fill_class_type_aux(string classID){
         field_type.push_back(ClassesType[field.second.type]);
         llvm::ArrayRef<llvm::Type*> field_array = llvm::ArrayRef<llvm::Type*>(field_type);
         ClassesType[classID] = llvm::StructType::create(TheContext,field_array,llvm::StringRef(classID));
+    }
+}
+
+void CodeGenerator::fill_method_proto(){
+    //loop over all classes
+    for(auto class_pair: prototype){
+        //loop over all methods
+        for(auto method_pair : class_pair.second.method){
+            std::vector<llvm::Type*> args_type = vector<llvm::Type*>();
+            //push the a pointer to classes as the first argument of the method
+            llvm::Type* pointer_to_class = ClassesType[class_pair.first]->getPointerElementType();
+            args_type.push_back(pointer_to_class);
+            //take the arguments of the methods
+            for (auto arg : method_pair.second.arguments){
+                args_type.push_back(ClassesType[arg]);
+            }
+            llvm::FunctionType *FT = llvm::FunctionType::get(ClassesType[method_pair.second.return_type], args_type, false);
+            llvm::Function::Create(FT, llvm::Function::ExternalLinkage, method_pair.first, TheModule.get());
+        }
     }
 }

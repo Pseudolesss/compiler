@@ -59,6 +59,7 @@ public:
     private:
         void fill_class_type();
         void fill_class_type_aux(std::string);
+        void fill_method_proto();
 };
 
 
