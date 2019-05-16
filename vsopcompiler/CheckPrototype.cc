@@ -16,6 +16,7 @@ check semantic error on prototype, check:
 /*retrun true if there no error, false otherwise.
  */
 bool check(std::string file){
+    cout << "making check" << endl;
     return check_main(file) && check_parent(file);
 }
 //return true if no error, false otherwise

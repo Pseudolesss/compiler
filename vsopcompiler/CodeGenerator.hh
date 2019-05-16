@@ -61,7 +61,8 @@ private:
     void fill_class_type();
     void fill_class_type_aux(std::string);
     void fill_method_proto();
-    void allocator(std::string classID);
+    std::string classID;
+    //void allocator(std::string classID);
 };
 
 #endif //COMPILER_CODEGENERATOR_HH

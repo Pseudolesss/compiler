@@ -10,9 +10,9 @@
 class MethodPrototype{
     public:
         //type of arguments
-        std::list<std::string> arguments;
+        std::list<std::string> arguments = std::list<std::string>();
         //name of arguments of the functions
-        //std::list<std::string> arguments_name;
+        std::list<std::string> arguments_name = std::list<std::string>();
         std::string return_type;
         std::string toString() const;
         yy::location location;

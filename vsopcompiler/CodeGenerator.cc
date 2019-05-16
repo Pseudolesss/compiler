@@ -37,95 +37,14 @@ llvm::Value* CodeGenerator::visit(Classes* classes) { //TODO implementation(actu
 
 
 llvm::Value* CodeGenerator::visit(Classe* classe) {
-
     std::cout << "Classe" << '\n';
-
-    // Get fields and methods name and type for corresponding class
-    std::unordered_map<std::string,FieldPrototype> fields = ::prototype[classe->getTypeID()].field;
-    std::unordered_map<std::string,MethodPrototype> methods = ::prototype[classe->getTypeID()].method;
-    //std::vector<std::string> fieldsKeys = ::prototype[classe->getTypeID()].fieldKeys;
-    //std::vector<std::string> methodsKeys = ::prototype[classe->getTypeID()].methodKeys;
-
-
-    std::vector<llvm::Type* > vt;
-
-    // TODO L'iterable renvoie des paires, composer avec ces paires
-    // We first declare the field in the type declaration
-    for(auto it = fields.begin(); it != fields.end();++it){
-        std::cout<<fields.size()<<endl;
-        std::cout<<"hello in loop"<<endl;
-        FieldPrototype fieldPrototype = it->second;
-        std::cout<<"filed prorotype set"<<endl;
-        if(fieldPrototype.type == "int32")
-            vt.push_back(llvm::Type::getInt32Ty(TheContext));
-        else if(fieldPrototype.type == "bool")
-            vt.push_back(llvm::Type::getInt1Ty(TheContext));
-        else if(fieldPrototype.type == "string")
-            vt.push_back(llvm::Type::getInt8PtrTy(TheContext));
-        else // Get a class type already declared
-            vt.push_back(ClassesType[fieldPrototype.type]);
-    }
-
-    // Then the function
-    std::vector<llvm::Type*> argsType;
-    llvm::Type* pt = llvm::Type::getDoubleTy(TheContext);
-
-    // TODO L'iterable renvoie des paires, composer avec ces paires
-    for(auto it = methods.begin(); it != methods.end();++it){
-        std::cout<<"hello in second loop"<<endl;
-
-        MethodPrototype methodPrototype = it->second;
-
-        // First the return type
-        if(methodPrototype.return_type == "int32")
-            pt = llvm::Type::getInt32Ty(TheContext);
-        else if(methodPrototype.return_type == "bool")
-            pt = llvm::Type::getInt1Ty(TheContext);
-        else if(methodPrototype.return_type == "string")
-            pt = llvm::Type::getInt8PtrTy(TheContext);
-        else 
-            cout<<"Get a class type already declared"<<endl;
-            pt = ClassesType[methodPrototype.return_type];
-
-        // Then the arguments' types
-        std::cout<<"arguments"<<endl;
-        for(std::string t : methodPrototype.arguments){
-            if(t == "int32")
-                argsType.push_back(llvm::Type::getInt32Ty(TheContext));
-            else if(t == "bool")
-                argsType.push_back(llvm::Type::getInt1Ty(TheContext));
-            else if(t == "string")
-                argsType.push_back(llvm::Type::getInt8PtrTy(TheContext));
-            else // 
-                cout<<"Get a class type already declared"<<endl;
-                argsType.push_back(ClassesType[t]);
-        }
-        cout<<"push back"<<endl;
-        pt->print(llvm::outs()) ;
-        cout<<endl;
-        //vt.push_back(llvm::FunctionType::get(pt, argsType, false )); // Boolean for variable nb of arg
-    }
-    std::cout<<"end two loop"<<endl;
-
-
-    llvm::ArrayRef<llvm::Type*> ar = llvm::makeArrayRef(vt);
-
-    llvm::StructType* st = llvm::StructType::create(TheContext , ar, classe->getTypeID() );
-
-    // Add new type in global table -> TODO : c'est toujours utile de le faire ? on le connait déjà non ?
-    ClassesType[classe->getTypeID()] = st;
-
-    // TODO continu implementation
-    // TODO implementation of get field/method access with the GEP => getElementPointer llvm defined function
-
-    //TODO what follow has to be removed, it is just to call the rest of the tree and see what happens
-
+    //set the current visited class;
+    classID = classe->getTypeID();
+    //clear the NameSpace
+    NamedValues.clear();
+    //Deal with the body (create new block in llvm for value)
     classe->getBody()->accept(this);
-
     return nullptr;
-
-
-
 }
 
 
@@ -155,7 +74,6 @@ llvm::Value* CodeGenerator::visit(Block* block) {
 //implement Field method declaration.
 llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
 
-    //TODO implementation
     std::cout << "FieldMethod" << '\n';
 
     // Fields and methods are returned backwards
@@ -189,88 +107,26 @@ llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
 
 //implement the prototype of a method
 llvm::Value* CodeGenerator::visit(Method* method) {
-
-    std::cout << "Method" << '\n';
-
-    llvm::Type* PT;
-
-    if(method->getType()->getID() == "string"){
-        PT = llvm::Type::getInt8PtrTy(TheContext);
-    }else if(method->getType()->getID() == "int32"){
-        PT = llvm::Type::getInt32Ty(TheContext);
-    }else if(method->getType()->getID() == "bool"){
-        PT = llvm::Type::getInt1Ty(TheContext);
-    }else {
-        //TODO Le cas d'une classe prédéfini
-        PT = llvm::Type::getInt1Ty(TheContext);
-    }
-
-    std::vector<Formal* > fs;
-    if(method->getFormals()->getFormal() != nullptr){
-        fs.push_back(method->getFormals()->getFormal());
-        Formalx* f = method->getFormals()->getFormalx();
-
-        while(f->getFormal() != nullptr){
-            fs.push_back(f->getFormal());
-            f = f->getFormalx();
-        }
-    }
-
-    std::vector<llvm::Type*> ArgumentsType;
-    for(int i = 0, s = fs.size(); i < s; i++){
-
-        if(fs[i]->getType()->getID() == "string"){
-            ArgumentsType.push_back(llvm::Type::getInt8PtrTy(TheContext));
-        }else if(fs[i]->getType()->getID() == "int32"){
-            ArgumentsType.push_back(llvm::Type::getInt32Ty(TheContext));
-        }else if(fs[i]->getType()->getID() == "bool"){
-            ArgumentsType.push_back(llvm::Type::getInt1Ty(TheContext));
-        }else {
-            //TODO Le cas d'une classe prédéfini
-            ArgumentsType.push_back(llvm::Type::getInt1Ty(TheContext));
-        }
-
-    }
-
-
-
-    llvm::FunctionType* FT = llvm::FunctionType::get(PT, ArgumentsType, false); // Boolean to indicate variable nb of arg or not (like printf(string, arg1, arg2, ...) )
-    llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage, method->getID(), TheModule.get());
-
-    // Naming declaration arguments (not necessary)
-    // F->args and fs have same size
-    int j = 0;
-    for (auto &Arg : F->args()){
-        Arg.setName(fs[j]->getID());
-        j++;
-    }
-
+    llvm::Function *F = TheModule->getFunction(classID + method->getID());
     // Create a new basic block to start insertion into.
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "entry", F);
     Builder.SetInsertPoint(BB);
-
-    // Return instruction handle by Block codegen()
+    // Return instruction handle by Block 
     llvm::Value* Block = method->getBlock()->accept(this);
-
     // Type has already be checked, it is "safe" enough to just take the function type as condition, Block last expr is ok tho
     //TODO Check if good condition and type for Unit
     if(Block->getType() == llvm::Type::getVoidTy(TheContext))
         Builder.CreateRetVoid();
     else
         Builder.CreateRet(Block);
-
-
-
-
-    return F;
+    return nullptr;
 }
 
 
 llvm::Value* CodeGenerator::visit(Body* body) {
 
-    //TODO implementation
     std::cout << "Body" << '\n';
-
+    //TODO create new block to scope to the current classID ???
     body->getFieldMethod()->accept(this);
 
     return nullptr;
@@ -562,15 +418,24 @@ void CodeGenerator::fill_class_type(){
         if(ClassesType.find(element.first) == ClassesType.end()){
             fill_class_type_aux(element.first);
         }
+        cout<<"printing field of "<<element.first<<endl;
+        for(auto field : element.second.fieldKeys){
+            cout << field << " , ";
+        }
+        cout<<"printing method of "<<element.first<<endl;
+        for(auto method : element.second.methodKeys){
+            cout << method << " , ";
+        }
         cout << "class " << element.first << " was pushed in ClassesType";
+
     }
     for (std::pair<std::string, llvm::Type *> element : ClassesType){
         if(element.second != nullptr){
         element.second->print(llvm::outs()) ;
         printf("\n");            
         }
-
     }
+    
 }
 
 void CodeGenerator::fill_class_type_aux(string classID){
@@ -600,21 +465,14 @@ void CodeGenerator::fill_class_type_aux(string classID){
 void CodeGenerator::fill_method_proto(){
     //check classes Types
     //cout << "printing Classes Type" << endl;
-    for (auto& it: ClassesType) {
-    // Do stuff
-        cout << it.first << endl;;
-    }
     //loop over all classes
     for(auto class_pair: prototype){
-        //cout<<"making method proto of class " << class_pair.first << endl;
+        cout<<"making method proto of class " << class_pair.first << endl;
         //loop over all methods
         for(auto method_pair : class_pair.second.method){
-            //cout << "making method "<< method_pair.first << endl;
+            cout << "making method "<< method_pair.first << endl;
             std::vector<llvm::Type*> args_type = vector<llvm::Type*>();
             //push a pointer to classes as the first argument of the method
-            if(ClassesType.find(class_pair.first) == ClassesType.end()){
-                //cerr<<"unknown class " << class_pair.first << endl;
-            }
             //if there is any field in class, create a pointer to the class
             if(ClassesType[class_pair.first] != nullptr){
                 llvm::Type* pointer_to_class = ClassesType[class_pair.first]->getPointerElementType();
@@ -625,20 +483,31 @@ void CodeGenerator::fill_method_proto(){
                 if(ClassesType.find(arg) == ClassesType.end()){
                     //cerr<<"unknown class: " << arg << endl;
                 }
-                //cout << arg <<endl;
+                cout << arg <<endl;
                 args_type.push_back(ClassesType[arg]);
             }
             std::string method_name = class_pair.first + method_pair.first ;
-            //cout << "llvm stuff of " << method_name <<  endl;
-           // cout << method_pair.second.return_type << endl;
             //if class return type has no field, return of llvm::Type::voidTY, else the struct representing the field.
             llvm::Type* ret_type = llvm::Type::getVoidTy(TheContext);
             if(ClassesType[method_pair.second.return_type] != nullptr){
                 ret_type = ClassesType[method_pair.second.return_type];
             }
             llvm::FunctionType *FT = llvm::FunctionType::get(ret_type, args_type, false);
-            //cout<<"create function"<<endl;
-            llvm::Function::Create(FT, llvm::Function::ExternalLinkage, method_name, TheModule.get());
+            cout<<"create function"<<endl;
+            llvm::Function* F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage, method_name, TheModule.get());
+            cout << "args_name size: "<<prototype[classID].method[method_pair.first].arguments_name.size()<<endl;
+            auto args_name = method_pair.second.arguments_name.begin();  
+            int i=0;
+            cout<<"function arg size: " << F->arg_size();
+            for (auto &Arg : F->args()){
+                //because first arg of a method is pointer on the class, should pass it.
+                if( i> 0){
+                    cout<<"i "<< i << endl;              
+                    Arg.setName(*args_name);
+                    ++args_name;                     
+                }
+                i++;
+            }
             cout << "end making method "<< method_name << endl;
         }
     }
