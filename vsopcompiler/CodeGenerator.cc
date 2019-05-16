@@ -560,6 +560,7 @@ void CodeGenerator::fill_class_type(){
         if(ClassesType.find(element.first) == ClassesType.end()){
             fill_class_type_aux(element.first);
         }
+        cout << "class " << element.first << " was pushed in ClassesType";
     }
     for (std::pair<std::string, llvm::Type *> element : ClassesType){
         element.second->print(llvm::outs()) ;
@@ -570,34 +571,76 @@ void CodeGenerator::fill_class_type(){
 void CodeGenerator::fill_class_type_aux(string classID){
     unordered_map<std::string,FieldPrototype> fields = prototype[classID].field;
     std::vector<llvm::Type*> field_type = vector<llvm::Type*>();  //content type of inner field
+    std::cout<<"making class " << classID << "with " << fields.size() << " fields" << endl;
+    //classes without any field, nothing to do.
+    if(fields.size() == 0){
+        ClassesType[classID] = nullptr;
+        return;
+    }
+    //classes with field => make a struct.
     for (auto field : fields){
         //deal before with unknow field
+        cout << "making field " << field.first << endl;
         if(ClassesType.find(field.second.type) == ClassesType.end()){
             fill_class_type_aux(field.second.type);
         }
         field_type.push_back(ClassesType[field.second.type]);
+        llvm::ArrayRef<llvm::Type*> field_array = llvm::ArrayRef<llvm::Type*>(field_type);
+        llvm::Type* struct_type = llvm::StructType::create(TheContext,field_array,classID,true);
+        if(struct_type == nullptr){
+            cerr << "struct type is null";
+        }
+        cout << struct_type << endl;
+        ClassesType[classID] = struct_type;
     }
-    llvm::ArrayRef<llvm::Type*> field_array = llvm::ArrayRef<llvm::Type*>(field_type);
-    ClassesType[classID] = llvm::StructType::create(TheContext,field_array,llvm::StringRef(classID));
-    
+    std::cout << "Type of class " << classID << " was done " << endl;
 }
 
 void CodeGenerator::fill_method_proto(){
+    //check classes Types
+    cout << "printing Classes Type" << endl;
+    for (auto& it: ClassesType) {
+    // Do stuff
+    cout << it.first << endl;;
+    }
+    //TODO VTABLE 
+
     //loop over all classes
     for(auto class_pair: prototype){
+        cout<<"making method proto of class " << class_pair.first << endl;
         //loop over all methods
         for(auto method_pair : class_pair.second.method){
+            cout << "making method "<< method_pair.first << endl;
             std::vector<llvm::Type*> args_type = vector<llvm::Type*>();
-            //push the a pointer to classes as the first argument of the method
-            llvm::Type* pointer_to_class = ClassesType[class_pair.first]->getPointerElementType();
-            args_type.push_back(pointer_to_class);
+            //push a pointer to classes as the first argument of the method
+            if(ClassesType.find(class_pair.first) == ClassesType.end()){
+                cerr<<"unknown class " << class_pair.first << endl;
+            }
+            //if there is any field in class, create a pointer to the class
+            if(ClassesType[class_pair.first] != nullptr){
+                llvm::Type* pointer_to_class = ClassesType[class_pair.first]->getPointerElementType();
+                args_type.push_back(pointer_to_class);
+            }
             //take the arguments of the methods
             for (auto arg : method_pair.second.arguments){
+                if(ClassesType.find(arg) == ClassesType.end()){
+                    cerr<<"unknown class: " << arg << endl;
+                }
+                cout << arg <<endl;
                 args_type.push_back(ClassesType[arg]);
             }
             std::string method_name = class_pair.first + method_pair.first ;
-            llvm::FunctionType *FT = llvm::FunctionType::get(ClassesType[method_pair.second.return_type], args_type, false);
+            cout << "llvm stuff of " << method_name <<  endl;
+            cout << method_pair.second.return_type << endl;
+            //if class return type has no field, return of llvm::Type::voidTY, else the struct representing the field.
+            llvm::Type* ret_type = llvm::Type::getVoidTy(TheContext);
+            if(ClassesType[method_pair.second.return_type] != nullptr){
+                ret_type = ClassesType[method_pair.second.return_type];
+            }
+            llvm::FunctionType *FT = llvm::FunctionType::get(ret_type, args_type, false);
+            cout<<"create function"<<endl;
             llvm::Function::Create(FT, llvm::Function::ExternalLinkage, method_name, TheModule.get());
+            cout << "end making method "<< method_name << endl;
         }
     }
 }
