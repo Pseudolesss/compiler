@@ -62,7 +62,8 @@ private:
     void fill_class_type_aux(std::string);
     void fill_method_proto();
     std::string classID;
-    //void allocator(std::string classID);
+    //default initialize of a variable in a function.
+    void allocator(std::string classID, llvm::Function* f, std::string VarName);
 };
 
 #endif //COMPILER_CODEGENERATOR_HH

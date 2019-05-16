@@ -111,6 +111,9 @@ llvm::Value* CodeGenerator::visit(Method* method) {
     // Create a new basic block to start insertion into.
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "entry", F);
     Builder.SetInsertPoint(BB);
+    //TODO create alloca for all argument of the function, set namespace to function argname and field
+    //Then in args, set the value of the arguments with the created alloca.
+
     // Return instruction handle by Block 
     llvm::Value* Block = method->getBlock()->accept(this);
     // Type has already be checked, it is "safe" enough to just take the function type as condition, Block last expr is ok tho
@@ -511,4 +514,11 @@ void CodeGenerator::fill_method_proto(){
             cout << "end making method "<< method_name << endl;
         }
     }
+}
+
+void CodeGenerator::allocator(std::string classID, llvm::Function* f, std::string VarName){
+    llvm::Type* type = ClassesType[classID];
+    llvm::Value* def_value = llvm::Constant::getNullValue(type);
+    llvm::AllocaInst* alloca = CreateEntryBlockAlloca(f,type,VarName);
+    Builder.CreateStore(def_value, alloca);
 }
