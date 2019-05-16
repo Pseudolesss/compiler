@@ -13,7 +13,8 @@ check semantic error on prototype, check:
 #include "prototype.hh"
 #include <set>
 
-//retrun true if there no error, false otherwise.
+/*retrun true if there no error, false otherwise.
+ */
 bool check(std::string file){
     return check_main(file) && check_parent(file);
 }
@@ -91,38 +92,19 @@ bool _check_parent(std::set<std::string>& todo,std::string classID,std::string f
         out = false;
     }
 
-    //these tests are also done in CheckTypeScope
-
-    // //check all field return type are defined
-    // for (auto const& field :  prototype[classID].field){
-    //     if( ! check_defined(field.second.type)){
-    //         yy::location l = field.second.location;
-    //         errors.add(l,"use of undefined class: " + field.second.type + " in the field: " + field.first);
-    //     }
-    // }
-
-    // for(auto const& method :  prototype[classID].method){
-        
-    //     //check all method return type are defined
-    //     if(!check_defined(method.second.return_type)){
-    //         yy::location l = method.second.location;
-    //         errors.add(l,"use of undefined class: " + method.second.return_type + " in the return of method: " + method.first);
-    //     }
-
-    //     //check all argument type are defined  
-    //     for(auto const& arg : method.second.arguments){
-    //         if(!check_defined(arg)){
-    //             yy::location l = method.second.location;
-    //             errors.add(l,"use of undefined class: " + arg + " in the argument list of method: " + method.first);
-    //         }            
-    //     }   
-    // }
-
     //base case 1.
     if(::prototype[classID].direct_parent == ""){
+        //give an order to field and method.
+        for(auto field_pair : ::prototype[classID].field){
+            ::prototype[classID].fieldKeys.push_back(field_pair.first);
+        }
+        for(auto method_pair : ::prototype[classID].method){
+            ::prototype[classID].methodKeys.push_back(method_pair.first);
+        }
         todo.erase(classID);
         return out;
     }
+
     //base case 2: break cycle
     if(todo.find(classID) == todo.end()){
         return false;
@@ -150,7 +132,12 @@ bool _check_parent(std::set<std::string>& todo,std::string classID,std::string f
             ::prototype[classID].parent.insert(ancestor);
         }          
     }
-
+    //add parent field at child.fieldKeys in same order.     
+    ::prototype[classID].fieldKeys = std::vector<std::string>(::prototype[parentID].fieldKeys);
+    //order child field
+    for(auto child_field : ::prototype[classID].field){
+        ::prototype[classID].fieldKeys.push_back(child_field.first);
+    }
     //Add parent field to child field and check there is no redefinition.
     for (auto const& parent_field: ::prototype[parentID].field){
         if(::prototype[classID].field.find(parent_field.first) != ::prototype[classID].field.end()
@@ -165,6 +152,15 @@ bool _check_parent(std::set<std::string>& todo,std::string classID,std::string f
         else{
             ::prototype[classID].field.insert(parent_field);
         }          
+    }
+    //add parent method to child methodKey in same order
+    ::prototype[classID].methodKeys = std::vector<std::string>(::prototype[parentID].methodKeys);
+    //add child method not in parent method
+
+    for(auto child_method : ::prototype[classID].method){
+        if(::prototype[parentID].method.find(child_method.first) == ::prototype[parentID].method.end()){
+            ::prototype[classID].methodKeys.push_back(child_method.first);
+        }
     }
 
     //Add parent method to child method if not override. check override are well done

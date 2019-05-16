@@ -40,26 +40,6 @@ main (int argc, char *argv[])
         drv.root->accept(new CheckTypeScope());
         std::cout << drv.root->accept(new CheckPrinter()) << std::endl;
         ::errors.print(drv.file);
-        
-        /*std::cout<<"end of error printing" << std::endl;
-        for(auto elem : prototype){
-            std::cout<< elem.first<< ":" << elem.second.toString() << std::endl;
-          }
-        //to test the symbol table
-        // SymbolTable s = SymbolTable();
-        // s.add_element("one", "string");
-        // std::cout << s.lookup("one") << '\n';
-        // s.new_scope();
-        // s.add_element("two", "int64");
-        // std::cout << s.lookup("two") << '\n';
-        // s.exit_scope();
-        // std::cout << s.lookup("two") << '\n';
-        // s.add_element("one", "int64");
-        // s.new_scope();
-        // std::cout << s.lookup("one") << '\n';*/
-        
-        //cout<<::errors.isempty()<<"\n";
-
         return !::errors.isempty();        
       }
 
@@ -80,11 +60,14 @@ main (int argc, char *argv[])
       int ret = drv.parse(argv[2]);
 
       drv.root->accept(new FillPrototype());
+      std::cout<<"fill proto done"<<std::endl;
       check(drv.file);
+      std::cout<<"check done"<<std::endl;
       drv.root->accept(new CheckTypeScope());
+      std::cout<<"type scope done"<<std::endl;
       std::cout << drv.root->accept(new CheckPrinter()) << std::endl;
       ::errors.print(drv.file);
-
+      std::cout<<"printer done"<<std::endl;
       drv.root->accept(new CodeGenerator());
       TheModule->print(llvm::outs(), nullptr);
 
