@@ -18,6 +18,7 @@ llvm::Value* CodeGenerator::visit(Field* field) {
 llvm::Value* CodeGenerator::visit(Programm* programm) {
 
     fill_class_type();
+    fill_method_proto();
     programm->getClasses()->accept(this);
     return nullptr;
 
@@ -563,8 +564,11 @@ void CodeGenerator::fill_class_type(){
         cout << "class " << element.first << " was pushed in ClassesType";
     }
     for (std::pair<std::string, llvm::Type *> element : ClassesType){
+        if(element.second != nullptr){
         element.second->print(llvm::outs()) ;
-        printf("\n");
+        printf("\n");            
+        }
+
     }
 }
 
