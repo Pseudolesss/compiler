@@ -83,7 +83,7 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
         else if(methodPrototype.return_type == "string")
             pt = llvm::Type::getInt8PtrTy(TheContext);
         else 
-            cout<<"Get a class type already declared";
+            cout<<"Get a class type already declared"<<endl;
             pt = ClassesType[methodPrototype.return_type];
 
         // Then the arguments' types
@@ -100,7 +100,8 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
                 argsType.push_back(ClassesType[t]);
         }
         cout<<"push back"<<endl;
-        cout<<pt<<endl;
+        pt->print(llvm::outs()) ;
+        cout<<endl;
         //vt.push_back(llvm::FunctionType::get(pt, argsType, false )); // Boolean for variable nb of arg
     }
     std::cout<<"end two loop"<<endl;
@@ -110,7 +111,7 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
 
     llvm::StructType* st = llvm::StructType::create(TheContext , ar, classe->getTypeID() );
 
-    // Add new type in global table
+    // Add new type in global table -> TODO : c'est toujours utile de le faire ? on le connait déjà non ?
     ClassesType[classe->getTypeID()] = st;
 
     // TODO continu implementation
@@ -560,6 +561,10 @@ void CodeGenerator::fill_class_type(){
             fill_class_type_aux(element.first);
         }
     }
+    for (std::pair<std::string, llvm::Type *> element : ClassesType){
+        element.second->print(llvm::outs()) ;
+        printf("\n");
+    }
 }
 
 void CodeGenerator::fill_class_type_aux(string classID){
@@ -571,9 +576,10 @@ void CodeGenerator::fill_class_type_aux(string classID){
             fill_class_type_aux(field.second.type);
         }
         field_type.push_back(ClassesType[field.second.type]);
-        llvm::ArrayRef<llvm::Type*> field_array = llvm::ArrayRef<llvm::Type*>(field_type);
-        ClassesType[classID] = llvm::StructType::create(TheContext,field_array,llvm::StringRef(classID));
     }
+    llvm::ArrayRef<llvm::Type*> field_array = llvm::ArrayRef<llvm::Type*>(field_type);
+    ClassesType[classID] = llvm::StructType::create(TheContext,field_array,llvm::StringRef(classID));
+    
 }
 
 void CodeGenerator::fill_method_proto(){
