@@ -9,8 +9,10 @@ llvm::Value* CodeGenerator::visit(ASTnode* astNode) { return nullptr; }
 
 llvm::Value* CodeGenerator::visit(Field* field) {
     std::cout << "Field" << '\n';
-    //Keep the default field value in a table.
-    Def_field_value[classID + field->getID()] = field->getExpr()->accept(this);
+    //Keep the ssigned field value in a table if it exist.
+    if(field->getExpr() != nullptr){
+        Def_field_value[classID + field->getID()] = field->getExpr()->accept(this);
+    }
     return nullptr;
 }
 
@@ -40,7 +42,7 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
     classID = classe->getTypeID();
     //clear the NameSpace
     NamedValues.clear();
-    //Deal with the body (create new block in llvm for value)
+    //Deal with the body 
     classe->getBody()->accept(this);
     return nullptr;
 }
@@ -48,18 +50,16 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
 
 llvm::Value* CodeGenerator::visit(Block* block) {
 
-    std::cout << "Block" << '\n';
+    std::cout << "Block" << endl;
 
     if(block->getExpr() == nullptr)
         return llvm::Constant::getNullValue(llvm::Type::getVoidTy(TheContext)); // Noop
     //TODO Check the meaning of a no op and if this could be an ok alternative
 
-    block->getExpr()->accept(this);
-    block->getExprx()->getExpr()->accept(this);
-
     Exprx* e = block->getExprx();
     Expr* exp = block->getExpr();
     while(e->getExpr() != nullptr){
+        cout<<"in while loop"<<endl;
         exp->accept(this);
         exp = e->getExpr();
         e = e->getExprx();
@@ -71,23 +71,8 @@ llvm::Value* CodeGenerator::visit(Block* block) {
 
 llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
     std::cout << "FieldMethod" << '\n';
-
-    //for method, write down the method in llvm.
-
-    if(fieldMethod->getField() != nullptr){
-        //For field, find init value and keep it into a global hash table.
-        fieldMethod->getField()->accept(this);
-    }
-    if(fieldMethod->getMethod() != nullptr){
-        //for method, write the function in llvm
-        fieldMethod->getMethod()->accept(this);
-    }
-    if(fieldMethod->getFieldMethod()!= nullptr){
-        fieldMethod->getFieldMethod()->accept(this);
-    }
-/*    
-// Fields and methods are returned backwards
-
+    std::vector<Field*> f = std::vector<Field*>();
+    std::vector<Method*> m = std::vector<Method*>();
     FieldMethod* fm = fieldMethod;
     while(fm->getFieldMethod() != nullptr){
         if(fm->getField() != nullptr)
@@ -105,12 +90,13 @@ llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
     while(!m.empty()){
         m.back()->accept(this);
         m.pop_back();
-    }*/
+    }
     return nullptr;
 }
 
 //implement the method
 llvm::Value* CodeGenerator::visit(Method* method) {
+    cout<<"Method"<<endl;
     llvm::Function *F = TheModule->getFunction(classID + method->getID());
     // Create a new basic block to start insertion into.
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "method" + method->getID() + "entry", F);
@@ -127,6 +113,7 @@ llvm::Value* CodeGenerator::visit(Method* method) {
         NamedValues[Arg.getName()] = Alloca;
     }
     // Return instruction handle by Block 
+    cout<<"making block"<<endl;
     llvm::Value* Block = method->getBlock()->accept(this);
     // Type has already be checked, it is "safe" enough to just take the function type as condition, Block last expr is ok tho
     if(Block->getType() == llvm::Type::getVoidTy(TheContext))
@@ -138,12 +125,9 @@ llvm::Value* CodeGenerator::visit(Method* method) {
 
 
 llvm::Value* CodeGenerator::visit(Body* body) {
-
     std::cout << "Body" << '\n';
     body->getFieldMethod()->accept(this);
-
     return nullptr;
-
 }
 
 
@@ -320,16 +304,20 @@ llvm::Value* CodeGenerator::visit(Let* let) {
 
 }
 
-//generate code for call to a function
+//generate code for call to a function what is a function ?
 llvm::Value* CodeGenerator::visit(Function* function) {
-
     std::cout << "Function" << '\n';
-
     std::vector<llvm::Value*> ArgsVal;
     std::vector<Expr*> ArgsExpr;
-
     // Look up the name in the global module table.
     llvm::Function* functionCalled = TheModule->getFunction(function->getID());
+    if(functionCalled == nullptr){
+        cout<<"undefined function "<< endl;
+    }
+    //get the object which call a method
+    std::string obj_id = function->getID();
+    //push pointer to the object as first argument.
+    //ArgsVal.push_back();
 
     // Need to isolate the arguments of the function and get their llvm expression
     // Check if the first one is empty
@@ -341,11 +329,10 @@ llvm::Value* CodeGenerator::visit(Function* function) {
             exprxx = exprxx->getExprxx();
         }
     }
-
     for (int i = 0, s = ArgsExpr.size(); i < s; ++i) {
         ArgsVal.push_back(ArgsExpr[i]->accept(this));
     }
-
+    cout<<"create call"<<endl;
     return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
 }
 
@@ -354,7 +341,12 @@ llvm::Value* CodeGenerator::visit(Pow* pow) { std::cout << "pow" << '\n'; return
 
 
 //TODO IMPLEMENT DYNAMIC DISPATCH 
-llvm::Value* CodeGenerator::visit(Dot* dot) { std::cout << "dot" << '\n'; return nullptr;}
+llvm::Value* CodeGenerator::visit(Dot* dot) { 
+    
+    
+    
+    
+    std::cout << "dot" << '\n'; return nullptr;}
 
 //TODO IMPLEMENT NEW
 llvm::Value* CodeGenerator::visit(New* anew) {std::cout << "new" << '\n'; return nullptr;}
@@ -407,19 +399,18 @@ llvm::Value* CodeGenerator::visit(IsNull* isNull) {std::cout << "IsNull" << '\n'
 
 llvm::Value* CodeGenerator::visit(Parenthese* parenthese) {std::cout << "()" << '\n'; return parenthese->getExpr()->accept(this);}
 
-llvm::Value* CodeGenerator::visit(Formal* formal) {std::cout << "Formal" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Formalx* formalx) {std::cout << "Formalx" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Formals* formals) {std::cout << "Formals" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Exprx* exprx) {std::cout << "Exprx" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Exprxx* exprxx) {std::cout << "Exprxx" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Expr* expr) {std::cout << "Expr" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Dual* dual) {std::cout << "dual" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Unary* unary) {std::cout << "unary" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Args* args) {std::cout << "args" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Literal* literal) {std::cout << "literal" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Lpar* lpar) {std::cout << "lpar" << '\n'; return nullptr;}
-llvm::Value* CodeGenerator::visit(Rpar* rpar) {std::cout << "rpar" << '\n'; return nullptr;}
-
+llvm::Value* CodeGenerator::visit(Formal* formal) {std::cout << "Formal" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Formalx* formalx) {std::cout << "Formalx" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Formals* formals) {std::cout << "Formals" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Exprx* exprx) {std::cout << "Exprx" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Exprxx* exprxx) {std::cout << "Exprxx" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Expr* expr) {std::cout << "Expr" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Dual* dual) {std::cout << "dual" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Unary* unary) {std::cout << "unary" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Args* args) {std::cout << "args" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Literal* literal) {std::cout << "literal" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Lpar* lpar) {std::cout << "lpar" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Rpar* rpar) {std::cout << "rpar" << endl; return nullptr;}
 void CodeGenerator::fill_class_type(){
     //push primitive type into the ClasseType
     ClassesType["int32"] = llvm::Type::getInt32Ty(TheContext);
