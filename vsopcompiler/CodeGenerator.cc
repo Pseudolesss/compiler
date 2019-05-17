@@ -8,20 +8,18 @@ llvm::Value* CodeGenerator::visit(ASTnode* astNode) { return nullptr; }
 
 
 llvm::Value* CodeGenerator::visit(Field* field) {
-    //TODO implementation
     std::cout << "Field" << '\n';
-    field->getExpr()->accept(this);
+    //Keep the default field value in a table.
+    Def_field_value[classID + field->getID()] = field->getExpr()->accept(this);
     return nullptr;
 }
 
 
 llvm::Value* CodeGenerator::visit(Programm* programm) {
-
     fill_class_type();
     fill_method_proto();
     programm->getClasses()->accept(this);
     return nullptr;
-
 }
 
 
@@ -71,15 +69,24 @@ llvm::Value* CodeGenerator::visit(Block* block) {
 
 }
 
-//implement Field method declaration.
 llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
-
     std::cout << "FieldMethod" << '\n';
 
-    // Fields and methods are returned backwards
+    //for method, write down the method in llvm.
 
-    std::vector<Method*> m;
-    std::vector<Field*> f;
+    if(fieldMethod->getField() != nullptr){
+        //For field, find init value and keep it into a global hash table.
+        fieldMethod->getField()->accept(this);
+    }
+    if(fieldMethod->getMethod() != nullptr){
+        //for method, write the function in llvm
+        fieldMethod->getMethod()->accept(this);
+    }
+    if(fieldMethod->getFieldMethod()!= nullptr){
+        fieldMethod->getFieldMethod()->accept(this);
+    }
+/*    
+// Fields and methods are returned backwards
 
     FieldMethod* fm = fieldMethod;
     while(fm->getFieldMethod() != nullptr){
@@ -98,26 +105,30 @@ llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
     while(!m.empty()){
         m.back()->accept(this);
         m.pop_back();
-    }
-
-
+    }*/
     return nullptr;
-
 }
 
-//implement the prototype of a method
+//implement the method
 llvm::Value* CodeGenerator::visit(Method* method) {
     llvm::Function *F = TheModule->getFunction(classID + method->getID());
     // Create a new basic block to start insertion into.
-    llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "entry", F);
+    llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "method" + method->getID() + "entry", F);
     Builder.SetInsertPoint(BB);
-    //TODO create alloca for all argument of the function, set namespace to function argname and field
-    //Then in args, set the value of the arguments with the created alloca.
-
+    //create alloca for all argument of the function
+    // Record the function arguments in the NamedValues map.
+    NamedValues.clear();
+    for (auto &Arg : F->args()) {
+        // Create an alloca for this variable.
+        llvm::AllocaInst *Alloca = CreateEntryBlockAlloca(F, Arg.getType(), Arg.getName());
+        // Store the initial value into the alloca.
+        Builder.CreateStore(&Arg, Alloca);
+        // Add arguments to variable symbol table for the body.
+        NamedValues[Arg.getName()] = Alloca;
+    }
     // Return instruction handle by Block 
     llvm::Value* Block = method->getBlock()->accept(this);
     // Type has already be checked, it is "safe" enough to just take the function type as condition, Block last expr is ok tho
-    //TODO Check if good condition and type for Unit
     if(Block->getType() == llvm::Type::getVoidTy(TheContext))
         Builder.CreateRetVoid();
     else
@@ -129,7 +140,6 @@ llvm::Value* CodeGenerator::visit(Method* method) {
 llvm::Value* CodeGenerator::visit(Body* body) {
 
     std::cout << "Body" << '\n';
-    //TODO create new block to scope to the current classID ???
     body->getFieldMethod()->accept(this);
 
     return nullptr;
