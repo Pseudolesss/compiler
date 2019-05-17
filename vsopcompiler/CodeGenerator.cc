@@ -365,10 +365,36 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
     
     std::cout << "dot" <<std::endl; return nullptr;}
 
-//TODO IMPLEMENT NEW
 llvm::Value* CodeGenerator::visit(New* anew) {
     
-    std::cout << "new" <<std::endl; return nullptr;}
+    llvm::Function *CalledF = TheModule->getFunction("malloc" + anew->getTypeID());
+    if (!CalledF){
+        std::cerr<<"Unable to malloc "<< anew->getTypeID() << std::endl;
+        return nullptr;
+    }
+    llvm::Value* pointer_to_obj = Builder.CreateCall(CalledF);
+    //show it is a pointer type for debug purpose.
+    std::cout<<pointer_to_obj->getType()->isPointerTy()<<std::endl;
+    //init field to zero, push the result.
+    llvm::Value* all_zero = llvm::Constant::getNullValue(ClassesType[anew->getTypeID()]);
+    Builder.CreateStore(all_zero,pointer_to_obj);
+    int index=0;
+    for(auto field : prototype[anew->getTypeID()].fieldKeys){
+        if(Def_field_value.find(anew->getTypeID() + field) != Def_field_value.end()){
+            // set the field to the correct default value 
+            //see: https://stackoverflow.com/questions/40771022/how-to-get-the-value-of-a-member-of-a-structure-in-llvm
+            llvm::Value* member_index = llvm::ConstantInt::get(TheContext, llvm::APInt(32, index, true));
+            std::vector<llvm::Value*> indices(2);
+            indices[0] = llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true));
+            indices[1] = member_index;
+            llvm::Value* member_ptr = Builder.CreateGEP(ClassesType[anew->getTypeID()],pointer_to_obj, indices, "memberptr");
+            Builder.CreateStore(Def_field_value[anew->getTypeID() + field],member_ptr,"init field");
+        }
+        index++;    
+    }
+    std::cout << "new" <<std::endl; 
+    return Builder.CreateLoad(pointer_to_obj);
+}
 
 llvm::Value* CodeGenerator::visit(ObjID* objId) { std::cout << "ObjID" << std::endl;
 //TODO The goal is to send back the value only, no need to load in a register CHANGE THAT IF NEEDED
