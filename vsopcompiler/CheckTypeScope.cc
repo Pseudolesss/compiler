@@ -225,6 +225,7 @@ std::string CheckTypeScope::visit(Classes *classes){
 
 std::string CheckTypeScope::visit(Programm *programm)
 {
+    cout<<"cheking type scope"<<std::endl;
     return programm->getClasses()->accept(this);
 }
 

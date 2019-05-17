@@ -120,7 +120,8 @@ std::string FillPrototype::visit(Formals *formals)
 std::string FillPrototype::visit(Formal *formal)
 {
     ::prototype[classID].method[methodID].arguments.push_back(formal->getType()->getID());
-    //::prototype[classID].method[methodID].arguments_name.push_back(formal->getID());
+    cout<<"pushing argument name: " << formal->getID() << endl;
+    ::prototype[classID].method[methodID].arguments_name.push_back(formal->getID());
     return "done";
 }
 

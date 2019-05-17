@@ -10,9 +10,9 @@
 class MethodPrototype{
     public:
         //type of arguments
-        std::list<std::string> arguments;
+        std::list<std::string> arguments = std::list<std::string>();
         //name of arguments of the functions
-        //std::list<std::string> arguments_name;
+        std::list<std::string> arguments_name = std::list<std::string>();
         std::string return_type;
         std::string toString() const;
         yy::location location;
@@ -31,8 +31,9 @@ class ClassPrototype {
         std::unordered_map<std::string,FieldPrototype> field;
         // method id | return type
         std::unordered_map<std::string,MethodPrototype> method;
-        // To track relative order of "keys" field/method insertion.
-        //std::vector<std::string> fieldKeys, methodKeys; //FALSE IF OVERIDE METHOD
+        // To keep coherent order of "keys" field/method.
+        std::vector<std::string> fieldKeys = std::vector<std::string>();
+        std::vector<std::string> methodKeys = std::vector<std::string>(); 
         // parent class id
         std::set<std::string> parent;
         std::string direct_parent;
