@@ -549,3 +549,19 @@ void CodeGenerator::allocator(std::string classID, llvm::Function* f, std::strin
     llvm::AllocaInst* alloca = CreateEntryBlockAlloca(f,type,VarName);
     Builder.CreateStore(def_value, alloca);
 }
+//Create a malloc function for all classe type. function name are malloc + classID 
+void CodeGenerator::create_malloc_function()
+{
+    for(auto type_pair : ClassesType){
+        std::string name =  "malloc" + type_pair.first;
+        llvm::FunctionType *FT = llvm::FunctionType::get(ClassesType[type_pair.first]->getPointerTo(),false);
+        llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage,name, TheModule.get());
+        llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "entry_" + name, F);
+        Builder.SetInsertPoint(BB);
+        llvm::Type* ITy = llvm::Type::getInt32Ty(TheContext);
+        llvm::Constant* AllocSize = llvm::ConstantExpr::getSizeOf(ClassesType[type_pair.first]);
+        AllocSize = llvm::ConstantExpr::getTruncOrBitCast(AllocSize, ITy);
+        llvm::Instruction* Malloc = llvm::CallInst::CreateMalloc(BB,ITy,ClassesType[type_pair.first], AllocSize,nullptr, nullptr, "");
+        Builder.CreateRet(Malloc);
+    }
+}
