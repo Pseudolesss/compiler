@@ -6,7 +6,7 @@ BISON = bison
 CXX = g++
 FLEX = flex
 XSLTPROC = xsltproc
-CXXFLAGS = -std=c++14  `llvm-config --cxxflags --ldflags --libs --libfiles --system-libs --includedir`
+CXXFLAGS = -fpic -std=c++14  `llvm-config --cxxflags --ldflags --libs --libfiles --system-libs --includedir`
 LDFLAGS = `llvm-config --ldflags --system-libs --libs`
 
 all: $(BASE)
@@ -14,14 +14,17 @@ all: $(BASE)
 %.cc %.hh %.xml %.gv: %.yy
 	$(BISON) $(BISONFLAGS) --xml --graph=$*.gv -o $*.cc $<
 
-%.cc: %.ll
+%.cc: %.l
 	$(FLEX) $(FLEXFLAGS)  -o $@ $<
 
+%.o: %.ll
+	llc  -filetype obj -relocation-model pic $<
+
 %.o: %.cc
-	$(CXX) $(CXXFLAGS)  -fexceptions -c -o $@ $< $(LDFLAGS)
-	
-$(BASE): $(BASE).o driver.o parser.o scanner.o ASTnode.o CheckPrinter.o  ParserPrinter.o ErrorHandler.o SymbolTable.o prototype.o FillPrototype.o CheckPrototype.o SymbolTable.o CheckTypeScope.o CodeGenerator.o
-	$(CXX)  -o $@ $^ $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -fexceptions -c -o $@ $< $(LDFLAGS)
+
+$(BASE): $(BASE).o  IO.o driver.o parser.o scanner.o ASTnode.o CheckPrinter.o  ParserPrinter.o ErrorHandler.o SymbolTable.o prototype.o FillPrototype.o CheckPrototype.o SymbolTable.o CheckTypeScope.o CodeGenerator.o
+	$(CXX) -fpic -o $@ $^ $(LDFLAGS)
 	echo $(shell pwd)
 
 $(BASE).o: parser.hh
@@ -30,7 +33,7 @@ scanner.o: parser.hh
 
 install-tools: 	
 	sudo cp IO.vsop /home
-
+	sudo llc  -filetype obj IO.ll
 
 html: parser.html
 %.html: %.xml
