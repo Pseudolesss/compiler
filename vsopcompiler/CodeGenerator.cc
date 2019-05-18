@@ -354,16 +354,60 @@ llvm::Value* CodeGenerator::visit(Function* function) {
 }
 
 //TODO IMPLEMENT POWER
-llvm::Value* CodeGenerator::visit(Pow* pow) { std::cout << "pow" <<std::endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Pow* pow) { 
+    std::cout << "pow" <<std::endl;
+    //TODO : there are not pow in the builder functions disponible,
+    //the llvm instruction is
+    // declare float     @llvm.powi.f32(float  %Val, i32 %power)
+    return nullptr;
+}
 
 
 //TODO IMPLEMENT DYNAMIC DISPATCH 
 llvm::Value* CodeGenerator::visit(Dot* dot) { 
+    std::vector<llvm::Value*> ArgsVal;
+    std::vector<Expr*> ArgsExpr;
+
+    //Lookup for the right name in the global module table.
+    std::cout << classID <<std::endl;
+    llvm::Function* functionCalled = TheModule->getFunction(dot->getExpr()->getTypeID() + dot->getID());
+
+    std::string classe = dot->getExpr()->getTypeID();    
+    while(functionCalled->empty()){
+        classe = prototype[classe].direct_parent;
+        functionCalled = TheModule->getFunction(classe + function->getID());
+        if(functionCalled == nullptr){
+            cout<<"undefined function "<< classe + function->getID() << endl;
+            return nullptr;
+        }         
+    }
+    std::cout<<"loaded function " << classe + function->getID() << endl;
     
-    
-    
-    
-    std::cout << "dot" <<std::endl; return nullptr;}
+    //push pointer to the object as first argument, but object main not yet create !
+    //ArgsVal.push_back();
+
+    // Need to isolate the arguments of the function and get their llvm expression
+    // Check if the first one is empty
+    if(function->getArgs()->getExpr() != nullptr) {
+        ArgsExpr.push_back( function->getArgs()->getExpr());
+        struct Exprxx* exprxx = function->getArgs()->getExprxx();
+        while(exprxx->getExprxx() != nullptr){        
+            std::cout<<"getting args"<<std::endl;
+            ArgsExpr.push_back( exprxx->getExpr());
+            exprxx = exprxx->getExprxx();
+        }
+    }
+    std::cout<<ArgsExpr.size()<<std::endl;
+    for (int i = 0, s = ArgsExpr.size(); i < s; ++i) {    
+        std::cout<<"pushing args"<<std::endl;
+        ArgsVal.push_back(ArgsExpr[i]->accept(this));
+        std::cout<<"args "<<ArgsExpr[i]->getLocation() << "pushed" <<std::endl;
+    }
+    std::cout<<"create call"<<std::endl;
+    //return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
+    return nullptr;
+
+ }
 
 llvm::Value* CodeGenerator::visit(New* anew) {
     
