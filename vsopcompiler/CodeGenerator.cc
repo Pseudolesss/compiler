@@ -359,7 +359,21 @@ llvm::Value* CodeGenerator::visit(Pow* pow) {
     //TODO : there are not pow in the builder functions disponible,
     //the llvm instruction is
     // declare float     @llvm.powi.f32(float  %Val, i32 %power)
-    return nullptr;
+
+    // Get the intrasec function handling int32 base and int32 power
+    std::vector<llvm::Type *> arg_type;
+    arg_type.push_back(llvm::Type::getInt32Ty(TheContext));
+    llvm::Function *fun = llvm::Intrinsic::getDeclaration(Builder.GetInsertBlock()->getModule(), llvm::Intrinsic::powi, arg_type);
+
+    // Set up parameters
+    std::vector<llvm::Value* > vt;
+    vt.push_back(pow->getLeft()->accept(this));
+    vt.push_back(pow->getRight()->accept(this));
+
+    llvm::ArrayRef<llvm::Value* >arr = llvm::makeArrayRef(vt);
+
+    // Send back the call to the intrasec llvm.powi.i32
+    return Builder.CreateCall(fun, arr);
 }
 
 
@@ -370,27 +384,27 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
 
     //Lookup for the right name in the global module table.
     std::cout << classID <<std::endl;
-    llvm::Function* functionCalled = TheModule->getFunction(dot->getExpr()->getTypeID() + dot->getID());
+    llvm::Function* functionCalled = TheModule->getFunction(dot->getExpr()->getType() + dot->getID());
 
-    std::string classe = dot->getExpr()->getTypeID();    
+    std::string classe = dot->getExpr()->getType();
     while(functionCalled->empty()){
         classe = prototype[classe].direct_parent;
-        functionCalled = TheModule->getFunction(classe + function->getID());
+        functionCalled = TheModule->getFunction(classe + dot->getID());
         if(functionCalled == nullptr){
-            cout<<"undefined function "<< classe + function->getID() << endl;
+            cout<<"undefined function "<< classe + dot->getID() << endl;
             return nullptr;
         }         
     }
-    std::cout<<"loaded function " << classe + function->getID() << endl;
+    std::cout<<"loaded function " << classe + dot->getID() << endl;
     
     //push pointer to the object as first argument, but object main not yet create !
     //ArgsVal.push_back();
 
     // Need to isolate the arguments of the function and get their llvm expression
     // Check if the first one is empty
-    if(function->getArgs()->getExpr() != nullptr) {
-        ArgsExpr.push_back( function->getArgs()->getExpr());
-        struct Exprxx* exprxx = function->getArgs()->getExprxx();
+    if(dot->getArgs()->getExpr() != nullptr) {
+        ArgsExpr.push_back( dot->getArgs()->getExpr());
+        struct Exprxx* exprxx = dot->getArgs()->getExprxx();
         while(exprxx->getExprxx() != nullptr){        
             std::cout<<"getting args"<<std::endl;
             ArgsExpr.push_back( exprxx->getExpr());
