@@ -18,25 +18,42 @@ llvm::Value* CodeGenerator::visit(Field* field) {
 
 
 llvm::Value* CodeGenerator::visit(Programm* programm) {
+    //create llvm type from source classes
     fill_class_type();
+    //create llvm declaration from source
     fill_method_proto();
+    //create malloc function for all classes
+    create_malloc_function();
     //create object main
+    llvm::Function *CalleeF = TheModule->getFunction("mallocMain");
+    llvm::Value* main_obj_ptr = Builder.CreateCall(CalleeF);
+    //just for debug... some printing :)
+    cout<<"malloc return is pointer ? " << main_obj_ptr->getType()->isPointerTy()<<std::endl;
+    std::cout<<"Main classes created "<<std::endl;
+    TheModule->print(llvm::outs(), nullptr) ;
 
-    //lauch method main.
-
-
+    // set self object
+    self_ptr.push(main_obj_ptr);
+    //create llvm code for all classes.
     programm->getClasses()->accept(this);
-    return nullptr;
+    //launch method main of class main.
+    std::cout<<"launching main method"<<std::endl;
+    CalleeF = TheModule->getFunction("Mainmain");
+    return Builder.CreateCall(CalleeF);
 }
 
 
-llvm::Value* CodeGenerator::visit(Classes* classes) { //TODO implementation(actually just for demo purposes)
+llvm::Value* CodeGenerator::visit(Classes* classes) {
 
     std::cout << "Classes" <<std::endl;
-    while(classes->getClass() != nullptr) {
+    while(classes->nextClass() != nullptr) {
         classes->getClass()->accept(this);
         classes = classes->nextClass();
+        std::cout<<"in classes loop"<<std::endl;
     }
+    classes->getClass()->accept(this);
+    std::cout << "end of Classes" <<std::endl;
+
     return nullptr;
 }
 
@@ -49,6 +66,7 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
     NamedValues.clear();
     //Deal with the body 
     classe->getBody()->accept(this);
+    std::cout << " end of Classe" <<std::endl;
     return nullptr;
 }
 
@@ -94,6 +112,7 @@ llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
         m.back()->accept(this);
         m.pop_back();
     }
+    std::cout<<"end of fieldmethod" << std::endl;
     return nullptr;
 }
 
@@ -315,11 +334,9 @@ llvm::Value* CodeGenerator::visit(Function* function) {
     std::vector<Expr*> ArgsExpr;
 
     //Lookup for the right name in the global module table.
-    std::cout << classID <<std::endl;
     llvm::Function* functionCalled = TheModule->getFunction(classID + function->getID());
-
     std::string classe = classID;    
-    while(functionCalled->empty()){
+    while(functionCalled == nullptr){
         classe = prototype[classe].direct_parent;
         functionCalled = TheModule->getFunction(classe + function->getID());
         if(functionCalled == nullptr){
@@ -327,10 +344,9 @@ llvm::Value* CodeGenerator::visit(Function* function) {
             return nullptr;
         }         
     }
-    std::cout<<"loaded function " << classe + function->getID() << endl;
-    //push pointer to the object as first argument, but object main not yet create !
-    //ArgsVal.push_back();
-
+    std::cout<<"load function " << classe + function->getID() << endl;
+    //push pointer to the object as first argument
+    ArgsVal.push_back(self_ptr.top());
     // Need to isolate the arguments of the function and get their llvm expression
     // Check if the first one is empty
     if(function->getArgs()->getExpr() != nullptr) {
@@ -349,8 +365,7 @@ llvm::Value* CodeGenerator::visit(Function* function) {
         std::cout<<"args "<<ArgsExpr[i]->getLocation() << "pushed" <<std::endl;
     }
     std::cout<<"create call"<<std::endl;
-    //return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
-    return nullptr;
+    return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
 }
 
 //TODO IMPLEMENT POWER
@@ -639,7 +654,7 @@ void CodeGenerator::allocator(std::string classID, llvm::Function* f, std::strin
 }
 //Create a malloc function for all classe type. function name are malloc + classID 
 void CodeGenerator::create_malloc_function()
-{
+{   //See https://stackoverflow.com/questions/28143087/how-to-create-a-call-to-function-malloc-using-llvm-api
     for(auto type_pair : ClassesType){
         std::string name =  "malloc" + type_pair.first;
         llvm::FunctionType *FT = llvm::FunctionType::get(ClassesType[type_pair.first]->getPointerTo(),false);
@@ -649,7 +664,11 @@ void CodeGenerator::create_malloc_function()
         llvm::Type* ITy = llvm::Type::getInt32Ty(TheContext);
         llvm::Constant* AllocSize = llvm::ConstantExpr::getSizeOf(ClassesType[type_pair.first]);
         AllocSize = llvm::ConstantExpr::getTruncOrBitCast(AllocSize, ITy);
-        llvm::Instruction* Malloc = llvm::CallInst::CreateMalloc(BB,ITy,ClassesType[type_pair.first], AllocSize,nullptr, nullptr, "");
-        Builder.CreateRet(Malloc);
+        llvm::Instruction* Malloc = llvm::CallInst::CreateMalloc(Builder.GetInsertBlock(),ITy,ClassesType[type_pair.first], AllocSize,nullptr, nullptr, "");
+        llvm::Value* ret = llvm::CastInst::CreateTruncOrBitCast(Malloc,type_pair.second);	
+
+        Builder.CreateRet(ret);
+        std::cout << "Verify function malloc" << std::endl;
+        verifyFunction(*F);
     }
 }

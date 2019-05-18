@@ -6,6 +6,7 @@
 #define LLVM_VISITOR_HH
 
 #include <string>
+#include <stack>
 
 #include <llvm/ADT/APFloat.h>
 #include <llvm/ADT/STLExtras.h>
@@ -73,6 +74,7 @@ static std::unique_ptr<llvm::Module> TheModule = llvm::make_unique<llvm::Module>
 static std::map<std::string, llvm::AllocaInst *> NamedValues;
 static std::map<std::string, llvm::Type *> ClassesType;
 static std::map<std::string, llvm::Value *> Def_field_value;
+static std::stack<llvm::Value*>  self_ptr;
 
 // Because in vsop, every variable have a default initial value TODO Check if this is true for Class types (fields should be initialized by default)
 // @args Variable's type, Variable's value, Variable's name.

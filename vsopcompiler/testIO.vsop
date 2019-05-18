@@ -1,0 +1,6 @@
+class Main extends IO {
+    main() : int32 {
+        print("Enter an integer greater-than or equal to 0: ");
+        1
+    }
+}
