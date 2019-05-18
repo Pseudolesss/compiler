@@ -100,7 +100,7 @@ bool _check_parent(std::set<std::string>& todo,std::string classID,std::string f
             ::prototype[classID].fieldKeys.push_back(field_pair.first);
         }
         for(auto method_pair : ::prototype[classID].method){
-            ::prototype[classID].methodKeys.push_back(method_pair.first);
+            ::prototype[classID].implemented_method.push_back(method_pair.first);
         }
         todo.erase(classID);
         return out;
@@ -154,13 +154,10 @@ bool _check_parent(std::set<std::string>& todo,std::string classID,std::string f
             ::prototype[classID].field.insert(parent_field);
         }          
     }
-    //add parent method to child methodKey in same order
-    ::prototype[classID].methodKeys = std::vector<std::string>(::prototype[parentID].methodKeys);
     //add child method not in parent method
-
     for(auto child_method : ::prototype[classID].method){
         if(::prototype[parentID].method.find(child_method.first) == ::prototype[parentID].method.end()){
-            ::prototype[classID].methodKeys.push_back(child_method.first);
+            ::prototype[classID].implemented_method.push_back(child_method.first);
         }
     }
 

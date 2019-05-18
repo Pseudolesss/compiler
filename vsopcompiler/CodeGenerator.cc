@@ -384,9 +384,9 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
 
     //Lookup for the right name in the global module table.
     std::cout << classID <<std::endl;
-    llvm::Function* functionCalled = TheModule->getFunction(dot->getExpr()->getType() + dot->getID());
+    llvm::Function* functionCalled = TheModule->getFunction(dot->getExpr()->getDataType() + dot->getID());
 
-    std::string classe = dot->getExpr()->getType();
+    std::string classe = dot->getExpr()->getDataType();
     while(functionCalled->empty()){
         classe = prototype[classe].direct_parent;
         functionCalled = TheModule->getFunction(classe + dot->getID());
@@ -536,8 +536,8 @@ void CodeGenerator::fill_class_type(){
         for(auto field : element.second.fieldKeys){
             cout << field << " , ";
         }
-        cout<<"printing method of "<<element.first<<endl;
-        for(auto method : element.second.methodKeys){
+        cout<<"printing implemented method of "<<element.first<<endl;
+        for(auto method : element.second.implemented_method){
             cout << method << " , ";
         }
         cout << "class " << element.first << " was pushed in ClassesType";
@@ -566,7 +566,6 @@ void CodeGenerator::fill_class_type_aux(string classID){
             fill_class_type_aux(type);
         }
         field_type.push_back(ClassesType[type]);
-        //llvm::ArrayRef<llvm::Type*> field_array = llvm::ArrayRef<llvm::Type*>(field_type);
     }
     llvm::Type* struct_type = llvm::StructType::create(TheContext,field_type,classID,true);
     if(struct_type == nullptr){
@@ -582,39 +581,44 @@ void CodeGenerator::fill_method_proto(){
     //loop over all classes
     for(auto class_pair: prototype){
         cout<<"making method proto of class " << class_pair.first << endl;
-        //loop over all methods
-        for(auto method_pair : class_pair.second.method){
-            cout << "making method "<< method_pair.first << endl;
+        //only make prototype for method which are really implemented, make nothing for inherited method.
+        for(auto method : class_pair.second.implemented_method){
+            cout << "making method "<< method << endl;
             std::vector<llvm::Type*> args_type = vector<llvm::Type*>();
             //push a pointer to classes as the first argument of the method
-            //if there is any field in class, create a pointer to the class
             if(ClassesType[class_pair.first] != nullptr){
-                llvm::Type* pointer_to_class = ClassesType[class_pair.first]->getPointerElementType();
+                llvm::Type* pointer_to_class = ClassesType[class_pair.first]->getPointerTo();
                 args_type.push_back(pointer_to_class);
             }
             //take the arguments of the methods
-            for (auto arg : method_pair.second.arguments){
+            for (auto arg : prototype[class_pair.first].method[method].arguments){
                 if(ClassesType.find(arg) == ClassesType.end()){
                     //cerr<<"unknown class: " << arg << endl;
                 }
                 cout << arg <<endl;
                 args_type.push_back(ClassesType[arg]);
             }
-            std::string method_name = class_pair.first + method_pair.first ;
-            //if class return type has no field, return of llvm::Type::voidTY, else the struct representing the field.
+            std::string method_name = class_pair.first + method ;
+            //set the return type, the return type is void if no return.
             llvm::Type* ret_type = llvm::Type::getVoidTy(TheContext);
-            if(ClassesType[method_pair.second.return_type] != nullptr){
-                ret_type = ClassesType[method_pair.second.return_type];
+            if(ClassesType[prototype[class_pair.first].method[method].return_type] != nullptr){
+                ret_type = ClassesType[prototype[class_pair.first].method[method].return_type];
             }
+            //make the function prototype
             llvm::FunctionType *FT = llvm::FunctionType::get(ret_type, args_type, false);
             cout<<"create function"<<endl;
             llvm::Function* F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage, method_name, TheModule.get());
-            cout << "args_name size: "<<prototype[classID].method[method_pair.first].arguments_name.size()<<endl;
-            auto args_name = method_pair.second.arguments_name.begin();  
+            cout << "args_name size: "<<prototype[classID].method[method].arguments_name.size()<<endl;
+            auto args_name = prototype[class_pair.first].method[method].arguments_name.begin();  
             int i=0;
             cout<<"function arg size: " << F->arg_size();
+            //name the argument of the method.
             for (auto &Arg : F->args()){
-                //because first arg of a method is pointer on the class, should pass it.
+                //first argument is a pointer to the class.
+                if(i == 0){
+                    Arg.setName("Object");
+                }
+                //other argument are names by the source file
                 if( i> 0){
                     cout<<"i "<< i << endl;              
                     Arg.setName(*args_name);
