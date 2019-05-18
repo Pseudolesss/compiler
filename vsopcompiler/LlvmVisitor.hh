@@ -70,7 +70,7 @@ struct Parenthese;
 
 static llvm::LLVMContext TheContext;
 static llvm::IRBuilder<> Builder(TheContext);
-static std::unique_ptr<llvm::Module> TheModule = llvm::make_unique<llvm::Module>("TODOPutCorrectFileName", TheContext);
+static std::unique_ptr<llvm::Module> TheModule = llvm::make_unique<llvm::Module>("mymodule", TheContext);
 static std::map<std::string, llvm::AllocaInst *> NamedValues;
 static std::map<std::string, llvm::Type *> ClassesType;
 static std::map<std::string, llvm::Value *> Def_field_value;

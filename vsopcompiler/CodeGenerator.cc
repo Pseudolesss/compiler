@@ -30,16 +30,17 @@ llvm::Value* CodeGenerator::visit(Programm* programm) {
     //just for debug... some printing :)
     cout<<"malloc return is pointer ? " << main_obj_ptr->getType()->isPointerTy()<<std::endl;
     std::cout<<"Main classes created "<<std::endl;
-    TheModule->print(llvm::outs(), nullptr) ;
-
     // set self object
     self_ptr.push(main_obj_ptr);
     //create llvm code for all classes.
     programm->getClasses()->accept(this);
     //launch method main of class main.
     std::cout<<"launching main method"<<std::endl;
-    CalleeF = TheModule->getFunction("Mainmain");
-    return Builder.CreateCall(CalleeF);
+    CalleeF = TheModule->getFunction("main");
+    llvm::Value* out = Builder.CreateCall(CalleeF);    
+    TheModule->print(llvm::outs(), nullptr) ;
+    return out;
+
 }
 
 
@@ -119,7 +120,13 @@ llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
 //implement the method
 llvm::Value* CodeGenerator::visit(Method* method) {
     cout<<"Method: "<< method->getID() << endl;
-    llvm::Function *F = TheModule->getFunction(classID + method->getID());
+    llvm::Function *F = nullptr;
+    if(classID == "Main" && method->getID() == "main"){
+        F = TheModule->getFunction("main");
+    }
+    else{
+        F = TheModule->getFunction(classID + method->getID());
+    }
     // Create a new basic block to start insertion into.
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "method" + method->getID() + "entry", F);
     Builder.SetInsertPoint(BB);
@@ -334,7 +341,13 @@ llvm::Value* CodeGenerator::visit(Function* function) {
     std::vector<Expr*> ArgsExpr;
 
     //Lookup for the right name in the global module table.
-    llvm::Function* functionCalled = TheModule->getFunction(classID + function->getID());
+    llvm::Function* functionCalled = nullptr;
+    if(classID == "Main" && function->getID() == "main"){
+        functionCalled = TheModule->getFunction("main");
+    }
+    else{
+        llvm::Function* functionCalled = TheModule->getFunction(classID + function->getID());
+    }
     std::string classe = classID;    
     while(functionCalled == nullptr){
         classe = prototype[classe].direct_parent;
@@ -613,7 +626,13 @@ void CodeGenerator::fill_method_proto(){
                 cout << arg <<endl;
                 args_type.push_back(ClassesType[arg]);
             }
-            std::string method_name = class_pair.first + method ;
+            std::string method_name = "";
+            if(class_pair.first != "Main" && method != "main"){
+                method_name = class_pair.first + method ;
+            }
+            else{
+                method_name = "main";
+            }
             //set the return type, the return type is void if no return.
             llvm::Type* ret_type = llvm::Type::getVoidTy(TheContext);
             if(ClassesType[prototype[class_pair.first].method[method].return_type] != nullptr){
