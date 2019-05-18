@@ -36,7 +36,7 @@ llvm::Value* CodeGenerator::visit(Programm* programm) {
     programm->getClasses()->accept(this);
     //launch method main of class main.
     std::cout<<"launching main method"<<std::endl;
-    CalleeF = TheModule->getFunction("main");
+    CalleeF = TheModule->getFunction("Mainmain");
     llvm::Value* out = Builder.CreateCall(CalleeF);    
     TheModule->print(llvm::outs(), nullptr) ;
     return out;
@@ -120,13 +120,7 @@ llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
 //implement the method
 llvm::Value* CodeGenerator::visit(Method* method) {
     cout<<"Method: "<< method->getID() << endl;
-    llvm::Function *F = nullptr;
-    if(classID == "Main" && method->getID() == "main"){
-        F = TheModule->getFunction("main");
-    }
-    else{
-        F = TheModule->getFunction(classID + method->getID());
-    }
+    llvm::Function *F = TheModule->getFunction(classID + method->getID());
     // Create a new basic block to start insertion into.
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "method" + method->getID() + "entry", F);
     Builder.SetInsertPoint(BB);
@@ -341,13 +335,7 @@ llvm::Value* CodeGenerator::visit(Function* function) {
     std::vector<Expr*> ArgsExpr;
 
     //Lookup for the right name in the global module table.
-    llvm::Function* functionCalled = nullptr;
-    if(classID == "Main" && function->getID() == "main"){
-        functionCalled = TheModule->getFunction("main");
-    }
-    else{
-        llvm::Function* functionCalled = TheModule->getFunction(classID + function->getID());
-    }
+    llvm::Function* functionCalled = TheModule->getFunction(classID + function->getID());
     std::string classe = classID;    
     while(functionCalled == nullptr){
         classe = prototype[classe].direct_parent;
@@ -626,13 +614,7 @@ void CodeGenerator::fill_method_proto(){
                 cout << arg <<endl;
                 args_type.push_back(ClassesType[arg]);
             }
-            std::string method_name = "";
-            if(class_pair.first != "Main" && method != "main"){
-                method_name = class_pair.first + method ;
-            }
-            else{
-                method_name = "main";
-            }
+            std::string method_name = class_pair.first + method ;
             //set the return type, the return type is void if no return.
             llvm::Type* ret_type = llvm::Type::getVoidTy(TheContext);
             if(ClassesType[prototype[class_pair.first].method[method].return_type] != nullptr){
