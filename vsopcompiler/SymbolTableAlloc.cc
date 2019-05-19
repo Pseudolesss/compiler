@@ -62,7 +62,3 @@ std::unordered_map<std::string,llvm::AllocaInst *> SymbolTableAlloc::exit_class_
 	symboltablealloc.pop_front();
 	return map;
 }
-
-	// for( auto it = map.begin() ; it != map.end() ; ++it ){
-	// 	list.push_front(it->first,it->second);
-	// }

@@ -565,14 +565,12 @@ llvm::Value* CodeGenerator::visit(Formals* formals) {
     std::cout << "Formals" << endl;
     Formal* formal = formals->getFormal();
     Formalx* formalx = formals->getFormalx();
-
     while(true){
         if(formal == nullptr){
             break;
         }
-        llvm::Value* formal_value = formal->accept(this);
-        llvm::AllocaInst* alloca = Builder.CreateAlloca(formal_value->getType(),formal_value,formal->getID());
-        ::allocvtable.add_element(formal->getID(),alloca);
+        llvm::Type* formal_type = ClassesType[formal->getType()->getID()];
+        llvm::AllocaInst* alloca = Builder.CreateAlloca(formal_type,nullptr,formal->getID());
         formal = formalx->getFormal();
         formalx = formalx->getFormalx();
     }
