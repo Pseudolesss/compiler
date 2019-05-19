@@ -402,32 +402,29 @@ llvm::Value* CodeGenerator::visit(Pow* pow) {
     return Builder.CreateCall(fun, arr);
 }
 
-
 llvm::Value* CodeGenerator::visit(Dot* dot) { 
     std::vector<llvm::Value*> ArgsVal;
     std::vector<Expr*> ArgsExpr;
 
     //Lookup for the dynamic type of expr
-    //std::vector<llvm::Value*> indices(1);
-    //indices[0] = llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true));
-    //llvm::Value* member_ptr = Builder.CreateGEP(ClassesType[dot->getExpr()->getDataType()],dot->getExpr()->accept(this), indices, "member");
-    //how to get std::string from llvm::value ???
-    //char* class_name = Builder.CreateLoad(member);
-    //std::cout<<"class: " << class_name;
+    std::vector<llvm::Value*> indices(1);
+    indices[0] = llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true));
+    llvm::Value* member_ptr = Builder.CreateGEP(ClassesType[dot->getExpr()->getDataType()],dot->getExpr()->accept(this), indices, "member");
+    llvm::Value* field_class = Builder.CreateLoad(member_ptr);
+    std::string classe_name = key_class[field_class];
+    std::cout<<"class: " << classe_name;
     std::cout << classID <<std::endl;
     llvm::Function* functionCalled = TheModule->getFunction(dot->getExpr()->getDataType() + dot->getID());
 
-    std::string classe = classID;
     while(functionCalled == nullptr){
-        functionCalled = TheModule->getFunction(classe + dot->getID());
-        if(prototype[classe].direct_parent == "" && functionCalled == nullptr){
-            cout<<"undefined function "<< classe + dot->getID() << endl;
+        functionCalled = TheModule->getFunction(classe_name + dot->getID());
+        if(prototype[classe_name].direct_parent == "" && functionCalled == nullptr){
+            cout<<"undefined function "<< classe_name + dot->getID() << endl;
             return nullptr;
         }             
-        classe = prototype[classe].direct_parent;
-    
+        classe_name = prototype[classe_name].direct_parent;
     }
-    std::cout<<"loaded function " << classe + dot->getID() << endl;
+    std::cout<<"loaded function " << classe_name + dot->getID() << endl;
     
     //push pointer to the object as first argument.
     self_ptr.push(allocvtable.lookup(dot->getID()));
@@ -458,8 +455,6 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
 llvm::Value* CodeGenerator::visit(New* anew) {
     llvm::Function *CalleeF = TheModule->getFunction("malloc" + anew->getTypeID());
     llvm::Value* pointer_to_obj = Builder.CreateCall(CalleeF);
-    //show it is a pointer type for debug purpose.
-    std::cout<<pointer_to_obj->getType()->isPointerTy()<<std::endl;
     //init field to zero, push the result.
     llvm::Value* all_zero = llvm::Constant::getNullValue(ClassesType[anew->getTypeID()]);
     Builder.CreateStore(all_zero,pointer_to_obj);
@@ -606,7 +601,7 @@ void CodeGenerator::fill_class_type_aux(string classID){
     std::vector<llvm::Type*> field_type = vector<llvm::Type*>();  //content type of inner field
     std::cout<<"making class " << classID << "with " << fields.size() << " fields" << endl;
     //push a ghost field "class" to get the dynamic type when needed
-    field_type.push_back(ClassesType["string"]);
+    field_type.push_back(ClassesType["int32"]);
     //classes with field => make a struct.
     for (auto field : fields){
         //deal before with unknow field
@@ -620,7 +615,10 @@ void CodeGenerator::fill_class_type_aux(string classID){
     if(struct_type == nullptr){
         cerr << "struct type is null";
     }
-    ClassesType[classID] = struct_type;    
+    ClassesType[classID] = struct_type;   
+    class_key[classID] = llvm::ConstantInt::get(TheContext, llvm::APInt(32,key, true));
+    key_class[llvm::ConstantInt::get(TheContext, llvm::APInt(32,key, true))] = classID;
+    key++;
     std::cout << "Type of class " << classID << " was done " << endl;
 }
 

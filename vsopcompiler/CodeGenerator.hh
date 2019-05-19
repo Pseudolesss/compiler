@@ -15,7 +15,6 @@ public:
     llvm::Value *visit(Dual *);
     llvm::Value *visit(Unary *);
     llvm::Value *visit(Literal *);
-    //llvm::Value* visit(Type *);
     llvm::Value *visit(Field *);
     llvm::Value *visit(Formal *);
     llvm::Value *visit(Formalx *);
