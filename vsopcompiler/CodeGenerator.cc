@@ -10,12 +10,16 @@ llvm::Value* CodeGenerator::visit(ASTnode* astNode) { return nullptr; }
 llvm::Value* CodeGenerator::visit(Field* field) {
     std::cout << "Field: " << field->getID() << std::endl;
     //Keep the ssigned field value in a table if it exist.
-    llvm::Value * value = field->getExpr()->accept(this);
-
+    llvm::AllocaInst * alloca = nullptr;
     if(field->getExpr() != nullptr){
+        llvm::Value* value = field->getExpr()->accept(this);
         Def_field_value[classID + field->getID()] = value;
+        alloca = Builder.CreateAlloca(value->getType(),value,field->getID());
+        Builder.CreateStore(value,alloca);
     }
-    llvm::AllocaInst * alloca = Builder.CreateAlloca(value->getType(),value,field->getID());
+    else{
+        alloca = Builder.CreateAlloca(ClassesType[field->getType()->getID()]);
+    }
     ::allocvtable.add_element(field->getID(),alloca);
     return nullptr;
 }
