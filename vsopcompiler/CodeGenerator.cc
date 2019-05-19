@@ -82,7 +82,6 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
     return class_value;
 }
 
-
 llvm::Value* CodeGenerator::visit(Block* block) {
     std::cout << "Block" << endl;
     allocvtable.new_scope();
@@ -95,11 +94,8 @@ llvm::Value* CodeGenerator::visit(Block* block) {
         exp = e->getExpr();
         e = e->getExprx();
     }
-
     allocvtable.exit_scope();
-
     return exp->accept(this);
-
 }
 
 llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
@@ -107,6 +103,7 @@ llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
     std::vector<Field*> f = std::vector<Field*>();
     std::vector<Method*> m = std::vector<Method*>();
     FieldMethod* fm = fieldMethod;
+    //extract all field and method of the class
     while(fm->getFieldMethod() != nullptr){
         if(fm->getField() != nullptr)
             f.emplace_back(fm->getField());
@@ -114,10 +111,12 @@ llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
             m.emplace_back(fm->getMethod());
         fm = fm->getFieldMethod();
     }
+    //deal before with field
     while(!f.empty()){
         f.back()->accept(this);
         f.pop_back();
     }
+    //then with method.
     while(!m.empty()){
         m.back()->accept(this);
         m.pop_back();
@@ -131,16 +130,9 @@ llvm::Value* CodeGenerator::visit(Method* method) {
     cout<<"Method: "<< classID +method->getID() << endl;
     allocvtable.new_scope();
     llvm::Function *F = TheModule->getFunction(classID + method->getID());
-    /*
-    if(F == nullptr){
-        std::cout<<"method " << method->getID() << " not know" << std::endl;
-        return nullptr;
-    }*/
     // Create a new basic block to start insertion into.
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "method" + method->getID() + "entry", F);
     Builder.SetInsertPoint(BB);
-    //create alloca for all argument of the function
-    // Record the function arguments in the NamedValues map.
     for (auto &Arg : F->args()) {
         std::cout<<"making args" << std::endl;
         // Create an alloca for this variable.
@@ -158,12 +150,10 @@ llvm::Value* CodeGenerator::visit(Method* method) {
         Builder.CreateRetVoid();
     else 
         Builder.CreateRet(Block);
-
     allocvtable.exit_scope();
     cout << "method " << method->getID() << "done " << endl;
     return nullptr;
 }
-
 
 llvm::Value* CodeGenerator::visit(Body* body) {
     std::cout << "Body" <<std::endl;
@@ -171,11 +161,9 @@ llvm::Value* CodeGenerator::visit(Body* body) {
     return nullptr;
 }
 
-
 llvm::Value* CodeGenerator::visit(If* anIf) {
 
     std::cout << "If" <<std::endl;
-
     // Value of the conditional (i8)
     llvm::Value* CondV = anIf->getIf()->accept(this);
 
@@ -209,7 +197,7 @@ llvm::Value* CodeGenerator::visit(If* anIf) {
     llvm::Value* ElseV;
     if(anIf->getElse() != nullptr)
         ElseV = anIf->getElse()->accept(this);
-    else //TODO Check if this is correct or not => Interpretation of Unit == NoOP ?
+    else 
         ElseV = llvm::Constant::getNullValue(llvm::Type::getVoidTy(TheContext)); // Noop
 
     Builder.CreateBr(MergeBB);
@@ -226,15 +214,11 @@ llvm::Value* CodeGenerator::visit(If* anIf) {
     PN->addIncoming(ThenV, ThenBB);
     PN->addIncoming(ElseV, ElseBB);
     return PN;
-
 }
-
 
 llvm::Value* CodeGenerator::visit(While* aWhile) {
 
     std::cout << "While" <<std::endl;
-
-
     // Get current function
     llvm::Function* TheFunction = Builder.GetInsertBlock()->getParent();
 
@@ -250,8 +234,6 @@ llvm::Value* CodeGenerator::visit(While* aWhile) {
 
     // Start insertion in LoopBB.
     Builder.SetInsertPoint(LoopBB);
-
-
 
     // Emit the body of the loop.  This, like any other expr, can change the
     // current BB.
@@ -270,9 +252,7 @@ llvm::Value* CodeGenerator::visit(While* aWhile) {
 
     // For while body always returns Unit
     return llvm::Constant::getNullValue(llvm::Type::getVoidTy(TheContext));
-
 }
-
 
 llvm::Value* CodeGenerator::visit(Assign* assign) {
     std::cout << "Assign" <<std::endl;
@@ -282,14 +262,12 @@ llvm::Value* CodeGenerator::visit(Assign* assign) {
     return Val; 
 }
 
-
 llvm::Value* CodeGenerator::visit(Let* let) {
     //Two possible case: with or without assignement
     std::cout << "Let" <<std::endl;
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "letbody", Builder.GetInsertBlock()->getParent()); // Get the parent (function) of the actual block
     Builder.SetInsertPoint(BB);
     allocvtable.new_scope();
-    //Two possible case: with or without assignement
     std::cout << "Let" <<std::endl;
     Builder.SetInsertPoint(BB);        
     llvm::Type* type = ClassesType[let->getType()->getID()];
@@ -302,7 +280,6 @@ llvm::Value* CodeGenerator::visit(Let* let) {
         for(auto field : prototype[let->getType()->getID()].fieldKeys){
             if(Def_field_value.find(let->getType()->getID() + field) != Def_field_value.end()){
                 // set the field to the correct default value 
-                //see: https://stackoverflow.com/questions/40771022/how-to-get-the-value-of-a-member-of-a-structure-in-llvm
                 llvm::Value* member_index = llvm::ConstantInt::get(TheContext, llvm::APInt(32, index, true));
                 std::vector<llvm::Value*> indices(2);
                 indices[0] = llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true));
@@ -314,6 +291,7 @@ llvm::Value* CodeGenerator::visit(Let* let) {
         }
     }    
     else{
+        //value imposed.
         llvm::Value* def_value = let->getAssign()->accept(this);
         Builder.CreateStore(def_value, alloca);        
     }
@@ -321,14 +299,13 @@ llvm::Value* CodeGenerator::visit(Let* let) {
     llvm::Value* let_value = let->getIn()->accept(this);
     allocvtable.exit_scope();
     return let_value;
-
 }
 
-//generate code for call to a function.
 llvm::Value* CodeGenerator::visit(Function* function) {
     std::cout << "Function" <<std::endl;
     std::vector<llvm::Value*> ArgsVal;
     std::vector<Expr*> ArgsExpr;
+
     //Lookup for the right name in the global module table.
     llvm::Function* functionCalled = TheModule->getFunction(classID + function->getID());
     std::string classe = classID;    
@@ -342,8 +319,10 @@ llvm::Value* CodeGenerator::visit(Function* function) {
         cout<<"consider function "<< classe + function->getID() << endl;
     }
     std::cout<<"load function " << classe + function->getID() << endl;
+
     //push pointer to the object as first argument
     ArgsVal.push_back(self_ptr.top());
+
     // Need to isolate the arguments of the function and get their llvm expression
     // Check if the first one is empty
     if(function->getArgs()->getExpr() != nullptr) {
@@ -364,7 +343,6 @@ llvm::Value* CodeGenerator::visit(Function* function) {
     std::cout<<"create call to "<< classe + function->getID() << "with " << ArgsVal.size() << " arguments" << std::endl;
     return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
 }
-
 
 llvm::Value* CodeGenerator::visit(Pow* pow) { 
     std::cout << "pow" <<std::endl;
@@ -435,8 +413,7 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
     llvm::Value* dot_val = Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
     self_ptr.pop();
     return dot_val;
-
- }
+}
 
 llvm::Value* CodeGenerator::visit(New* anew) {
     llvm::Function *CalleeF = TheModule->getFunction("malloc" + anew->getTypeID());
@@ -447,6 +424,7 @@ llvm::Value* CodeGenerator::visit(New* anew) {
     int index=0;
     //set the field which tell the dynamic type.
     Def_field_value[anew->getTypeID() + "class"] = class_key[anew->getTypeID()];
+    //init field to the value imposed by the source
     for(auto field : prototype[anew->getTypeID()].fieldKeys){
         if(Def_field_value.find(anew->getTypeID() + field) != Def_field_value.end()){
             // set the field to the correct default value 
@@ -483,18 +461,13 @@ llvm::Value* CodeGenerator::visit(ObjID* objId) {
 
 }
 
-
 llvm::Value* CodeGenerator::visit(IntLit* intLit) {std::cout << "IntLit" <<std::endl; return llvm::ConstantInt::get(TheContext, llvm::APInt(32, intLit->getValue(), true));}
-
 
 llvm::Value* CodeGenerator::visit(StrLit* strLit) { std::cout << "StrLit" <<std::endl; return llvm::ConstantDataArray::getString(TheContext, llvm::StringRef(strLit->getValue())); }
 
-
 llvm::Value* CodeGenerator::visit(BoolLit* boolLit) {std::cout << "BoolLit" <<std::endl; return Builder.getInt1(boolLit->getValue()); }
 
-
 llvm::Value* CodeGenerator::visit(And* anAnd) {std::cout << "And" <<std::endl; return Builder.CreateAnd(anAnd->getLeft()->accept(this), anAnd->getRight()->accept(this), "andop"); }
-
 
 llvm::Value* CodeGenerator::visit(Not* aNot) {std::cout << "Not" <<std::endl; return Builder.CreateNot(aNot->getExpr()->accept(this), "notop"); }
 
