@@ -7,7 +7,7 @@ declare float @llvm.powi.f32(float  %Val, i32 %power)
 ; The IO class has no variable only functions
 %class.IO = type {}
 
-define %class.IO* @IO.print(%class.IO* %self, i8*) {
+define %class.IO* @IO.IOprint(%class.IO* %self, i8*) {
   call i32 (i8*, ...) @printf(i8* %0)
   ret %class.IO* %self
 }

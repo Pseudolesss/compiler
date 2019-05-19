@@ -282,14 +282,10 @@ llvm::Value* CodeGenerator::visit(Assign* assign) {
 llvm::Value* CodeGenerator::visit(Let* let) {
 
     std::cout << "Let" <<std::endl;
-
-
-
-
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "letbody", Builder.GetInsertBlock()->getParent()); // Get the parent (function) of the actual block
     Builder.SetInsertPoint(BB);
 
-    lvm::AllocaInst* alloca = CreateEntryBlockAlloca(let->getType(), let, let->getObjID());
+    llvm::AllocaInst* alloca = CreateEntryBlockAlloca(let->getType(), let, let->getObjID());
 
     // NamedValues[let->getObjID()] = alloca;
 
@@ -312,15 +308,13 @@ llvm::Value* CodeGenerator::visit(Let* let) {
     else{
 
         llvm::Value* Init = let->getAssign()->accept(this);
-        
-
     }
 
     llvm::Value* LetBody = let->getIn()->accept(this);
 
     // TODO do we need to create a new block to be the new insertion block?
 
-    return LetBody;
+    return nullptr;
 
 }
 
@@ -333,13 +327,14 @@ llvm::Value* CodeGenerator::visit(Function* function) {
     //Lookup for the right name in the global module table.
     llvm::Function* functionCalled = TheModule->getFunction(classID + function->getID());
     std::string classe = classID;    
+    cout<<"consider function "<< classe + function->getID() << endl;
     while(functionCalled == nullptr){
-        classe = prototype[classe].direct_parent;
         functionCalled = TheModule->getFunction(classe + function->getID());
-        if(functionCalled == nullptr){
+        if("" == prototype[classe].direct_parent && functionCalled == nullptr){
             cout<<"undefined function "<< classe + function->getID() << endl;
-            return nullptr;
-        }         
+        }          
+        classe = prototype[classe].direct_parent;   
+        cout<<"consider function "<< classe + function->getID() << endl;
     }
     std::cout<<"load function " << classe + function->getID() << endl;
     //push pointer to the object as first argument
@@ -361,7 +356,10 @@ llvm::Value* CodeGenerator::visit(Function* function) {
         ArgsVal.push_back(ArgsExpr[i]->accept(this));
         std::cout<<"args "<<ArgsExpr[i]->getLocation() << "pushed" <<std::endl;
     }
-    std::cout<<"create call"<<std::endl;
+    TheModule->print(llvm::outs(), nullptr);
+
+    std::cout<<"create call to "<< classe + function->getID() << "with " << ArgsVal.size() << " arguments" << std::endl;
+
     return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
 }
 
@@ -389,28 +387,34 @@ llvm::Value* CodeGenerator::visit(Pow* pow) {
 }
 
 
-//TODO IMPLEMENT DYNAMIC DISPATCH 
 llvm::Value* CodeGenerator::visit(Dot* dot) { 
     std::vector<llvm::Value*> ArgsVal;
     std::vector<Expr*> ArgsExpr;
 
-    //Lookup for the right name in the global module table.
+    //Lookup for the dynamic type of expr
+    std::vector<llvm::Value*> indices(1);
+    indices[0] = llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true));
+    llvm::Value* member = Builder.CreateGEP(ClassesType[dot->getExpr()->getDataType()],dot->getExpr()->accept(this), indices, "member");
+    std::string class_name = std::string(*member);
+    std::cout<<"class: " << class_name;
     std::cout << classID <<std::endl;
     llvm::Function* functionCalled = TheModule->getFunction(dot->getExpr()->getDataType() + dot->getID());
 
-    std::string classe = dot->getExpr()->getDataType();
-    while(functionCalled->empty()){
-        classe = prototype[classe].direct_parent;
+    std::string classe = class_name;
+    while(functionCalled == nullptr){
         functionCalled = TheModule->getFunction(classe + dot->getID());
-        if(functionCalled == nullptr){
+        if(prototype[classe].direct_parent == "" && functionCalled == nullptr){
             cout<<"undefined function "<< classe + dot->getID() << endl;
             return nullptr;
-        }         
+        }             
+        classe = prototype[classe].direct_parent;
+    
     }
     std::cout<<"loaded function " << classe + dot->getID() << endl;
     
-    //push pointer to the object as first argument, but object main not yet create !
-    //ArgsVal.push_back();
+    //push pointer to the object as first argument.
+    self_ptr.push(NamedValues[dot->getID()]);
+    ArgsVal.push_back(NamedValues[dot->getID()]);
 
     // Need to isolate the arguments of the function and get their llvm expression
     // Check if the first one is empty
@@ -430,8 +434,7 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
         std::cout<<"args "<<ArgsExpr[i]->getLocation() << "pushed" <<std::endl;
     }
     std::cout<<"create call"<<std::endl;
-    //return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
-    return nullptr;
+    return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
 
  }
 
@@ -444,6 +447,8 @@ llvm::Value* CodeGenerator::visit(New* anew) {
     llvm::Value* all_zero = llvm::Constant::getNullValue(ClassesType[anew->getTypeID()]);
     Builder.CreateStore(all_zero,pointer_to_obj);
     int index=0;
+    //set the filed which tell the dynamic type.
+    Def_field_value[anew->getTypeID() + "class"] = llvm::ConstantDataArray::getString(TheContext, anew->getTypeID());
     for(auto field : prototype[anew->getTypeID()].fieldKeys){
         if(Def_field_value.find(anew->getTypeID() + field) != Def_field_value.end()){
             // set the field to the correct default value 
@@ -528,6 +533,7 @@ llvm::Value* CodeGenerator::visit(Args* args) {std::cout << "args" << endl; retu
 llvm::Value* CodeGenerator::visit(Literal* literal) {std::cout << "literal" << endl; return nullptr;}
 llvm::Value* CodeGenerator::visit(Lpar* lpar) {std::cout << "lpar" << endl; return nullptr;}
 llvm::Value* CodeGenerator::visit(Rpar* rpar) {std::cout << "rpar" << endl; return nullptr;}
+
 void CodeGenerator::fill_class_type(){
     //push primitive type into the ClasseType
     ClassesType["int32"] = llvm::Type::getInt32Ty(TheContext);
@@ -647,7 +653,7 @@ void CodeGenerator::allocator(std::string classID, llvm::Function* f, std::strin
 }
 
 void CodeGenerator::create_main(){
-    llvm::FunctionType *FT = llvm::FunctionType::get(ClassesType["int32"],false);
+    llvm::FunctionType *FT = llvm::FunctionType::get(llvm::Type::getInt32Ty(TheContext),false);
     llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage,"main", TheModule.get());
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "main", F);
     Builder.SetInsertPoint(BB);
@@ -660,7 +666,8 @@ void CodeGenerator::create_main(){
     self_ptr.push(main_obj_ptr);
     std::cout<<"launching main method"<<std::endl;
     CalleeF = TheModule->getFunction("Mainmain");
-    Builder.CreateRet(Builder.CreateCall(CalleeF));
+    llvm::Value* ret = Builder.CreateCall(CalleeF,main_obj_ptr);
+    Builder.CreateRet(ret);
     llvm::verifyFunction(*F);
 }
 
@@ -678,10 +685,7 @@ void CodeGenerator::create_malloc_function()
         llvm::Type* ITy = llvm::Type::getInt8Ty(TheContext);
         llvm::Constant* AllocSize = llvm::ConstantExpr::getSizeOf(ClassesType[type_pair.first]);
         AllocSize = llvm::ConstantExpr::getTruncOrBitCast(AllocSize, ITy);
-        llvm::Value* Malloc = llvm::CallInst::CreateMalloc(BB,ITy,ClassesType[type_pair.first], AllocSize,nullptr, nullptr, "malloccall");
-        if(Malloc == nullptr){
-            std::cout<<"malloc is null" << std::endl;
-        }
+        llvm::Value* Malloc = llvm::CallInst::CreateMalloc(BB,ITy,ClassesType[type_pair.first], AllocSize,nullptr,nullptr,"malloccall");
         std::cout<<"cast"<<std::endl;
         llvm::ReturnInst::Create(TheContext,Malloc,BB);
         std::cout << "Verify function malloc" << std::endl;
@@ -689,17 +693,4 @@ void CodeGenerator::create_malloc_function()
     }
 }
 
-
-/*
-llvm::Value* CodeGenerator::malloc_type(llvm::Type* type){
-    std::cout<<"alloc size" << std::endl;
-    llvm::Type* ITy = llvm::Type::getInt32Ty(TheContext);
-    llvm::Constant* AllocSize = llvm::ConstantExpr::getSizeOf(type);
-    AllocSize = llvm::ConstantExpr::getTruncOrBitCast(AllocSize, ITy);
-    llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "entry_" + name, F);
-    Builder.SetInsertPoint(BB);
-    llvm::Value* obj_ptr = llvm::CallInst::CreateMalloc(BB,ITy,ClassesType[type_pair.first], AllocSize,nullptr, nullptr, "");
-    return obj_ptr
-}*/
-		
 
