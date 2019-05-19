@@ -237,20 +237,12 @@ llvm::Value* CodeGenerator::visit(While* aWhile) {
 
     std::cout << "While" <<std::endl;
 
-    // TODO Change PHInode* by AllocaInst*
-    // TODO Check if still usefull to manipulate allocation (Probably not) use it again for For Loop implementation
 
     // Get current function
     llvm::Function* TheFunction = Builder.GetInsertBlock()->getParent();
 
     // Value of the conditional (i8)
     llvm::Value* CondV = aWhile->getWhile()->accept(this);
-
-//    // Create an alloca for the variable in the current block.
-//    llvm::AllocaInst *Alloca = CreateEntryBlockAlloca(TheFunction, "whilecond");
-
-//    // Store the value into alloca
-//    Builder.CreateStore(CondV, Alloca);
 
     // Make the new basic block for the loop header, inserting after current
     // block.
@@ -262,17 +254,12 @@ llvm::Value* CodeGenerator::visit(While* aWhile) {
     // Start insertion in LoopBB.
     Builder.SetInsertPoint(LoopBB);
 
-//    // Within the loop, the variable is defined equal to the PHI node.  If it
-//    // shadows an existing variable, we have to restore it, so save it now.
-//    llvm::AllocaInst *OldVal = NamedValues["whilecond"]; //TODO Is using names like this ok? Seems ok
-//    NamedValues["whilecond"] = Alloca;
 
 
     // Emit the body of the loop.  This, like any other expr, can change the
     // current BB.
     llvm::Value* Body = aWhile->getDo()->accept(this);
 
-    //TODO Oh dear we are in trouble => Is it really a correct flow ? (seems ok)
     llvm::Value* NextC = aWhile->getWhile()->accept(this);
 
     // Create the "after loop" block and insert it.
@@ -284,13 +271,7 @@ llvm::Value* CodeGenerator::visit(While* aWhile) {
     // Any new code will be inserted in AfterBB.
     Builder.SetInsertPoint(AfterBB);
 
-//    // Restore the unshadowed variable if any, else remove the current one.
-//    if (OldVal)
-//        NamedValues["whilecond"] = OldVal;
-//    else
-//        NamedValues.erase("whilecond");
-
-    // For while body always returns Unit TODO check representation of unit
+    // For while body always returns Unit
     return llvm::Constant::getNullValue(llvm::Type::getVoidTy(TheContext));
 
 }
@@ -387,14 +368,11 @@ llvm::Value* CodeGenerator::visit(Function* function) {
     return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
 }
 
-//TODO IMPLEMENT POWER
+
 llvm::Value* CodeGenerator::visit(Pow* pow) { 
     std::cout << "pow" <<std::endl;
-    //TODO : there are not pow in the builder functions disponible,
-    //the llvm instruction is
-    // declare float     @llvm.powi.f32(float  %Val, i32 %power)
 
-    // Get the intrasec function handling int32 base and int32 power
+    // Get the intrasec llvm function handling int32 base and int32 power
     std::vector<llvm::Type *> arg_type;
     arg_type.push_back(llvm::Type::getInt32Ty(TheContext));
     llvm::Function *fun = llvm::Intrinsic::getDeclaration(Builder.GetInsertBlock()->getModule(), llvm::Intrinsic::powi, arg_type);
