@@ -24,23 +24,11 @@ llvm::Value* CodeGenerator::visit(Programm* programm) {
     fill_method_proto();
     //create malloc function for all classes
     create_malloc_function();
-    //create object main
-    llvm::Function *CalleeF = TheModule->getFunction("mallocMain");
-    llvm::Value* main_obj_ptr = Builder.CreateCall(CalleeF);
-    //just for debug... some printing :)
-    cout<<"malloc return is pointer ? " << main_obj_ptr->getType()->isPointerTy()<<std::endl;
-    std::cout<<"Main classes created "<<std::endl;
-    // set self object
-    self_ptr.push(main_obj_ptr);
+    create_main();
     //create llvm code for all classes.
-    programm->getClasses()->accept(this);
-    //launch method main of class main.
-    std::cout<<"launching main method"<<std::endl;
-    CalleeF = TheModule->getFunction("Mainmain");
-    llvm::Value* out = Builder.CreateCall(CalleeF);    
+    programm->getClasses()->accept(this);   
     TheModule->print(llvm::outs(), nullptr) ;
-    return out;
-
+    return nullptr;
 }
 
 
@@ -440,13 +428,8 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
  }
 
 llvm::Value* CodeGenerator::visit(New* anew) {
-    
-    llvm::Function *CalledF = TheModule->getFunction("malloc" + anew->getTypeID());
-    if (!CalledF){
-        std::cerr<<"Unable to malloc "<< anew->getTypeID() << std::endl;
-        return nullptr;
-    }
-    llvm::Value* pointer_to_obj = Builder.CreateCall(CalledF);
+    llvm::Function *CalleeF = TheModule->getFunction("malloc" + anew->getTypeID());
+    llvm::Value* pointer_to_obj = Builder.CreateCall(CalleeF);
     //show it is a pointer type for debug purpose.
     std::cout<<pointer_to_obj->getType()->isPointerTy()<<std::endl;
     //init field to zero, push the result.
@@ -478,7 +461,7 @@ llvm::Value* CodeGenerator::visit(ObjID* objId) { std::cout << "ObjID" << std::e
         std::cout<<"value loaded" << std::endl;
         return v;
     } 
-    std::cout << "object " << objId->getID() << "unknown" << std::endl;
+    std::cout << "object " << objId->getID() << " unknown" << std::endl;
     return nullptr;}
 
 
@@ -583,7 +566,7 @@ void CodeGenerator::fill_class_type_aux(string classID){
         }
         field_type.push_back(ClassesType[type]);
     }
-    llvm::Type* struct_type = llvm::StructType::create(TheContext,field_type,classID,true);
+    llvm::Type* struct_type = llvm::StructType::create(TheContext,field_type,classID);
     if(struct_type == nullptr){
         cerr << "struct type is null";
     }
@@ -645,6 +628,7 @@ void CodeGenerator::fill_method_proto(){
             cout << "end making method "<< method_name << endl;
         }
     }
+    cout<< "end filling method proto" << std::endl;
 }
 
 void CodeGenerator::allocator(std::string classID, llvm::Function* f, std::string VarName){
@@ -653,23 +637,61 @@ void CodeGenerator::allocator(std::string classID, llvm::Function* f, std::strin
     llvm::AllocaInst* alloca = CreateEntryBlockAlloca(f,type,VarName);
     Builder.CreateStore(def_value, alloca);
 }
+
+void CodeGenerator::create_main(){
+    llvm::FunctionType *FT = llvm::FunctionType::get(ClassesType["int32"],false);
+    llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage,"main", TheModule.get());
+    llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "main", F);
+    Builder.SetInsertPoint(BB);
+    //create object main
+    std::cout<<"making main" << std::endl;
+    llvm::Function *CalleeF = TheModule->getFunction("mallocMain");
+    llvm::Value* main_obj_ptr = Builder.CreateCall(CalleeF);
+    std::cout<<"Main classes created "<<std::endl;
+    // set self object
+    self_ptr.push(main_obj_ptr);
+    std::cout<<"launching main method"<<std::endl;
+    CalleeF = TheModule->getFunction("Mainmain");
+    Builder.CreateRet(Builder.CreateCall(CalleeF));
+    llvm::verifyFunction(*F);
+}
+
 //Create a malloc function for all classe type. function name are malloc + classID 
+
 void CodeGenerator::create_malloc_function()
 {   //See https://stackoverflow.com/questions/28143087/how-to-create-a-call-to-function-malloc-using-llvm-api
     for(auto type_pair : ClassesType){
+        cout<<"making malloc of " << type_pair.first << std::endl;
         std::string name =  "malloc" + type_pair.first;
         llvm::FunctionType *FT = llvm::FunctionType::get(ClassesType[type_pair.first]->getPointerTo(),false);
         llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage,name, TheModule.get());
         llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "entry_" + name, F);
         Builder.SetInsertPoint(BB);
-        llvm::Type* ITy = llvm::Type::getInt32Ty(TheContext);
+        llvm::Type* ITy = llvm::Type::getInt8Ty(TheContext);
         llvm::Constant* AllocSize = llvm::ConstantExpr::getSizeOf(ClassesType[type_pair.first]);
         AllocSize = llvm::ConstantExpr::getTruncOrBitCast(AllocSize, ITy);
-        llvm::Instruction* Malloc = llvm::CallInst::CreateMalloc(Builder.GetInsertBlock(),ITy,ClassesType[type_pair.first], AllocSize,nullptr, nullptr, "");
-        llvm::Value* ret = llvm::CastInst::CreateTruncOrBitCast(Malloc,type_pair.second);	
-
-        Builder.CreateRet(ret);
+        llvm::Value* Malloc = llvm::CallInst::CreateMalloc(BB,ITy,ClassesType[type_pair.first], AllocSize,nullptr, nullptr, "malloccall");
+        if(Malloc == nullptr){
+            std::cout<<"malloc is null" << std::endl;
+        }
+        std::cout<<"cast"<<std::endl;
+        llvm::ReturnInst::Create(TheContext,Malloc,BB);
         std::cout << "Verify function malloc" << std::endl;
         verifyFunction(*F);
     }
 }
+
+
+/*
+llvm::Value* CodeGenerator::malloc_type(llvm::Type* type){
+    std::cout<<"alloc size" << std::endl;
+    llvm::Type* ITy = llvm::Type::getInt32Ty(TheContext);
+    llvm::Constant* AllocSize = llvm::ConstantExpr::getSizeOf(type);
+    AllocSize = llvm::ConstantExpr::getTruncOrBitCast(AllocSize, ITy);
+    llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "entry_" + name, F);
+    Builder.SetInsertPoint(BB);
+    llvm::Value* obj_ptr = llvm::CallInst::CreateMalloc(BB,ITy,ClassesType[type_pair.first], AllocSize,nullptr, nullptr, "");
+    return obj_ptr
+}*/
+		
+

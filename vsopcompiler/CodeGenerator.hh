@@ -65,6 +65,8 @@ private:
     //default initialize of a variable in a function.
     void allocator(std::string classID, llvm::Function* f, std::string VarName);
     void create_malloc_function();
+    void create_main();
+    //llvm::Value* malloc_type(llvm::Type* type);
 };
 
 #endif //COMPILER_CODEGENERATOR_HH
