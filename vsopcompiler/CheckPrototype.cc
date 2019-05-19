@@ -156,9 +156,7 @@ bool _check_parent(std::set<std::string>& todo,std::string classID,std::string f
     }
     //add child method not in parent method
     for(auto child_method : ::prototype[classID].method){
-        if(::prototype[parentID].method.find(child_method.first) == ::prototype[parentID].method.end()){
             ::prototype[classID].implemented_method.push_back(child_method.first);
-        }
     }
 
     //Add parent method to child method if not override. check override are well done

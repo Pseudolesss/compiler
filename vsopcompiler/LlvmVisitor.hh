@@ -82,7 +82,7 @@ static std::map<std::string, llvm::Value *> Def_field_value;
 //map each class to a unique llvm value* in both direction. The value is an int.
 static std::map<std::string,llvm::Value *> class_key = std::map<std::string,llvm::Value *>();
 static std::map<llvm::Value *,std::string> key_class = std::map<llvm::Value *,std::string>();
-int key;
+static int key;
 
 static std::stack<llvm::Value*>  self_ptr;
 

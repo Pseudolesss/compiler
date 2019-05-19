@@ -131,23 +131,27 @@ llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
 
 //implement the method
 llvm::Value* CodeGenerator::visit(Method* method) {
-    cout<<"Method: "<< method->getID() << endl;
+    cout<<"Method: "<< classID +method->getID() << endl;
     allocvtable.new_scope();
-
     llvm::Function *F = TheModule->getFunction(classID + method->getID());
+    /*
+    if(F == nullptr){
+        std::cout<<"method " << method->getID() << " not know" << std::endl;
+        return nullptr;
+    }*/
     // Create a new basic block to start insertion into.
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "method" + method->getID() + "entry", F);
     Builder.SetInsertPoint(BB);
     //create alloca for all argument of the function
     // Record the function arguments in the NamedValues map.
     for (auto &Arg : F->args()) {
+        std::cout<<"making args" << std::endl;
         // Create an alloca for this variable.
         llvm::AllocaInst *Alloca = CreateEntryBlockAlloca(F, Arg.getType(), Arg.getName());
         // Store the initial value into the alloca.
         Builder.CreateStore(&Arg, Alloca);
         // Add arguments to variable symbol table for the body.
         allocvtable.add_element(Arg.getName(),Alloca);
-
     }
     // Return instruction handle by Block 
     cout<<"making block of method "<< method->getID() << endl;
