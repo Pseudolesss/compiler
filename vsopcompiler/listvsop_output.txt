@@ -1,0 +1,208 @@
+
+%List = type { i32 }
+%Cons = type { i32, i32, %List }
+%Main = type { i32 }
+%Nil = type { i32 }
+%IO = type { i32 }
+%Object = type { i32 }
+
+define i1 @ListisNil(%List* %Object) {
+methodisNilentry:
+  %Object1 = alloca %List*
+  store %List* %Object, %List** %Object1
+  ret i1 true
+}
+
+define i32 @Listlength(%List* %Object) {
+methodlengthentry:
+  %Object1 = alloca %List*
+  store %List* %Object, %List** %Object1
+  ret i32 0
+}
+
+declare i1 @ListisNil.1(%List*)
+
+declare i32 @Listlength.2(%List*)
+
+define %Cons @Consinit(%Cons* %Object, i32 %hd, %List %tl) {
+methodinitentry:
+  %tl3 = alloca %List
+  %hd2 = alloca i32
+  %Object1 = alloca %Cons*
+  store %Cons* %Object, %Cons** %Object1
+  store i32 %hd, i32* %hd2
+  store %List %tl, %List* %tl3
+  %hd4 = load i32, i32* %hd2
+  store i32 %hd4, i32* %15
+  %tl5 = load %List, %List* %tl3
+  store %List %tl5, %List* %16
+  %self = load %Main, %Main* %0
+  ret %Main %self
+}
+
+define i32 @Conshead(%Cons* %Object) {
+methodheadentry:
+  %Object1 = alloca %Cons*
+  store %Cons* %Object, %Cons** %Object1
+  %head = load i32, i32* %15
+  ret i32 %head
+}
+
+define i32 @Conslength(%Cons* %Object) {
+methodlengthentry:
+  %Object1 = alloca %Cons*
+  store %Cons* %Object, %Cons** %Object1
+  %tail = load %List, %List* %16
+  %member = getelementptr %List, %List %tail, i32 0
+  %0 = load %List, %List addrspace(9)* %member
+  %fctcall = call i32 @Listlength(<null operand!>)
+  %addop = fadd i32 1, %fctcall
+  ret i32 %addop
+}
+
+define i1 @ConsisNil(%Cons* %Object) {
+methodisNilentry:
+  %Object1 = alloca %Cons*
+  store %Cons* %Object, %Cons** %Object1
+  ret i1 false
+}
+
+define i32 @Mainmain(%Main* %Object) {
+methodmainentry:
+  %Object1 = alloca %Main*
+  store %Main* %Object, %Main** %Object1
+
+letbody:                                          ; No predecessors!
+  %0 = alloca %List
+  %1 = call %Cons* @mallocCons()
+  store %Cons zeroinitializer, %Cons* %1
+  %2 = load %Cons, %Cons* %1
+  %member = getelementptr %Cons, %Cons %2, i32 0
+  %3 = load %Cons, %Cons addrspace(9)* %member
+  %4 = call %Cons* @mallocCons()
+  store %Cons zeroinitializer, %Cons* %4
+  %5 = load %Cons, %Cons* %4
+  %member2 = getelementptr %Cons, %Cons %5, i32 0
+  %6 = load %Cons, %Cons addrspace(9)* %member2
+  %7 = call %Cons* @mallocCons()
+  store %Cons zeroinitializer, %Cons* %7
+  %8 = load %Cons, %Cons* %7
+  %member3 = getelementptr %Cons, %Cons %8, i32 0
+  %9 = load %Cons, %Cons addrspace(9)* %member3
+  %10 = call %Nil* @mallocNil()
+  store %Nil zeroinitializer, %Nil* %10
+  %11 = load %Nil, %Nil* %10
+  %fctcall = call %Cons @Consinit(<null operand!>, i32 2, %Nil %11)
+  %fctcall4 = call %Cons @Consinit(<null operand!>, i32 1, %Cons %fctcall)
+  %fctcall5 = call %Cons @Consinit(<null operand!>, i32 0, %Cons %fctcall4)
+  store %Cons %fctcall5, %List* %0
+  %fctcall6 = call %IO @IOprint(%Main* %0, [19 x i8] c"\22List has length \22\00")
+  %member7 = getelementptr %IO, %IO %fctcall6, i32 0
+  %12 = load %IO, %IO addrspace(9)* %member7
+  %xs = load %List, %List* %0
+  %member8 = getelementptr %List, %List %xs, i32 0
+  %13 = load %List, %List addrspace(9)* %member8
+  %fctcall9 = call i32 @Listlength(<null operand!>)
+  %fctcall10 = call %IO @IOprintInt32(<null operand!>, i32 %fctcall9)
+  %member11 = getelementptr %IO, %IO %fctcall10, i32 0
+  %14 = load %IO, %IO addrspace(9)* %member11
+  %fctcall12 = call %IO @IOprint(<null operand!>, [7 x i8] c"\22\5Cx0a\22\00")
+  ret i32 0
+  %15 = alloca i32
+  %16 = alloca %List
+}
+
+declare %IO @IOprintBool(%IO*, i1)
+
+declare %IO @IOprintInt32(%IO*, i32)
+
+declare i8* @IOinputLine(%IO*)
+
+declare %IO @IOprint(%IO*, i8*)
+
+declare i32 @IOinputInt32(%IO*)
+
+declare i1 @IOinputBool(%IO*)
+
+declare %IO @IOprintBool.3(%IO*, i1)
+
+declare %IO @IOprintInt32.4(%IO*, i32)
+
+declare i8* @IOinputLine.5(%IO*)
+
+declare %IO @IOprint.6(%IO*, i8*)
+
+declare i32 @IOinputInt32.7(%IO*)
+
+declare i1 @IOinputBool.8(%IO*)
+
+define %Cons* @mallocCons() {
+entry_mallocCons:
+  %malloccall = tail call i8* @malloc(i8 trunc (i64 mul nuw (i64 ptrtoint (i32* getelementptr (i32, i32* null, i32 1) to i64), i64 3) to i8))
+  ret %Cons* %malloccall
+}
+
+declare noalias i8* @malloc(i8)
+
+define %IO* @mallocIO() {
+entry_mallocIO:
+  %malloccall = tail call i8* @malloc(i8 ptrtoint (i32* getelementptr (i32, i32* null, i32 1) to i8))
+  ret %IO* %malloccall
+}
+
+define %List* @mallocList() {
+entry_mallocList:
+  %malloccall = tail call i8* @malloc(i8 ptrtoint (i32* getelementptr (i32, i32* null, i32 1) to i8))
+  ret %List* %malloccall
+}
+
+define %Main* @mallocMain() {
+entry_mallocMain:
+  %malloccall = tail call i8* @malloc(i8 ptrtoint (i32* getelementptr (i32, i32* null, i32 1) to i8))
+  ret %Main* %malloccall
+}
+
+define %Nil* @mallocNil() {
+entry_mallocNil:
+  %malloccall = tail call i8* @malloc(i8 ptrtoint (i32* getelementptr (i32, i32* null, i32 1) to i8))
+  ret %Nil* %malloccall
+}
+
+define %Object* @mallocObject() {
+entry_mallocObject:
+  %malloccall = tail call i8* @malloc(i8 ptrtoint (i32* getelementptr (i32, i32* null, i32 1) to i8))
+  ret %Object* %malloccall
+}
+
+define i1* @mallocbool() {
+entry_mallocbool:
+  %malloccall = tail call i8* @malloc(i8 ptrtoint (i1* getelementptr (i1, i1* null, i32 1) to i8))
+  ret i1* %malloccall
+}
+
+define i32* @mallocint32() {
+entry_mallocint32:
+  %malloccall = tail call i8* @malloc(i8 ptrtoint (i32* getelementptr (i32, i32* null, i32 1) to i8))
+  ret i32* %malloccall
+}
+
+define i8** @mallocstring() {
+entry_mallocstring:
+  %malloccall = tail call i8* @malloc(i8 ptrtoint (i1** getelementptr (i1*, i1** null, i32 1) to i8))
+  ret i8** %malloccall
+}
+
+define i32 @main() {
+entry:
+  %0 = call %Main* @mallocMain()
+  %1 = call i32 @Mainmain(%Main* %0)
+  ret i32 %1
+}
+llvm code generated
+; ModuleID = 'mymodule'
+source_filename = "mymodule"
+Wrote test.o
+writing executable
+/usr/lib/gcc/x86_64-linux-gnu/7/../../../x86_64-linux-gnu/Scrt1.o: In function `_start':
+(.text+0x20): undefined reference to `main'
+collect2: error: ld returned 1 exit status

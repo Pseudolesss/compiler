@@ -6,11 +6,10 @@
 
 llvm::Value* CodeGenerator::visit(ASTnode* astNode) { return nullptr; }
 
-
 llvm::Value* CodeGenerator::visit(Field* field) {
     std::cout << "Field: " << field->getID() << std::endl;
-    //Keep the ssigned field value in a table if it exist.
     llvm::AllocaInst * alloca = nullptr;
+    //Keep the default value of a field in a hashtable.
     if(field->getExpr() != nullptr){
         llvm::Value* value = field->getExpr()->accept(this);
         Def_field_value[classID + field->getID()] = value;
@@ -32,16 +31,17 @@ llvm::Value* CodeGenerator::visit(Programm* programm) {
     fill_method_proto();
     //create malloc function for all classes
     create_malloc_function();
+    //create main
     create_main();
     //create llvm code for all classes.
     programm->getClasses()->accept(this);   
+    //dump llvm on stdout for debug purpose
     TheModule->print(llvm::outs(), nullptr) ;
     return nullptr;
 }
 
 
 llvm::Value* CodeGenerator::visit(Classes* classes) {
-
     std::cout << "Classes" <<std::endl;
     while(classes->nextClass() != nullptr) {
         classes->getClass()->accept(this);
@@ -50,22 +50,19 @@ llvm::Value* CodeGenerator::visit(Classes* classes) {
     }
     classes->getClass()->accept(this);
     std::cout << "end of Classes" <<std::endl;
-
     return nullptr;
 }
-
 
 llvm::Value* CodeGenerator::visit(Classe* classe) {
     std::cout << "Classe: " << classe->getTypeID() << std::endl;
     allocvtable.new_scope();
     //set the current visited class;
     classID = classe->getTypeID();
-
     std::set<std::string> parents;
     if(::prototype.find(classID) != ::prototype.end()){
         parents = prototype[classID].parent;
     }
-    llvm::Value* class_value  = classe->getBody()->accept(this);
+    //update the variable table
     for(auto it = parents.begin(); it != parents.end(); ++it){
         if(class_variables_table.find(*it) != class_variables_table.end()){
             for(auto it_ = class_variables_table[*it].begin(); it_ != class_variables_table[*it].end(); ++it_ ){
@@ -77,7 +74,8 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
                 }
             }
         }
-    }
+    }    
+    llvm::Value* class_value  = classe->getBody()->accept(this);
     class_variables_table[classID] = allocvtable.exit_class_scope();
     std::cout << " end of Classe" <<std::endl;
     return class_value;
@@ -85,7 +83,6 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
 
 
 llvm::Value* CodeGenerator::visit(Block* block) {
-
     std::cout << "Block" << endl;
     allocvtable.new_scope();
     if(block->getExpr() == nullptr)
@@ -93,7 +90,6 @@ llvm::Value* CodeGenerator::visit(Block* block) {
     Exprx* e = block->getExprx();
     Expr* exp = block->getExpr();
     while(e->getExpr() != nullptr){
-        cout<<"in while loop"<<endl;
         exp->accept(this);
         exp = e->getExpr();
         e = e->getExprx();
@@ -424,6 +420,7 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
     std::cout << classID <<std::endl;
     llvm::Function* functionCalled = TheModule->getFunction(dot->getExpr()->getDataType() + dot->getID());
 
+    //get the right function to call
     while(functionCalled == nullptr){
         functionCalled = TheModule->getFunction(classe_name + dot->getID());
         if(prototype[classe_name].direct_parent == "" && functionCalled == nullptr){
@@ -522,37 +519,30 @@ llvm::Value* CodeGenerator::visit(And* anAnd) {std::cout << "And" <<std::endl; r
 
 llvm::Value* CodeGenerator::visit(Not* aNot) {std::cout << "Not" <<std::endl; return Builder.CreateNot(aNot->getExpr()->accept(this), "notop"); }
 
-
 llvm::Value* CodeGenerator::visit(Equal* equal) {std::cout << "Equal" <<std::endl; return Builder.CreateICmpEQ(equal->getLeft()->accept(this), equal->getRight()->accept(this), "equbool"); }
-
 
 llvm::Value* CodeGenerator::visit(Lower* lower) {std::cout << "Lower" <<std::endl; return Builder.CreateICmpSLT(lower->getLeft()->accept(this), lower->getRight()->accept(this), "lowtha"); }
 
-
 llvm::Value* CodeGenerator::visit(LowerEqual* lowerEqual) {std::cout << "LowerEqual" <<std::endl; return Builder.CreateICmpSLE(lowerEqual->getLeft()->accept(this), lowerEqual->getRight()->accept(this), "lowequ");}
-
 
 llvm::Value* CodeGenerator::visit(Plus* plus) {std::cout << "Plus" <<std::endl; return Builder.CreateFAdd(plus->getLeft()->accept(this), plus->getRight()->accept(this), "addop");}
 
-
 llvm::Value* CodeGenerator::visit(Minus* minus) {std::cout << "Minus" <<std::endl; return Builder.CreateFSub(minus->getLeft()->accept(this), minus->getRight()->accept(this), "subop");}
-
 
 llvm::Value* CodeGenerator::visit(Times* times) {std::cout << "Times" <<std::endl; return Builder.CreateFMul(times->getLeft()->accept(this), times->getRight()->accept(this), "mulop");}
 
-
 llvm::Value* CodeGenerator::visit(Div* div) {std::cout << "Div" <<std::endl; return Builder.CreateFDiv(div->getLeft()->accept(this), div->getRight()->accept(this), "divop"); }
 
-
 llvm::Value* CodeGenerator::visit(Minus1* minus1) {std::cout << "Minus1" <<std::endl; return Builder.CreateFSub( llvm::ConstantInt::get(TheContext, llvm::APInt(32,0)), minus1->getExpr()->accept(this), "minusop"); }
-
 
 llvm::Value* CodeGenerator::visit(IsNull* isNull) {std::cout << "IsNull" <<std::endl; return Builder.CreateIsNull(isNull->getExpr()->accept(this), "isnullbool"); }
 
 llvm::Value* CodeGenerator::visit(Parenthese* parenthese) {std::cout << "()" <<std::endl; return parenthese->getExpr()->accept(this);}
 
 llvm::Value* CodeGenerator::visit(Formal* formal) {std::cout << "Formal" << endl; return nullptr;}
+
 llvm::Value* CodeGenerator::visit(Formalx* formalx) {std::cout << "Formalx" << endl; return nullptr;}
+
 llvm::Value* CodeGenerator::visit(Formals* formals) {
     std::cout << "Formals" << endl;
     Formal* formal = formals->getFormal();
@@ -568,6 +558,7 @@ llvm::Value* CodeGenerator::visit(Formals* formals) {
     }
     return nullptr;
 }
+
 llvm::Value* CodeGenerator::visit(Exprx* exprx) {std::cout << "Exprx" << endl; return nullptr;}
 llvm::Value* CodeGenerator::visit(Exprxx* exprxx) {std::cout << "Exprxx" << endl; return nullptr;}
 llvm::Value* CodeGenerator::visit(Expr* expr) {std::cout << "Expr" << endl; return nullptr;}
@@ -578,27 +569,23 @@ llvm::Value* CodeGenerator::visit(Literal* literal) {std::cout << "literal" << e
 llvm::Value* CodeGenerator::visit(Lpar* lpar) {std::cout << "lpar" << endl; return nullptr;}
 llvm::Value* CodeGenerator::visit(Rpar* rpar) {std::cout << "rpar" << endl; return nullptr;}
 
+//convert vsop classes to llvm type.
 void CodeGenerator::fill_class_type(){
     //push primitive type into the ClasseType
     ClassesType["int32"] = llvm::Type::getInt32Ty(TheContext);
     ClassesType["bool"] = llvm::Type::getInt1Ty(TheContext);
     ClassesType["string"] = llvm::Type::getInt8PtrTy(TheContext);  
-    std::cout << "hello"<<std::endl;  
     for (std::pair<std::string, ClassPrototype> element : prototype)
     {
         if(ClassesType.find(element.first) == ClassesType.end()){
             fill_class_type_aux(element.first);
         }
-        cout<<"printing field of "<<element.first<<endl;
         for(auto field : element.second.fieldKeys){
             cout << field << " , ";
         }
-        cout<<"printing implemented method of "<<element.first<<endl;
         for(auto method : element.second.implemented_method){
             cout << method << " , ";
         }
-        cout << "class " << element.first << " was pushed in ClassesType\n";
-
     }
     for (std::pair<std::string, llvm::Type *> element : ClassesType){
         if(element.second != nullptr){
@@ -608,7 +595,7 @@ void CodeGenerator::fill_class_type(){
     }
     
 }
-
+//recursiv function for convert vsop classes to llvm type.
 void CodeGenerator::fill_class_type_aux(string classID){
     std::vector<std::string> fields = prototype[classID].fieldKeys;
     std::vector<llvm::Type*> field_type = vector<llvm::Type*>();  //content type of inner field
@@ -624,20 +611,18 @@ void CodeGenerator::fill_class_type_aux(string classID){
         }
         field_type.push_back(ClassesType[type]);
     }
+    //create the llvm struct
     llvm::Type* struct_type = llvm::StructType::create(TheContext,field_type,classID);
-    if(struct_type == nullptr){
-        cerr << "struct type is null";
-    }
     ClassesType[classID] = struct_type;   
+    //map univoquely classe to int.
     class_key[classID] = llvm::ConstantInt::get(TheContext, llvm::APInt(32,key, true));
     key_class[llvm::ConstantInt::get(TheContext, llvm::APInt(32,key, true))] = classID;
     key++;
     std::cout << "Type of class " << classID << " was done " << endl;
 }
 
+//create prototype of all method of each classes
 void CodeGenerator::fill_method_proto(){
-    //check classes Types
-    //cout << "printing Classes Type" << endl;
     //loop over all classes
     for(auto class_pair: prototype){
         cout<<"making method proto of class " << class_pair.first << endl;
@@ -652,9 +637,6 @@ void CodeGenerator::fill_method_proto(){
             }
             //take the arguments of the methods
             for (auto arg : prototype[class_pair.first].method[method].arguments){
-                if(ClassesType.find(arg) == ClassesType.end()){
-                    //cerr<<"unknown class: " << arg << endl;
-                }
                 cout << arg <<endl;
                 args_type.push_back(ClassesType[arg]);
             }
@@ -666,12 +648,9 @@ void CodeGenerator::fill_method_proto(){
             }
             //make the function prototype
             llvm::FunctionType *FT = llvm::FunctionType::get(ret_type, args_type, false);
-            cout<<"create function"<<endl;
             llvm::Function* F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage, method_name, TheModule.get());
-            cout << "args_name size: "<<prototype[class_pair.first].method[method].arguments_name.size()<<endl;
             auto args_name = prototype[class_pair.first].method[method].arguments_name.begin();  
             int i=0;
-            cout<<"function arg size: " << F->arg_size();
             //name the argument of the method.
             for (auto &Arg : F->args()){
                 //first argument is a pointer to the class.
