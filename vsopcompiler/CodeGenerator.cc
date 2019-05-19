@@ -15,7 +15,7 @@ llvm::Value* CodeGenerator::visit(Field* field) {
     if(field->getExpr() != nullptr){
         Def_field_value[classID + field->getID()] = value;
     }
-    llvm::Alloca * alloca = CreateEntryBlockAlloca(value, field, field->getID());
+    llvm::AllocaInst * alloca = CreateEntryBlockAlloca(value, field, field->getID());
     ::allocvtable.add_element(field->getID(),alloca);
     return nullptr;
 }
@@ -54,7 +54,7 @@ llvm::Value* CodeGenerator::visit(Classes* classes) {
 llvm::Value* CodeGenerator::visit(Classe* classe) {
     std::cout << "Classe" <<std::endl;
 
-    ::allocvtable.new_scope;
+    allocvtable.new_scope();
     //set the current visited class;
     classID = classe->getTypeID();
 
