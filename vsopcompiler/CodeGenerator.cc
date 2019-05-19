@@ -61,7 +61,8 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
     std::set<std::string> parents;
     if(::prototype.find(classID) != ::prototype.end()){
         parents = prototype[classID].parent;
-    }
+    }    
+    llvm::Value* class_value  = classe->getBody()->accept(this);
     //update the variable table
     for(auto it = parents.begin(); it != parents.end(); ++it){
         if(class_variables_table.find(*it) != class_variables_table.end()){
@@ -75,7 +76,7 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
             }
         }
     }    
-    llvm::Value* class_value  = classe->getBody()->accept(this);
+
     class_variables_table[classID] = allocvtable.exit_class_scope();
     std::cout << " end of Classe" <<std::endl;
     return class_value;
