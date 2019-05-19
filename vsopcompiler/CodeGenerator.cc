@@ -280,42 +280,40 @@ llvm::Value* CodeGenerator::visit(Assign* assign) {
 
 
 llvm::Value* CodeGenerator::visit(Let* let) {
-
+    //Two possible case: with or without assignement
     std::cout << "Let" <<std::endl;
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "letbody", Builder.GetInsertBlock()->getParent()); // Get the parent (function) of the actual block
-    Builder.SetInsertPoint(BB);
-
-    llvm::AllocaInst* alloca = CreateEntryBlockAlloca(let->getType(), let, let->getObjID());
-
-    // NamedValues[let->getObjID()] = alloca;
-
-    //Builder.CreateStore(?, Alloca);
-
-    // Default constructor or not
-    llvm::Value* Val;
-    if(let->getAssign() == nullptr){
-        // TODO checl if initiator ok by constant
-        if(let->getType()->getID() == "int32")
-            CreateEntryBlockAlloca(llvm::Type::getInt32Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true)), let->getObjID());
-        else if(let->getType()->getID() == "bool")
-            CreateEntryBlockAlloca(llvm::Type::getInt1Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(1, 0)), let->getObjID());
-        else if(let->getType()->getID() == "string")
-            CreateEntryBlockAlloca(llvm::Type::getInt32Ty(TheContext), llvm::ConstantDataArray::getString(TheContext, llvm::StringRef("")), let->getObjID());
-        else // TODO initiator for class type
-            CreateEntryBlockAlloca(llvm::Type::getInt1Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(1, 0)), let->getObjID());
-
-    }
+    Builder.SetInsertPoint(BB);        
+    llvm::Type* type = ClassesType[let->getType()->getID()];
+    //default init
+    if(let->getAssign() == nullptr){        
+        llvm::Value* def_value = llvm::Constant::getNullValue(type);
+        llvm::Value* pointer_to_obj = Builder.CreateStore(def_value,Builder.CreateAlloca(type));
+        int index = 0;
+        for(auto field : prototype[let->getType()->getID()].fieldKeys){
+            if(Def_field_value.find(let->getType()->getID() + field) != Def_field_value.end()){
+                // set the field to the correct default value 
+                //see: https://stackoverflow.com/questions/40771022/how-to-get-the-value-of-a-member-of-a-structure-in-llvm
+                llvm::Value* member_index = llvm::ConstantInt::get(TheContext, llvm::APInt(32, index, true));
+                std::vector<llvm::Value*> indices(2);
+                indices[0] = llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true));
+                indices[1] = member_index;
+                llvm::Value* member_ptr = Builder.CreateGEP(ClassesType[let->getType()->getID()],pointer_to_obj, indices, "memberptr");
+                Builder.CreateStore(Def_field_value[let->getType()->getID() + field],member_ptr,"init field");
+            }
+            index++;    
+        }
+    }    
+    //assignement init
     else{
-
-        llvm::Value* Init = let->getAssign()->accept(this);
+        llvm::Value* def_value = let->getAssign()->accept(this);
+        llvm::AllocaInst* alloca = Builder.CreateAlloca(type,def_value,"let");
+        Builder.CreateStore(def_value, alloca);        
     }
 
-    llvm::Value* LetBody = let->getIn()->accept(this);
-
-    // TODO do we need to create a new block to be the new insertion block?
-
-    return nullptr;
-
+    //TODO update named space.
+    // ...
+    return let->getIn()->accept(this);
 }
 
 //generate code for call to a function.
@@ -392,26 +390,26 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
     std::vector<Expr*> ArgsExpr;
 
     //Lookup for the dynamic type of expr
-    //std::vector<llvm::Value*> indices(1);
-    //indices[0] = llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true));
-    //llvm::Value* member_ptr = Builder.CreateGEP(ClassesType[dot->getExpr()->getDataType()],dot->getExpr()->accept(this), indices, "member");
+    std::vector<llvm::Value*> indices(1);
+    indices[0] = llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true));
+    llvm::Value* member_ptr = Builder.CreateGEP(ClassesType[dot->getExpr()->getDataType()],dot->getExpr()->accept(this), indices, "member");
     //how to get std::string from llvm::value ???
-    //char* class_name = Builder.CreateLoad(member);
-    //std::cout<<"class: " << class_name;
+    llvm::Value* field_class = Builder.CreateLoad(member_ptr);
+    std::string classe_name = key_class[field_class];
+    std::cout<<"class: " << classe_name;
     std::cout << classID <<std::endl;
     llvm::Function* functionCalled = TheModule->getFunction(dot->getExpr()->getDataType() + dot->getID());
 
-    std::string classe = classID;
     while(functionCalled == nullptr){
-        functionCalled = TheModule->getFunction(classe + dot->getID());
-        if(prototype[classe].direct_parent == "" && functionCalled == nullptr){
-            cout<<"undefined function "<< classe + dot->getID() << endl;
+        functionCalled = TheModule->getFunction(classe_name + dot->getID());
+        if(prototype[classe_name].direct_parent == "" && functionCalled == nullptr){
+            cout<<"undefined function "<< classe_name + dot->getID() << endl;
             return nullptr;
         }             
-        classe = prototype[classe].direct_parent;
+        classe_name = prototype[classe_name].direct_parent;
     
     }
-    std::cout<<"loaded function " << classe + dot->getID() << endl;
+    std::cout<<"loaded function " << classe_name + dot->getID() << endl;
     
     //push pointer to the object as first argument.
     self_ptr.push(NamedValues[dot->getID()]);
@@ -448,8 +446,8 @@ llvm::Value* CodeGenerator::visit(New* anew) {
     llvm::Value* all_zero = llvm::Constant::getNullValue(ClassesType[anew->getTypeID()]);
     Builder.CreateStore(all_zero,pointer_to_obj);
     int index=0;
-    //set the filed which tell the dynamic type.
-    Def_field_value[anew->getTypeID() + "class"] = llvm::ConstantDataArray::getString(TheContext, anew->getTypeID());
+    //set the field which tell the dynamic type.
+    Def_field_value[anew->getTypeID() + "class"] = class_key[anew->getTypeID()];
     for(auto field : prototype[anew->getTypeID()].fieldKeys){
         if(Def_field_value.find(anew->getTypeID() + field) != Def_field_value.end()){
             // set the field to the correct default value 
@@ -571,7 +569,7 @@ void CodeGenerator::fill_class_type_aux(string classID){
     std::vector<llvm::Type*> field_type = vector<llvm::Type*>();  //content type of inner field
     std::cout<<"making class " << classID << "with " << fields.size() << " fields" << endl;
     //push a ghost field "class" to get the dynamic type when needed
-    field_type.push_back(ClassesType["string"]);
+    field_type.push_back(ClassesType["int32"]);
     //classes with field => make a struct.
     for (auto field : fields){
         //deal before with unknow field
@@ -585,7 +583,10 @@ void CodeGenerator::fill_class_type_aux(string classID){
     if(struct_type == nullptr){
         cerr << "struct type is null";
     }
-    ClassesType[classID] = struct_type;    
+    ClassesType[classID] = struct_type;   
+    class_key[classID] = llvm::ConstantInt::get(TheContext, llvm::APInt(32,key, true));
+    key_class[llvm::ConstantInt::get(TheContext, llvm::APInt(32,key, true))] = classID;
+    key++;
     std::cout << "Type of class " << classID << " was done " << endl;
 }
 

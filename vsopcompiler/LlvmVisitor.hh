@@ -68,13 +68,22 @@ struct Lpar;
 struct Rpar;
 struct Parenthese;
 
+//llvm stuff
 static llvm::LLVMContext TheContext;
 static llvm::IRBuilder<> Builder(TheContext);
 static std::unique_ptr<llvm::Module> TheModule = llvm::make_unique<llvm::Module>("mymodule", TheContext);
+//for variable scope
 static std::map<std::string, llvm::AllocaInst *> NamedValues;
+//llvm type of classes
 static std::map<std::string, llvm::Type *> ClassesType;
+//default init field value;
 static std::map<std::string, llvm::Value *> Def_field_value;
-static std::stack<llvm::Value*>  self_ptr;
+//map each class to a unique llvm value* in both direction. The value is an int.
+static std::map<std::string,llvm::Value *> class_key = std::map<std::string,llvm::Value *>();
+static std::map<llvm::Value *,std::string> key_class = std::map<llvm::Value *,std::string>();
+static int key = 0;
+//pointer to the current object.
+static std::stack<llvm::Value*>  self_ptr; //probably useless when scope will be well implemented.
 
 // Because in vsop, every variable have a default initial value TODO Check if this is true for Class types (fields should be initialized by default)
 // @args Variable's type, Variable's value, Variable's name.
