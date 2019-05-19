@@ -66,6 +66,7 @@ private:
     void allocator(std::string classID, llvm::Function* f, std::string VarName);
     void create_malloc_function();
     void create_main();
+    std::unordered_map<std::string,std::unordered_map<std::string,llvm::Value *>> class_variables_table;
     //llvm::Value* malloc_type(llvm::Type* type);
 };
 

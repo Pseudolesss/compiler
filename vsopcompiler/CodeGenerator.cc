@@ -10,9 +10,13 @@ llvm::Value* CodeGenerator::visit(ASTnode* astNode) { return nullptr; }
 llvm::Value* CodeGenerator::visit(Field* field) {
     std::cout << "Field" <<std::endl;
     //Keep the ssigned field value in a table if it exist.
+    llvm::Value * value = field->getExpr()->accept(this);
+
     if(field->getExpr() != nullptr){
-        Def_field_value[classID + field->getID()] = field->getExpr()->accept(this);
+        Def_field_value[classID + field->getID()] = value;
     }
+    llvm::Alloca * alloca = CreateEntryBlockAlloca(value, field, field->getID());
+    ::allocvtable.add_element(field->getID(),alloca);
     return nullptr;
 }
 
@@ -49,12 +53,33 @@ llvm::Value* CodeGenerator::visit(Classes* classes) {
 
 llvm::Value* CodeGenerator::visit(Classe* classe) {
     std::cout << "Classe" <<std::endl;
+
+    ::allocvtable.new_scope;
     //set the current visited class;
     classID = classe->getTypeID();
-    //clear the NameSpace
-    NamedValues.clear();
-    //Deal with the body 
-    classe->getBody()->accept(this);
+
+    std::set<std::string> parents;
+    if(::prototype.find(classID) != ::prototype.end()){
+        parents = prototype[classID].parent;
+    }
+
+    llvm::Type * type  = classe->getBody()->accept(this);
+
+    for(auto it = parents.begin(); it != parents.end(); ++it){
+        if(class_variables_table.find(*it) != class_variables_table.end()){
+            for(auto it_ = class_variables_table[*it].begin(); it_ != class_variables_table[*it].end(); ++it_ ){
+                //If the variable to add has not been already added because of another ancestor
+                //If we don't check if chained inheritance the variable will be added two times 
+                if(!allocvtable.check_variable(it_->first)){
+                    alloca = CreateEntryBlockAlloca(type, classe, classID);
+                    allocvtable.add_element(it_->first,alloca);
+                }
+            }
+        }
+    }
+
+    class_variables_table[classID] = allocvtable.exit_class_scope();
+
     std::cout << " end of Classe" <<std::endl;
     return nullptr;
 }
@@ -63,6 +88,8 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
 llvm::Value* CodeGenerator::visit(Block* block) {
 
     std::cout << "Block" << endl;
+
+    allocvtable.new_scope();
 
     if(block->getExpr() == nullptr)
         return llvm::Constant::getNullValue(llvm::Type::getVoidTy(TheContext)); // Noop
@@ -76,6 +103,8 @@ llvm::Value* CodeGenerator::visit(Block* block) {
         exp = e->getExpr();
         e = e->getExprx();
     }
+
+    allocvtable.exit_scope();
 
     return exp->accept(this);
 
@@ -108,20 +137,22 @@ llvm::Value* CodeGenerator::visit(FieldMethod* fieldMethod) {
 //implement the method
 llvm::Value* CodeGenerator::visit(Method* method) {
     cout<<"Method: "<< method->getID() << endl;
+    allocvtable.new_scope();
+
     llvm::Function *F = TheModule->getFunction(classID + method->getID());
     // Create a new basic block to start insertion into.
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "method" + method->getID() + "entry", F);
     Builder.SetInsertPoint(BB);
     //create alloca for all argument of the function
     // Record the function arguments in the NamedValues map.
-    NamedValues.clear();
     for (auto &Arg : F->args()) {
         // Create an alloca for this variable.
         llvm::AllocaInst *Alloca = CreateEntryBlockAlloca(F, Arg.getType(), Arg.getName());
         // Store the initial value into the alloca.
         Builder.CreateStore(&Arg, Alloca);
         // Add arguments to variable symbol table for the body.
-        NamedValues[Arg.getName()] = Alloca;
+        allocvtable.add_element(Arg.getName(),Alloca);
+
     }
     // Return instruction handle by Block 
     cout<<"making block of method "<< method->getID() << endl;
@@ -131,6 +162,8 @@ llvm::Value* CodeGenerator::visit(Method* method) {
         Builder.CreateRetVoid();
     else 
         Builder.CreateRet(Block);
+
+    allocvtable.exit_scope();
     cout << "method " << method->getID() << "done " << endl;
     return nullptr;
 }
@@ -270,7 +303,7 @@ llvm::Value* CodeGenerator::visit(Assign* assign) {
 
     llvm::Value* Val = assign->getExpr()->accept(this);
 
-    llvm::Value* Obj = NamedValues[assign->getObjID()];
+    llvm::Value* Obj = allocvtable.lookup(assign->getObjID());
 
     Builder.CreateStore(Val, Obj);
 
@@ -285,9 +318,10 @@ llvm::Value* CodeGenerator::visit(Let* let) {
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "letbody", Builder.GetInsertBlock()->getParent()); // Get the parent (function) of the actual block
     Builder.SetInsertPoint(BB);
 
-    llvm::AllocaInst* alloca = CreateEntryBlockAlloca(let->getType(), let, let->getObjID());
+    llvm::AllocaInst* alloca ;
 
-    // NamedValues[let->getObjID()] = alloca;
+    allocvtable.new_scope();
+
 
     //Builder.CreateStore(?, Alloca);
 
@@ -296,19 +330,24 @@ llvm::Value* CodeGenerator::visit(Let* let) {
     if(let->getAssign() == nullptr){
         // TODO checl if initiator ok by constant
         if(let->getType()->getID() == "int32")
-            CreateEntryBlockAlloca(llvm::Type::getInt32Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true)), let->getObjID());
+            alloca = CreateEntryBlockAlloca(llvm::Type::getInt32Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true)), let->getObjID());
         else if(let->getType()->getID() == "bool")
-            CreateEntryBlockAlloca(llvm::Type::getInt1Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(1, 0)), let->getObjID());
+            alloca = CreateEntryBlockAlloca(llvm::Type::getInt1Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(1, 0)), let->getObjID());
         else if(let->getType()->getID() == "string")
-            CreateEntryBlockAlloca(llvm::Type::getInt32Ty(TheContext), llvm::ConstantDataArray::getString(TheContext, llvm::StringRef("")), let->getObjID());
+            alloca = CreateEntryBlockAlloca(llvm::Type::getInt32Ty(TheContext), llvm::ConstantDataArray::getString(TheContext, llvm::StringRef("")), let->getObjID());
         else // TODO initiator for class type
-            CreateEntryBlockAlloca(llvm::Type::getInt1Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(1, 0)), let->getObjID());
+            alloca = CreateEntryBlockAlloca(llvm::Type::getInt1Ty(TheContext), llvm::ConstantInt::get(TheContext, llvm::APInt(1, 0)), let->getObjID());
 
     }
     else{
-
         llvm::Value* Init = let->getAssign()->accept(this);
+        alloca = CreateEntryBlockAlloca(Init, let, let->getObjID());
+        
     }
+
+    
+    allocvtable.add_element(let->getObjID(),alloca);
+    allocvtable.exit_scope();
 
     llvm::Value* LetBody = let->getIn()->accept(this);
 
@@ -414,8 +453,8 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
     std::cout<<"loaded function " << classe + dot->getID() << endl;
     
     //push pointer to the object as first argument.
-    self_ptr.push(NamedValues[dot->getID()]);
-    ArgsVal.push_back(NamedValues[dot->getID()]);
+    self_ptr.push(allocvtable.lookup(dot->getID()));
+    ArgsVal.push_back(allocvtable.lookup(dot->getID()));
 
     // Need to isolate the arguments of the function and get their llvm expression
     // Check if the first one is empty
@@ -467,14 +506,15 @@ llvm::Value* CodeGenerator::visit(New* anew) {
     return Builder.CreateLoad(pointer_to_obj);
 }
 
-llvm::Value* CodeGenerator::visit(ObjID* objId) { std::cout << "ObjID" << std::endl;
+llvm::Value* CodeGenerator::visit(ObjID* objId) { 
+    std::cout << "ObjID" << std::endl;
 //TODO The goal is to send back the value only, no need to load in a register CHANGE THAT IF NEEDED
-    if(NamedValues.find(objId->getID()) != NamedValues.end()){
-        std::cout<<"load object " << objId->getID() << std::endl;
-        llvm::Value* v = Builder.CreateLoad(NamedValues[objId->getID()], objId->getID()); 
-        std::cout<<"value loaded" << std::endl;
-        return v;
-    } 
+    llvm::Value* type = allocvtable.lookup(objId->getID())
+    ;
+    std::cout<<"load object " << objId->getID() << std::endl;
+    llvm::Value* v = Builder.CreateLoad(type, objId->getID()); 
+    std::cout<<"value loaded" << std::endl;
+    return v;
     std::cout << "object " << objId->getID() << " unknown" << std::endl;
     return nullptr;}
 
@@ -524,7 +564,22 @@ llvm::Value* CodeGenerator::visit(Parenthese* parenthese) {std::cout << "()" <<s
 
 llvm::Value* CodeGenerator::visit(Formal* formal) {std::cout << "Formal" << endl; return nullptr;}
 llvm::Value* CodeGenerator::visit(Formalx* formalx) {std::cout << "Formalx" << endl; return nullptr;}
-llvm::Value* CodeGenerator::visit(Formals* formals) {std::cout << "Formals" << endl; return nullptr;}
+llvm::Value* CodeGenerator::visit(Formals* formals) {
+    std::cout << "Formals" << endl;
+    Formal* formal = formals->getFormal();
+    Formalx* formalx = formals->getFormalx();
+
+    while(true){
+        if(formal == nullptr){
+            break;
+        }
+        llvm::AllocaInst* alloca = CreateEntryBlockAlloca(formal->getType()->accept(this), formal, formal->getID());
+        ::allocvtable.add_element(formal->getID(),alloca);
+        formal = formalx->getFormal();
+        formalx = formalx->getFormalx();
+    }
+    return nullptr;
+}
 llvm::Value* CodeGenerator::visit(Exprx* exprx) {std::cout << "Exprx" << endl; return nullptr;}
 llvm::Value* CodeGenerator::visit(Exprxx* exprxx) {std::cout << "Exprxx" << endl; return nullptr;}
 llvm::Value* CodeGenerator::visit(Expr* expr) {std::cout << "Expr" << endl; return nullptr;}

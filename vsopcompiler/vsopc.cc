@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
     drv.setting = 1;
     std::cout << "parsing io.vsop" << std::endl;;
 
-    drv.parse("/home/IO.vsop");
+    drv.parse("IO.vsop");
     drv.root->accept(new FillPrototype());
     std::cout << "parsing file"<<  std::endl;
     int ret;
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
       llvm::legacy::PassManager pass;
       auto FileType = llvm::TargetMachine::CGFT_ObjectFile;
 
-      if (TheTargetMachine->addPassesToEmitFile(pass, dest, FileType))
+      if (TheTargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType))
       {
         llvm::errs() << "TheTargetMachine can't emit a file of this type";
         return 1;

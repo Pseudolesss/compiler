@@ -20,6 +20,9 @@
 #include <llvm/IR/Type.h>
 #include <llvm/IR/Verifier.h>
 
+#include "SymbolTable.hh"
+#include "SymbolTableAlloc.hh"
+
 struct ASTnode;
 struct Expr;
 struct Type;
@@ -71,7 +74,7 @@ struct Parenthese;
 static llvm::LLVMContext TheContext;
 static llvm::IRBuilder<> Builder(TheContext);
 static std::unique_ptr<llvm::Module> TheModule = llvm::make_unique<llvm::Module>("mymodule", TheContext);
-static std::map<std::string, llvm::AllocaInst *> NamedValues;
+// static std::map<std::string, llvm::AllocaInst *> NamedValues;
 static std::map<std::string, llvm::Type *> ClassesType;
 static std::map<std::string, llvm::Value *> Def_field_value;
 static std::stack<llvm::Value*>  self_ptr;
