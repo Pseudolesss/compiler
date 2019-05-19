@@ -8,7 +8,7 @@ llvm::Value* CodeGenerator::visit(ASTnode* astNode) { return nullptr; }
 
 
 llvm::Value* CodeGenerator::visit(Field* field) {
-    std::cout << "Field" <<std::endl;
+    std::cout << "Field: " << field->getID() << std::endl;
     //Keep the ssigned field value in a table if it exist.
     llvm::Value * value = field->getExpr()->accept(this);
 
@@ -52,7 +52,7 @@ llvm::Value* CodeGenerator::visit(Classes* classes) {
 
 
 llvm::Value* CodeGenerator::visit(Classe* classe) {
-    std::cout << "Classe" <<std::endl;
+    std::cout << "Classe: " << classe->getTypeID() << std::endl;
     allocvtable.new_scope();
     //set the current visited class;
     classID = classe->getTypeID();
@@ -448,7 +448,9 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
         std::cout<<"args "<<ArgsExpr[i]->getLocation() << "pushed" <<std::endl;
     }
     std::cout<<"create call"<<std::endl;
-    return Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
+    llvm::Value* dot_val = Builder.CreateCall(functionCalled, ArgsVal, "fctcall");
+    self_ptr.pop();
+    return dot_val;
 
  }
 
@@ -482,6 +484,9 @@ llvm::Value* CodeGenerator::visit(ObjID* objId) {
     std::cout << "ObjID" << std::endl;
     llvm::Value* var_ptr = allocvtable.lookup(objId->getID());
     std::cout<<"load object " << objId->getID() << std::endl;
+    if(objId->getID() == "self"){
+        return Builder.CreateLoad(self_ptr.top(), objId->getID());
+    }
     if(var_ptr != nullptr){
         llvm::Value* v = Builder.CreateLoad(var_ptr, objId->getID()); 
         std::cout<<"value loaded" << std::endl;
@@ -492,7 +497,7 @@ llvm::Value* CodeGenerator::visit(ObjID* objId) {
         return nullptr;        
     }
 
-    }
+}
 
 
 llvm::Value* CodeGenerator::visit(IntLit* intLit) {std::cout << "IntLit" <<std::endl; return llvm::ConstantInt::get(TheContext, llvm::APInt(32, intLit->getValue(), true));}
