@@ -141,7 +141,7 @@ llvm::Value* CodeGenerator::visit(Method* method) {
     // Type has already be checked, it is "safe" enough to just take the function type as condition, Block last expr is ok tho
     if(Block->getType() == llvm::Type::getVoidTy(TheContext))
         Builder.CreateRetVoid();
-    else
+    else 
         Builder.CreateRet(Block);
     cout << "method " << method->getID() << "done " << endl;
     return nullptr;
@@ -295,8 +295,17 @@ llvm::Value* CodeGenerator::visit(Let* let) {
 
     std::cout << "Let" <<std::endl;
 
+
+
+
     llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "letbody", Builder.GetInsertBlock()->getParent()); // Get the parent (function) of the actual block
     Builder.SetInsertPoint(BB);
+
+    lvm::AllocaInst* alloca = CreateEntryBlockAlloca(let->getType(), let, let->getObjID());
+
+    // NamedValues[let->getObjID()] = alloca;
+
+    //Builder.CreateStore(?, Alloca);
 
     // Default constructor or not
     llvm::Value* Val;
@@ -315,8 +324,7 @@ llvm::Value* CodeGenerator::visit(Let* let) {
     else{
 
         llvm::Value* Init = let->getAssign()->accept(this);
-        //TODO
-        CreateEntryBlockAlloca(Init->getType(), Init, let->getObjID());
+        
 
     }
 
@@ -556,13 +564,13 @@ void CodeGenerator::fill_class_type(){
         for(auto method : element.second.implemented_method){
             cout << method << " , ";
         }
-        cout << "class " << element.first << " was pushed in ClassesType";
+        cout << "class " << element.first << " was pushed in ClassesType\n";
 
     }
     for (std::pair<std::string, llvm::Type *> element : ClassesType){
         if(element.second != nullptr){
-        element.second->print(llvm::outs()) ;
-        printf("\n");            
+            element.second->print(llvm::outs()) ;
+            printf("\n");            
         }
     }
     
@@ -624,7 +632,7 @@ void CodeGenerator::fill_method_proto(){
             llvm::FunctionType *FT = llvm::FunctionType::get(ret_type, args_type, false);
             cout<<"create function"<<endl;
             llvm::Function* F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage, method_name, TheModule.get());
-            cout << "args_name size: "<<prototype[classID].method[method].arguments_name.size()<<endl;
+            cout << "args_name size: "<<prototype[class_pair.first].method[method].arguments_name.size()<<endl;
             auto args_name = prototype[class_pair.first].method[method].arguments_name.begin();  
             int i=0;
             cout<<"function arg size: " << F->arg_size();
