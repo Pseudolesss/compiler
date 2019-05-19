@@ -76,6 +76,7 @@ static llvm::LLVMContext TheContext;
 static llvm::IRBuilder<> Builder(TheContext);
 static std::unique_ptr<llvm::Module> TheModule = llvm::make_unique<llvm::Module>("mymodule", TheContext);
 static std::map<std::string, llvm::Type *> ClassesType;
+
 //default init field value;
 static std::map<std::string, llvm::Value *> Def_field_value;
 

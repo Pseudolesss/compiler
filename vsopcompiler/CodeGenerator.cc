@@ -650,9 +650,7 @@ void CodeGenerator::create_main(){
 }
 
 //Create a malloc function for all classe type. function name are malloc + classID 
-
-void CodeGenerator::create_malloc_function()
-{   //See https://stackoverflow.com/questions/28143087/how-to-create-a-call-to-function-malloc-using-llvm-api
+void CodeGenerator::create_malloc_function(){
     for(auto type_pair : ClassesType){
         cout<<"making malloc of " << type_pair.first << std::endl;
         std::string name =  "malloc" + type_pair.first;
