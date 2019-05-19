@@ -70,6 +70,8 @@ std::string CheckPrinter::visit(FieldMethod *fieldMethod){
         return fieldMethod->getFieldMethod()->accept(this) + fieldMethod->getMethod()->accept(this) + "$";
 }
 
+// Recovering a string segmented by '$' symbol in order to differentiate each return from
+// FieldMethod and the first char of each return indicate the type 'M' => Method ; 'F' => Field
 std::string CheckPrinter::visit(Body *body){
 
     std::vector<std::string> m;
