@@ -392,15 +392,16 @@ llvm::Value* CodeGenerator::visit(Dot* dot) {
     std::vector<Expr*> ArgsExpr;
 
     //Lookup for the dynamic type of expr
-    std::vector<llvm::Value*> indices(1);
-    indices[0] = llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true));
-    llvm::Value* member = Builder.CreateGEP(ClassesType[dot->getExpr()->getDataType()],dot->getExpr()->accept(this), indices, "member");
-    std::string class_name = std::string(*member);
-    std::cout<<"class: " << class_name;
+    //std::vector<llvm::Value*> indices(1);
+    //indices[0] = llvm::ConstantInt::get(TheContext, llvm::APInt(32, 0, true));
+    //llvm::Value* member_ptr = Builder.CreateGEP(ClassesType[dot->getExpr()->getDataType()],dot->getExpr()->accept(this), indices, "member");
+    //how to get std::string from llvm::value ???
+    //char* class_name = Builder.CreateLoad(member);
+    //std::cout<<"class: " << class_name;
     std::cout << classID <<std::endl;
     llvm::Function* functionCalled = TheModule->getFunction(dot->getExpr()->getDataType() + dot->getID());
 
-    std::string classe = class_name;
+    std::string classe = classID;
     while(functionCalled == nullptr){
         functionCalled = TheModule->getFunction(classe + dot->getID());
         if(prototype[classe].direct_parent == "" && functionCalled == nullptr){
