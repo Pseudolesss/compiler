@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include <unistd.h>
 #include <stdlib.h>     
 
@@ -87,10 +88,14 @@ int main(int argc, char *argv[])
     drv.root->accept(new FillPrototype());
     std::cout << "parsing file"<<  std::endl;
     int ret;
+    std::string file_name;
     if(argc == 2){
       ret = drv.parse(argv[1]);
+      file_name = std::string(argv[1]);
     }else{
       ret = drv.parse(argv[2]);
+      file_name = std::string(argv[1]);
+
     }
     drv.root->accept(new FillPrototype());
     std::cout << "fill proto done" << std::endl;
@@ -105,6 +110,18 @@ int main(int argc, char *argv[])
     std::cout << "llvm code generated" << std::endl;
     TheModule->print(llvm::outs(), nullptr);
 
+    string new_file = file_name.substr(0, file_name.length() - 5);
+		std::ofstream outfile (new_file + ".ll");
+		std::string Str;
+		llvm::raw_string_ostream OS(Str);
+		OS << *TheModule;
+		OS.flush();
+		outfile << Str;
+		outfile.close();
+    system(("llc "+new_file+".ll").c_str());
+    system(("clang++ -Wno-everything "+new_file +".ll IO.o -g -o "+new_file ).c_str());
+
+    /*
     if (argc == 3)
     {
       TheModule->print(llvm::outs(), nullptr);
@@ -171,7 +188,7 @@ int main(int argc, char *argv[])
       //deliver executable.
       std::string gcc_out = Filename.substr(0,pos);
       std::cout<<"writing executable"<<std::endl;
-      std::string command = "g++ " + Filename + " -o main" ;//+ gcc_out;
+      std::string command = "clang++ -v -Wno-everything " + Filename + " -o " + gcc_out;
       ret = system (command.c_str());
       return ret;
     }
@@ -180,5 +197,6 @@ int main(int argc, char *argv[])
   {
     std::cerr << "unkow command " << std::endl;
     return 1;
+  }*/
   }
 }

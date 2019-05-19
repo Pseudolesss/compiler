@@ -310,7 +310,6 @@ llvm::Value* CodeGenerator::visit(Let* let) {
         llvm::AllocaInst* alloca = Builder.CreateAlloca(type,def_value,"let");
         Builder.CreateStore(def_value, alloca);        
     }
-
     //TODO update named space.
     // ...
     return let->getIn()->accept(this);
@@ -657,7 +656,7 @@ void CodeGenerator::allocator(std::string classID, llvm::Function* f, std::strin
 void CodeGenerator::create_main(){
     llvm::FunctionType *FT = llvm::FunctionType::get(llvm::Type::getInt32Ty(TheContext),false);
     llvm::Function *F = llvm::Function::Create(FT, llvm::Function::ExternalLinkage,"main", TheModule.get());
-    llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "main", F);
+    llvm::BasicBlock *BB = llvm::BasicBlock::Create(TheContext, "entry", F);
     Builder.SetInsertPoint(BB);
     //create object main
     std::cout<<"making main" << std::endl;
