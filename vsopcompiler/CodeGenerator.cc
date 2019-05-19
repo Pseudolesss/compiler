@@ -15,7 +15,7 @@ llvm::Value* CodeGenerator::visit(Field* field) {
     if(field->getExpr() != nullptr){
         Def_field_value[classID + field->getID()] = value;
     }
-    llvm::AllocaInst * alloca = CreateEntryBlockAlloca(value, field, field->getID());
+    llvm::AllocaInst * alloca = Builder.CreateAlloca(value->getType(),value,field->getID());
     ::allocvtable.add_element(field->getID(),alloca);
     return nullptr;
 }
@@ -63,7 +63,7 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
         parents = prototype[classID].parent;
     }
 
-    llvm::Type * type  = classe->getBody()->accept(this);
+    llvm::Value* class_value  = classe->getBody()->accept(this);
 
     for(auto it = parents.begin(); it != parents.end(); ++it){
         if(class_variables_table.find(*it) != class_variables_table.end()){
@@ -71,7 +71,7 @@ llvm::Value* CodeGenerator::visit(Classe* classe) {
                 //If the variable to add has not been already added because of another ancestor
                 //If we don't check if chained inheritance the variable will be added two times 
                 if(!allocvtable.check_variable(it_->first)){
-                    alloca = CreateEntryBlockAlloca(type, classe, classID);
+                    auto alloca = Builder.CreateAlloca( class_value->getType(), class_value,classID);
                     allocvtable.add_element(it_->first,alloca);
                 }
             }
@@ -341,11 +341,8 @@ llvm::Value* CodeGenerator::visit(Let* let) {
     }
     else{
         llvm::Value* Init = let->getAssign()->accept(this);
-        alloca = CreateEntryBlockAlloca(Init, let, let->getObjID());
-        
+        alloca = Builder.CreateAlloca(Init->getType(),Init,let->getObjID());
     }
-
-    
     allocvtable.add_element(let->getObjID(),alloca);
     allocvtable.exit_scope();
 
@@ -573,7 +570,8 @@ llvm::Value* CodeGenerator::visit(Formals* formals) {
         if(formal == nullptr){
             break;
         }
-        llvm::AllocaInst* alloca = CreateEntryBlockAlloca(formal->getType()->accept(this), formal, formal->getID());
+        llvm::Value* formal_value = formal->accept(this);
+        llvm::AllocaInst* alloca = Builder.CreateAlloca(formal_value->getType(),formal_value,formal->getID());
         ::allocvtable.add_element(formal->getID(),alloca);
         formal = formalx->getFormal();
         formalx = formalx->getFormalx();

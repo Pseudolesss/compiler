@@ -43,7 +43,7 @@ Formal::Formal(string s, Type *t,yy::location l) : ASTnode(l),objID(s), type(t){
 string Formal::getID() { return objID; }
 Type *Formal::getType() { return type; }
 std::string Formal::accept(Visitor *v) { return v->visit(this); }
-//llvm::Value* Formal::accept(CodeGenerator* cg) {return cg->visit(this);}
+llvm::Value* Formal::accept(CodeGenerator* cg) {return cg->visit(this);}
 
 
 Formalx::Formalx(yy::location l) : ASTnode(l)

@@ -24,7 +24,7 @@ llvm::AllocaInst * SymbolTableAlloc::lookup(std::string element_id){
         	return (*it)[element_id];
     	}
 	}
-	return " ";
+	return nullptr;
 }
 
 bool SymbolTableAlloc::check_variable(std::string element_id){

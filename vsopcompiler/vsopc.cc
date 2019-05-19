@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
       llvm::legacy::PassManager pass;
       auto FileType = llvm::TargetMachine::CGFT_ObjectFile;
 
-      if (TheTargetMachine->addPassesToEmitFile(pass, dest, nullptr, FileType))
+      if (TheTargetMachine->addPassesToEmitFile(pass, dest, FileType))
       {
         llvm::errs() << "TheTargetMachine can't emit a file of this type";
         return 1;
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
       //deliver executable.
       std::string gcc_out = Filename.substr(0,pos);
       std::cout<<"writing executable"<<std::endl;
-      std::string command = "g++ " + Filename + " -o main" ;//+ gcc_out;
+      std::string command = "g++ " + Filename + " -o" + gcc_out;
       ret = system (command.c_str());
       return ret;
     }
