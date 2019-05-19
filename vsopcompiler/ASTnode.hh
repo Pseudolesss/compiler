@@ -84,7 +84,7 @@ struct Formal : ASTnode
     string getID();
     Type* getType();
     std::string accept(Visitor*);
-    //llvm::Value* accept(CodeGenerator*);
+    llvm::Value* accept(CodeGenerator*);
 
   private:
     string objID;

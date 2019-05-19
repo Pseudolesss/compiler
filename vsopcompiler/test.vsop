@@ -1,19 +1,27 @@
-class Main extends IO {
-    factorial(n : int32) : int32 {
-    if n < 2 then 1
-    else n * factorial(n - 1)
-    }
+class List {
+    isNil() : bool { true }
+    length() : int32 { 0 }
+}
 
-    main() : int32 {
-        print("Enter an integer greater-than or equal to 0: ");
-        let n : int32 <- inputInt32() in
-            if n < 0 then {
-                print("Error: number must be greater-than or equal to 0.\n");
-                -1
-            } else {
-                print("The factorial of ").printInt32(n).print(" is ");
-                printInt32(factorial(n)).print("\n");
-                0
-            }
+(* Nil is nothing more than a glorified alias to List *)
+class Nil extends List { }
+class Cons extends List {
+    head : int32;
+    tail : List;
+    init(hd : int32, tl : List) : Cons {
+        head <- hd;
+        tail <- tl;
+        self
+    }
+    head() : int32 { head }
+    isNil() : bool { false }
+    length() : int32 { 1 + tail.length() }
+}
+
+class Main extends IO {main() : int32 {
+    let xs : List <- (new Cons).init(0, (new Cons).init(1, (new Cons).init(2, new Nil)))
+    in print("List has length ").printInt32(xs.length()).print("\n");
+    0
     }
 }
+

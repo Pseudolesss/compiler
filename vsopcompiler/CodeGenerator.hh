@@ -15,7 +15,6 @@ public:
     llvm::Value *visit(Dual *);
     llvm::Value *visit(Unary *);
     llvm::Value *visit(Literal *);
-    //llvm::Value* visit(Type *);
     llvm::Value *visit(Field *);
     llvm::Value *visit(Formal *);
     llvm::Value *visit(Formalx *);
@@ -66,7 +65,7 @@ private:
     void allocator(std::string classID, llvm::Function* f, std::string VarName);
     void create_malloc_function();
     void create_main();
-    //llvm::Value* malloc_type(llvm::Type* type);
+    std::unordered_map<std::string,std::unordered_map<std::string,llvm::AllocaInst*>> class_variables_table;
 };
 
 #endif //COMPILER_CODEGENERATOR_HH

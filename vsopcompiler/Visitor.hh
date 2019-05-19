@@ -3,6 +3,7 @@
 #define VISITOR_H
 
 #include "SymbolTable.hh"
+#include "SymbolTableAlloc.hh"
 
 struct ASTnode;
 struct Expr;
